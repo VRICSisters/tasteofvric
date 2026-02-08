@@ -424,9 +424,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.db = db;
-        window.doc = doc;
-        window.getDoc = getDoc;
+        // Make Firebase functions available globally
+        window.firebaseDB = db;
+        window.firebaseDoc = doc;
+        window.firebaseGetDoc = getDoc;
+        
+        // Signal that Firebase is loaded
+        window.firebaseReady = true;
+        if (window.onFirebaseReady) {
+            window.onFirebaseReady();
+        }
     </script>
     
     <script>
@@ -434,9 +441,19 @@
         let filteredRecipes = [];
         let currentPage = 0;
         
+        // Wait for Firebase to load
+        window.onFirebaseReady = function() {
+            loadCookbook();
+        };
+        
+        // If Firebase is already loaded, start immediately
+        if (window.firebaseReady) {
+            loadCookbook();
+        }
+        
         async function loadCookbook() {
             try {
-                const cookbookDoc = await window.getDoc(window.doc(window.db, 'cookbook', 'data'));
+                const cookbookDoc = await window.firebaseGetDoc(window.firebaseDoc(window.firebaseDB, 'cookbook', 'data'));
                 
                 if (cookbookDoc.exists()) {
                     const cookbook = cookbookDoc.data();
@@ -659,8 +676,6 @@
         window.filterByCategory = filterByCategory;
         window.nextPage = nextPage;
         window.previousPage = previousPage;
-        
-        loadCookbook();
     </script>
 </body>
 </html>
