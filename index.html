@@ -21,6 +21,56 @@
             padding: 20px;
         }
         
+        .verse-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            cursor: pointer;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 4px;
+            transition: all 0.3s;
+            max-width: 90%;
+            z-index: 100;
+        }
+        
+        .verse-container:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .verse-text {
+            font-size: 13px;
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+        
+        .verse-text.arabic {
+            font-size: 16px;
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', serif;
+            direction: rtl;
+        }
+        
+        .verse-text.urdu {
+            font-size: 14px;
+            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
+            direction: rtl;
+        }
+        
+        .verse-text.bangla {
+            font-size: 13px;
+            font-family: 'SolaimanLipi', 'Kalpurush', 'Vrinda', serif;
+        }
+        
+        .verse-ref {
+            font-size: 10px;
+            color: #95a5a6;
+            margin-top: 2px;
+            font-style: italic;
+        }
+        
         .container {
             max-width: 600px;
             width: 100%;
@@ -29,6 +79,7 @@
             padding: 60px 50px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
+            margin-top: 60px;
         }
         
         .logo {
@@ -207,6 +258,7 @@
         @media (max-width: 600px) {
             .container {
                 padding: 40px 30px;
+                margin-top: 80px;
             }
             
             h1 {
@@ -220,10 +272,28 @@
             .logo {
                 font-size: 36px;
             }
+            
+            .verse-container {
+                top: 10px;
+                padding: 6px 12px;
+            }
+            
+            .verse-text {
+                font-size: 11px;
+            }
+            
+            .verse-text.arabic {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="verse-container" onclick="toggleVerse()">
+        <div class="verse-text arabic" id="verseText">يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِن طَيِّبَاتِ مَا رَزَقْنَاكُمْ وَاشْكُرُوا لِلَّهِ إِن كُنتُمْ إِيَّاهُ تَعْبُدُونَ</div>
+        <div class="verse-ref">Quran 2:172</div>
+    </div>
+    
     <div class="container">
         <div class="logo">🍽️</div>
         <h1>Taste of VRIC</h1>
@@ -278,10 +348,45 @@
     <script>
         const REPO_OWNER = 'VRICSisters';
         const REPO_NAME = 'tasteofvric';
-        const DATA_TOKEN = 'YOUR_TOKEN_HERE'; // Replace with your token
+        const DATA_TOKEN = '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'; // REMINDER: Replace with your GitHub token!
         
         let currentYear = 2026;
         let yearCompleted = false;
+        
+        // Verse toggle functionality
+        const verses = [
+            {
+                lang: 'arabic',
+                text: 'يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِن طَيِّبَاتِ مَا رَزَقْنَاكُمْ وَاشْكُرُوا لِلَّهِ إِن كُنتُمْ إِيَّاهُ تَعْبُدُونَ',
+                className: 'arabic'
+            },
+            {
+                lang: 'english',
+                text: 'O you who have believed, eat from the good things which We have provided for you and be grateful to Allah if it is [indeed] Him that you worship.',
+                className: ''
+            },
+            {
+                lang: 'bangla',
+                text: 'হে মুমিনগণ! আমি তোমাদেরকে যে হালাল রিযিক দান করেছি তা থেকে খাও এবং আল্লাহর কৃতজ্ঞতা প্রকাশ কর, যদি তোমরা তাঁরই ইবাদত কর।',
+                className: 'bangla'
+            },
+            {
+                lang: 'urdu',
+                text: 'اے ایمان والو! جو پاک چیزیں ہم نے تمہیں دی ہیں ان میں سے کھاؤ اور اللہ کا شکر ادا کرو اگر تم اسی کی عبادت کرتے ہو۔',
+                className: 'urdu'
+            }
+        ];
+        
+        let currentVerseIndex = 0;
+        
+        function toggleVerse() {
+            currentVerseIndex = (currentVerseIndex + 1) % verses.length;
+            const verseElement = document.getElementById('verseText');
+            const currentVerse = verses[currentVerseIndex];
+            
+            verseElement.textContent = currentVerse.text;
+            verseElement.className = 'verse-text ' + currentVerse.className;
+        }
         
         async function loadConfig() {
             try {
@@ -380,7 +485,6 @@
             window.location.href = 'judges.html';
         }
         
-        // Allow Enter key on password fields
         document.getElementById('judgePassword')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') judgeLogin();
         });
