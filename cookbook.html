@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>VRIC Cookbook</title>
     <style>
         * {
@@ -142,11 +142,78 @@
         }
         
         .filters {
-            display: flex;
+            display: none;
             gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
             margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            max-width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .filters.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .filter-backdrop.active {
+            display: block;
+        }
+        
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .filter-header h2 {
+            font-size: 24px;
+            color: #059669;
+        }
+        
+        .close-filters {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .filter-trigger-btn {
+            padding: 12px 24px;
+            background: white;
+            color: #059669;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin: 0 auto 20px;
+            display: block;
         }
         
         .filter-btn {
@@ -314,34 +381,50 @@
         }
         
         .nav-buttons {
+            display: none;
+        }
+        
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #10b981;
+            border-radius: 50%;
             display: flex;
-            gap: 15px;
+            align-items: center;
             justify-content: center;
-            margin-top: 30px;
-        }
-        
-        .nav-btn {
-            padding: 15px 40px;
-            background: white;
-            color: #059669;
-            border: none;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 600;
-            font-family: 'Georgia', 'Times New Roman', serif;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 24px;
+            color: #059669;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 50;
+            transition: all 0.3s;
         }
         
-        .nav-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(0.9);
         }
         
-        .nav-btn:disabled {
+        .nav-arrow.disabled {
             opacity: 0.3;
-            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .nav-arrow.left {
+            left: 10px;
+        }
+        
+        .nav-arrow.right {
+            right: 10px;
+        }
+        
+        @media (orientation: landscape) and (min-width: 700px) {
+            .nav-arrow.right {
+                right: 10px;
+            }
         }
         
         .empty-state {
@@ -473,8 +556,14 @@
         <p>A collection of cherished recipes from our community</p>
     </div>
     
-    <div class="filters">
-        <button class="filter-btn active" onclick="filterBy('all')">All Recipes</button>
+    <button class="filter-trigger-btn" onclick="openFilters()">Filter Recipes</button>
+    
+    <div class="filter-backdrop" id="filterBackdrop" onclick="closeFilters()"></div>
+    <div class="filters" id="filtersModal">
+        <div class="filter-header">
+            <h2>Filter Recipes</h2>
+            <button class="close-filters" onclick="closeFilters()">Close</button>
+        </div>
         <select class="dropdown" id="yearFilter" onchange="filterByYear()">
             <option value="all">All Years</option>
         </select>
@@ -488,6 +577,7 @@
             <option value="Dessert">Dessert</option>
             <option value="Drink">Drink</option>
         </select>
+        <button class="filter-btn" onclick="resetFilters()">Reset All Filters</button>
     </div>
     
     <div id="loading" class="loading">Loading cookbook...</div>
@@ -502,10 +592,9 @@
             <div id="pages"></div>
         </div>
         
-        <div class="nav-buttons">
-            <button class="nav-btn" id="prevBtn" onclick="previousPage()" disabled>← Previous</button>
-            <button class="nav-btn" id="nextBtn" onclick="nextPage()">Next →</button>
-        </div>
+        <!-- Circular Navigation Arrows -->
+        <div class="nav-arrow left" id="prevArrow" onclick="previousPage()">‹</div>
+        <div class="nav-arrow right" id="nextArrow" onclick="nextPage()">›</div>
     </div>
 
     <script type="module">
@@ -722,7 +811,6 @@
                 currentPage++;
                 document.querySelectorAll('.page')[currentPage].classList.add('active');
                 updateNavButtons();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
         
@@ -732,13 +820,28 @@
                 currentPage--;
                 document.querySelectorAll('.page')[currentPage].classList.add('active');
                 updateNavButtons();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
         
         function updateNavButtons() {
-            document.getElementById('prevBtn').disabled = currentPage === 0;
-            document.getElementById('nextBtn').disabled = currentPage === filteredRecipes.length - 1;
+            const prevArrow = document.getElementById('prevArrow');
+            const nextArrow = document.getElementById('nextArrow');
+            
+            if (prevArrow) {
+                if (currentPage === 0) {
+                    prevArrow.classList.add('disabled');
+                } else {
+                    prevArrow.classList.remove('disabled');
+                }
+            }
+            
+            if (nextArrow) {
+                if (currentPage === filteredRecipes.length - 1) {
+                    nextArrow.classList.add('disabled');
+                } else {
+                    nextArrow.classList.remove('disabled');
+                }
+            }
         }
         
         document.addEventListener('keydown', (e) => {
@@ -770,6 +873,25 @@
             }
         }
         
+        function openFilters() {
+            document.getElementById('filtersModal').classList.add('active');
+            document.getElementById('filterBackdrop').classList.add('active');
+        }
+        
+        function closeFilters() {
+            document.getElementById('filtersModal').classList.remove('active');
+            document.getElementById('filterBackdrop').classList.remove('active');
+        }
+        
+        function resetFilters() {
+            document.getElementById('yearFilter').value = 'all';
+            document.getElementById('countryFilter').value = 'all';
+            document.getElementById('categoryFilter').value = 'all';
+            filteredRecipes = [...allRecipes];
+            displayRecipes();
+            closeFilters();
+        }
+        
         function openBook() {
             document.getElementById('closedBook').classList.add('hidden');
             setTimeout(() => {
@@ -785,6 +907,9 @@
         window.nextPage = nextPage;
         window.previousPage = previousPage;
         window.openBook = openBook;
+        window.openFilters = openFilters;
+        window.closeFilters = closeFilters;
+        window.resetFilters = resetFilters;
     </script>
     </div>
 </body>
