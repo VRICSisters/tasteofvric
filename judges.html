@@ -110,6 +110,15 @@
             cursor: not-allowed;
         }
         
+        .edit-judges-btn {
+            background: #f59e0b;
+            margin-top: 20px;
+        }
+        
+        .edit-judges-btn:hover {
+            background: #d97706;
+        }
+        
         .judge-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -254,6 +263,21 @@
             border-radius: 8px;
             font-weight: 600;
             box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            max-width: 300px;
+            line-height: 1.4;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .emergency-contact {
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+                font-size: 13px;
+                padding: 12px 15px;
+            }
         }
         
         .modal {
@@ -317,7 +341,7 @@
         <div class="setup-form">
             <div class="form-group">
                 <label>Number of Judges</label>
-                <input type="number" id="judgeCount" min="1" max="10" value="4">
+                <input type="number" id="judgeCount" min="1" max="10" value="2">
             </div>
             
             <div class="form-group">
@@ -333,6 +357,7 @@
     <div id="judgeSelectScreen" class="container screen">
         <h1>Select Your Judge</h1>
         <div class="judge-grid" id="judgeGrid"></div>
+        <button class="edit-judges-btn" onclick="editJudges()">Edit Judges</button>
     </div>
     
     <!-- Dish Selection Screen -->
@@ -480,6 +505,7 @@
                 if (judgesData.completed) {
                     showResults();
                 } else if (allJudges.length > 0) {
+                    // Judges already set up - go straight to selection
                     showJudgeSelect();
                 } else {
                     showSetup();
@@ -498,8 +524,17 @@
             hideAllScreens();
             document.getElementById('setupScreen').classList.add('active');
             
-            const count = document.getElementById('judgeCount').value || 4;
+            const count = document.getElementById('judgeCount').value || 2;
             updateJudgeInputs(count);
+        }
+        
+        function editJudges() {
+            showSetup();
+            // Pre-fill with existing judges
+            allJudges.forEach((judge, i) => {
+                const input = document.getElementById(`judge${i + 1}`);
+                if (input) input.value = judge;
+            });
         }
         
         document.getElementById('judgeCount')?.addEventListener('change', function() {
@@ -535,7 +570,7 @@
             
             judgesData = {
                 judges: allJudges,
-                scores: [],
+                scores: allScores, // Keep existing scores
                 completed: false,
                 year: currentYear
             };
@@ -923,6 +958,7 @@
         }
         
         window.startJudging = startJudging;
+        window.editJudges = editJudges;
         window.selectJudge = selectJudge;
         window.loadRatingForm = loadRatingForm;
         window.backToJudgeSelect = backToJudgeSelect;
