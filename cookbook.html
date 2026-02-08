@@ -5,235 +5,406 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VRIC Cookbook</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
-            font-family: Georgia, serif;
-            background: #10b981;
-        }
-        
-        /* Closed Book */
-        #closedBook {
-            position: fixed;
-            inset: 0;
-            background: #10b981;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 20px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
         
-        #closedBook.hidden { display: none; }
-        
-        .book-cover {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            padding: 60px 40px;
-            border-radius: 12px;
+        .header {
             text-align: center;
-            max-width: 400px;
-        }
-        
-        .book-logo { width: 120px; height: 120px; margin-bottom: 20px; }
-        .book-title { font-size: 36px; color: white; margin-bottom: 10px; }
-        .book-subtitle { font-size: 18px; color: white; font-style: italic; margin-bottom: 30px; }
-        
-        .tap-open {
-            background: rgba(255,255,255,0.3);
+            margin-bottom: 30px;
             color: white;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
         }
         
-        .back-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 400;
+        }
+        
+        .header p {
+            font-size: 18px;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            display: inline-block;
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-        }
-        
-        /* Main App */
-        #app { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; padding-bottom: 100px; }
-        #app.open { display: block; }
-        
-        /* Recipe Card */
-        .recipe-card {
-            background: #fef6e4;
-            border-radius: 12px;
-            overflow: hidden;
             margin-bottom: 20px;
-            display: none;
-        }
-        
-        .recipe-card.active { display: block; }
-        
-        .recipe-photo { width: 100%; max-height: 400px; object-fit: cover; }
-        .recipe-content { padding: 20px; }
-        .recipe-title { font-size: 32px; color: #2c1810; margin-bottom: 10px; }
-        .recipe-meta { display: flex; gap: 15px; margin-bottom: 20px; color: #666; flex-wrap: wrap; }
-        
-        .recipe-section {
-            background: white;
-            padding: 20px;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
             border-radius: 8px;
-            margin-bottom: 15px;
+            transition: all 0.3s;
         }
         
-        .recipe-section h3 { color: #8b7355; margin-bottom: 10px; font-size: 20px; }
-        .recipe-section ul { list-style: none; padding: 0; }
-        .recipe-section li { margin-bottom: 8px; padding-left: 20px; position: relative; }
-        .recipe-section li::before { content: '•'; position: absolute; left: 0; color: #8a9a5b; }
-        .instructions { white-space: pre-line; line-height: 1.8; }
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
         
-        /* Navigation */
-        .nav-buttons {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        .filters {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            padding: 12px 24px;
+            background: white;
+            color: #059669;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .filter-btn.active {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .dropdown {
+            padding: 12px 24px;
+            background: white;
+            color: #059669;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .book-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            perspective: 2000px;
+        }
+        
+        .book {
+            position: relative;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        
+        .page {
+            display: none;
+            padding: 60px;
+            min-height: 600px;
+            background: #fffbeb;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .page-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        
+        .recipe-image {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            object-fit: cover;
+            aspect-ratio: 4/3;
+        }
+        
+        .recipe-details h2 {
+            font-size: 36px;
+            color: #92400e;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        .recipe-meta {
             display: flex;
             gap: 20px;
-            background: rgba(255,255,255,0.95);
-            padding: 15px 30px;
-            border-radius: 50px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 100;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #78350f;
+        }
+        
+        .recipe-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .recipe-section {
+            margin-bottom: 25px;
+        }
+        
+        .recipe-section h3 {
+            font-size: 20px;
+            color: #92400e;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #fcd34d;
+            padding-bottom: 5px;
+            font-weight: 400;
+        }
+        
+        .recipe-section p, .recipe-section ul {
+            color: #78350f;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        
+        .recipe-section ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+        
+        .recipe-section ul li {
+            margin-bottom: 8px;
+        }
+        
+        .instructions {
+            white-space: pre-line;
+        }
+        
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #fcd34d;
+        }
+        
+        .page-number {
+            color: #92400e;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .attribution {
+            color: #78350f;
+            font-size: 14px;
+            font-style: italic;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
         }
         
         .nav-btn {
-            background: #10b981;
+            padding: 15px 40px;
+            background: white;
+            color: #059669;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
             color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
         }
         
-        .nav-btn:disabled { opacity: 0.3; }
-        
-        /* Filter Button */
-        .filter-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            font-weight: bold;
-            z-index: 100;
-        }
-        
-        /* Filter Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 200;
-        }
-        
-        .modal.active { display: flex; }
-        
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 400px;
-            width: 100%;
-        }
-        
-        .modal-content h2 { margin-bottom: 20px; }
-        
-        .modal-content select {
-            width: 100%;
-            padding: 12px;
+        .empty-state h2 {
+            font-size: 32px;
             margin-bottom: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            font-weight: 400;
         }
         
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+        .empty-state p {
+            font-size: 18px;
+            opacity: 0.8;
         }
         
-        .btn-close { background: #ef4444; color: white; }
-        .btn-reset { background: #6b7280; color: white; }
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+            font-size: 24px;
+        }
         
-        #loading { color: white; text-align: center; padding: 100px 20px; }
-        
-        /* Tablet landscape */
-        @media (min-width: 768px) and (orientation: landscape) {
-            .recipe-card.active {
-                display: grid;
-                grid-template-columns: 45% 55%;
+        /* Mobile Portrait - Photo first, scroll for recipe */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .page {
+                padding: 30px 20px;
+                min-height: auto;
             }
             
-            .recipe-photo {
-                max-height: none;
-                height: 100%;
+            .page-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .recipe-image {
+                width: 100%;
+                max-height: 300px;
+            }
+            
+            .recipe-details h2 {
+                font-size: 28px;
+            }
+            
+            .recipe-section h3 {
+                font-size: 18px;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-btn, .dropdown {
+                width: 100%;
+            }
+        }
+        
+        /* Mobile Landscape - Side by side */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .page {
+                padding: 40px 30px;
+            }
+            
+            .page-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+            
+            .recipe-image {
+                max-height: 400px;
+            }
+            
+            .recipe-details h2 {
+                font-size: 24px;
+            }
+            
+            .recipe-section {
+                margin-bottom: 15px;
+            }
+            
+            .recipe-section h3 {
+                font-size: 16px;
+            }
+            
+            .recipe-section p, .recipe-section ul {
+                font-size: 13px;
+                line-height: 1.6;
+            }
+        }
+        
+        /* Tablet */
+        @media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+            .page {
+                padding: 50px 40px;
+            }
+            
+            .page-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 50px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="closedBook">
-        <a href="index.html" class="back-link">← Home</a>
-        <div class="book-cover">
-            <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" class="book-logo">
-            <div class="book-title">VRIC Cookbook</div>
-            <div class="book-subtitle">Cherished recipes</div>
-        </div>
-        <button class="tap-open" onclick="openBook()">Open Cookbook</button>
+    <div class="header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        <h1>📖 VRIC Cookbook</h1>
+        <p>A collection of cherished recipes from our community</p>
     </div>
     
-    <div id="app">
-        <div id="loading">Loading...</div>
-        <div id="recipes"></div>
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterBy('all')">All Recipes</button>
+        <select class="dropdown" id="yearFilter" onchange="filterByYear()">
+            <option value="all">All Years</option>
+        </select>
+        <select class="dropdown" id="countryFilter" onchange="filterByCountry()">
+            <option value="all">All Countries</option>
+        </select>
+        <select class="dropdown" id="categoryFilter" onchange="filterByCategory()">
+            <option value="all">All Categories</option>
+            <option value="Appetizer">Appetizer</option>
+            <option value="Entree">Entree</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Drink">Drink</option>
+        </select>
+    </div>
+    
+    <div id="loading" class="loading">Loading cookbook...</div>
+    
+    <div id="emptyState" class="empty-state" style="display: none;">
+        <h2>No Recipes Found</h2>
+        <p>Try adjusting your filters or check back later for new recipes!</p>
+    </div>
+    
+    <div id="bookContainer" class="book-container" style="display: none;">
+        <div class="book">
+            <div id="pages"></div>
+        </div>
         
         <div class="nav-buttons">
-            <button class="nav-btn" onclick="prevRecipe()">← Prev</button>
-            <button class="nav-btn" onclick="nextRecipe()">Next →</button>
-        </div>
-        
-        <button class="filter-btn" onclick="openFilter()">Filter</button>
-    </div>
-    
-    <div class="modal" id="filterModal" onclick="if(event.target===this) closeFilter()">
-        <div class="modal-content">
-            <h2>Filter</h2>
-            <select id="yearFilter"><option value="all">All Years</option></select>
-            <select id="countryFilter"><option value="all">All Countries</option></select>
-            <select id="categoryFilter">
-                <option value="all">All Categories</option>
-                <option value="Appetizer">Appetizer</option>
-                <option value="Entree">Entree</option>
-                <option value="Dessert">Dessert</option>
-            </select>
-            <button class="btn-reset" onclick="resetFilters()">Reset</button>
-            <button class="btn-close" onclick="closeFilter()">Close</button>
+            <button class="nav-btn" id="prevBtn" onclick="previousPage()" disabled>← Previous</button>
+            <button class="nav-btn" id="nextBtn" onclick="nextPage()">Next →</button>
         </div>
     </div>
 
@@ -241,171 +412,270 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        const app = initializeApp({
+        const firebaseConfig = {
             apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
             authDomain: "tasteofvric-97d8b.firebaseapp.com",
             projectId: "tasteofvric-97d8b",
             storageBucket: "tasteofvric-97d8b.firebasestorage.app",
             messagingSenderId: "538483030204",
             appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
-        });
+        };
 
-        window.db = getFirestore(app);
-        window.doc = doc;
-        window.getDoc = getDoc;
-        window.ready = true;
-        loadRecipes();
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase functions available globally
+        window.firebaseDB = db;
+        window.firebaseDoc = doc;
+        window.firebaseGetDoc = getDoc;
+        
+        // Signal that Firebase is loaded
+        window.firebaseReady = true;
+        if (window.onFirebaseReady) {
+            window.onFirebaseReady();
+        }
     </script>
     
     <script>
-        let recipes = [], filtered = [], current = 0;
+        let allRecipes = [];
+        let filteredRecipes = [];
+        let currentPage = 0;
         
-        function openBook() {
-            document.getElementById('closedBook').classList.add('hidden');
-            document.getElementById('app').classList.add('open');
+        // Wait for Firebase to load
+        window.onFirebaseReady = function() {
+            loadCookbook();
+        };
+        
+        // If Firebase is already loaded, start immediately
+        if (window.firebaseReady) {
+            loadCookbook();
         }
         
-        async function loadRecipes() {
-            if (!window.ready) return setTimeout(loadRecipes, 100);
-            
+        async function loadCookbook() {
             try {
-                const d = await window.getDoc(window.doc(window.db, 'cookbook', 'data'));
-                recipes = d.exists() ? (d.data().approved || []) : [];
-                filtered = [...recipes];
+                const cookbookDoc = await window.firebaseGetDoc(window.firebaseDoc(window.firebaseDB, 'cookbook', 'data'));
                 
-                [...new Set(recipes.map(r => r.year))].sort().reverse().forEach(y => {
-                    const o = document.createElement('option');
-                    o.value = o.textContent = y;
-                    document.getElementById('yearFilter').appendChild(o);
+                if (cookbookDoc.exists()) {
+                    const cookbook = cookbookDoc.data();
+                    // ONLY show approved recipes - NO PII exposed
+                    allRecipes = cookbook.approved || [];
+                } else {
+                    allRecipes = [];
+                }
+                
+                filteredRecipes = [...allRecipes];
+                
+                const years = [...new Set(allRecipes.map(r => r.year))].sort().reverse();
+                const yearFilter = document.getElementById('yearFilter');
+                years.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearFilter.appendChild(option);
                 });
                 
-                [...new Set(recipes.map(r => r.country))].sort().forEach(c => {
-                    const o = document.createElement('option');
-                    o.value = o.textContent = c;
-                    document.getElementById('countryFilter').appendChild(o);
+                const countries = [...new Set(allRecipes.map(r => r.country))].sort();
+                const countryFilter = document.getElementById('countryFilter');
+                countries.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    countryFilter.appendChild(option);
                 });
                 
-                displayRecipes();
-            } catch (e) { console.error(e); }
-        }
-        
-        function displayRecipes() {
-            const c = document.getElementById('recipes');
-            c.innerHTML = '';
-            document.getElementById('loading').style.display = 'none';
-            
-            if (!filtered.length) {
-                c.innerHTML = '<div style="color:white;text-align:center;padding:100px 20px">No recipes</div>';
-                return;
+                document.getElementById('loading').style.display = 'none';
+                
+                if (allRecipes.length === 0) {
+                    document.getElementById('emptyState').style.display = 'block';
+                } else {
+                    displayRecipes();
+                }
+                
+            } catch (error) {
+                console.error('Failed to load cookbook:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
             }
+        }
+        
+        function filterBy(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
             
-            filtered.forEach((r, i) => {
-                const card = document.createElement('div');
-                card.className = 'recipe-card' + (i === current ? ' active' : '');
-                const ph = r.photo || `https://via.placeholder.com/800x600/d4af37/2c1810?text=${encodeURIComponent(r.dishName)}`;
-                
-                card.innerHTML = `
-                    <img src="${ph}" class="recipe-photo">
-                    <div class="recipe-content">
-                        <h1 class="recipe-title">${r.firstName}'s ${r.dishName}</h1>
-                        <div class="recipe-meta">
-                            <span>🌍 ${r.country}</span>
-                            <span>🍽️ ${r.category}</span>
-                            <span>📅 ${r.year}</span>
-                        </div>
-                        <div class="recipe-section">
-                            <h3>Time</h3>
-                            <p><b>Prep:</b> ${r.prepTime} | <b>Cook:</b> ${r.cookTime}</p>
-                        </div>
-                        <div class="recipe-section">
-                            <h3>Ingredients</h3>
-                            <ul>${r.ingredients.split('\n').filter(x=>x.trim()).map(x=>`<li>${x.trim()}</li>`).join('')}</ul>
-                        </div>
-                        <div class="recipe-section">
-                            <h3>Instructions</h3>
-                            <div class="instructions">${r.instructions}</div>
-                        </div>
-                        ${r.notes?`<div class="recipe-section"><h3>Notes</h3><p>${r.notes}</p></div>`:''}
-                    </div>
-                `;
-                c.appendChild(card);
-            });
-            
-            updateNav();
-        }
-        
-        function nextRecipe() {
-            current = (current + 1) % filtered.length;
-            showCurrent();
-        }
-        
-        function prevRecipe() {
-            current = (current - 1 + filtered.length) % filtered.length;
-            showCurrent();
-        }
-        
-        function showCurrent() {
-            document.querySelectorAll('.recipe-card').forEach((c, i) => {
-                c.classList.toggle('active', i === current);
-            });
-            updateNav();
-            window.scrollTo(0, 0);
-        }
-        
-        function updateNav() {
-            document.querySelectorAll('.nav-btn').forEach(b => b.disabled = filtered.length <= 1);
-        }
-        
-        function openFilter() { document.getElementById('filterModal').classList.add('active'); }
-        function closeFilter() { document.getElementById('filterModal').classList.remove('active'); }
-        
-        function applyFilters() {
-            const y = document.getElementById('yearFilter').value;
-            const c = document.getElementById('countryFilter').value;
-            const t = document.getElementById('categoryFilter').value;
-            
-            filtered = recipes.filter(r => 
-                (y === 'all' || r.year == y) &&
-                (c === 'all' || r.country === c) &&
-                (t === 'all' || r.category === t)
-            );
-            
-            current = 0;
-            displayRecipes();
-        }
-        
-        function resetFilters() {
             document.getElementById('yearFilter').value = 'all';
             document.getElementById('countryFilter').value = 'all';
             document.getElementById('categoryFilter').value = 'all';
-            filtered = [...recipes];
-            current = 0;
+            
+            filteredRecipes = [...allRecipes];
             displayRecipes();
-            closeFilter();
         }
         
-        ['yearFilter', 'countryFilter', 'categoryFilter'].forEach(id => {
-            document.getElementById(id).addEventListener('change', applyFilters);
+        function filterByYear() {
+            applyFilters();
+        }
+        
+        function filterByCountry() {
+            applyFilters();
+        }
+        
+        function filterByCategory() {
+            applyFilters();
+        }
+        
+        function applyFilters() {
+            const year = document.getElementById('yearFilter').value;
+            const country = document.getElementById('countryFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            
+            filteredRecipes = allRecipes.filter(recipe => {
+                const yearMatch = year === 'all' || recipe.year == year;
+                const countryMatch = country === 'all' || recipe.country === country;
+                const categoryMatch = category === 'all' || recipe.category === category;
+                return yearMatch && countryMatch && categoryMatch;
+            });
+            
+            displayRecipes();
+        }
+        
+        function displayRecipes() {
+            const pagesContainer = document.getElementById('pages');
+            pagesContainer.innerHTML = '';
+            currentPage = 0;
+            
+            if (filteredRecipes.length === 0) {
+                document.getElementById('bookContainer').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('bookContainer').style.display = 'block';
+            
+            filteredRecipes.forEach((recipe, index) => {
+                const page = document.createElement('div');
+                page.className = 'page';
+                if (index === 0) page.classList.add('active');
+                
+                // Use photo if available, otherwise placeholder
+                const photoSrc = recipe.photo || `https://via.placeholder.com/600x400/fcd34d/92400e?text=${encodeURIComponent(recipe.dishName)}`;
+                
+                // Format title with apostrophe-s (ONLY firstName shown - PII protected)
+                const recipeTitle = `${recipe.firstName}'s ${recipe.dishName}`;
+                
+                page.innerHTML = `
+                    <div class="page-content">
+                        <div class="recipe-image-container">
+                            <img src="${photoSrc}" alt="${recipe.dishName}" class="recipe-image">
+                        </div>
+                        
+                        <div class="recipe-details">
+                            <h2>${recipeTitle}</h2>
+                            <div class="recipe-meta">
+                                <span>🌍 ${recipe.country}</span>
+                                <span>🍽️ ${recipe.category}</span>
+                                <span>📅 ${recipe.year}</span>
+                            </div>
+                            
+                            <div class="recipe-section">
+                                <h3>Time</h3>
+                                <p><strong>Prep:</strong> ${recipe.prepTime} | <strong>Cook:</strong> ${recipe.cookTime}</p>
+                            </div>
+                            
+                            <div class="recipe-section">
+                                <h3>Ingredients</h3>
+                                <ul>
+                                    ${recipe.ingredients.split('\n').filter(i => i.trim()).map(ingredient => 
+                                        `<li>${ingredient.trim()}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                            
+                            <div class="recipe-section">
+                                <h3>Instructions</h3>
+                                <div class="instructions">${recipe.instructions}</div>
+                            </div>
+                            
+                            ${recipe.notes ? `
+                            <div class="recipe-section">
+                                <h3>Notes</h3>
+                                <p>${recipe.notes}</p>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="page-footer">
+                                <div class="attribution">Recipe by ${recipe.firstName}</div>
+                                <div class="page-number">Page ${index + 1} of ${filteredRecipes.length}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                pagesContainer.appendChild(page);
+            });
+            
+            updateNavButtons();
+        }
+        
+        function nextPage() {
+            if (currentPage < filteredRecipes.length - 1) {
+                document.querySelectorAll('.page')[currentPage].classList.remove('active');
+                currentPage++;
+                document.querySelectorAll('.page')[currentPage].classList.add('active');
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function previousPage() {
+            if (currentPage > 0) {
+                document.querySelectorAll('.page')[currentPage].classList.remove('active');
+                currentPage--;
+                document.querySelectorAll('.page')[currentPage].classList.add('active');
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentPage === 0;
+            document.getElementById('nextBtn').disabled = currentPage === filteredRecipes.length - 1;
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                previousPage();
+            } else if (e.key === 'ArrowRight') {
+                nextPage();
+            }
         });
         
-        document.addEventListener('keydown', e => {
-            if (e.key === 'ArrowLeft') prevRecipe();
-            if (e.key === 'ArrowRight') nextRecipe();
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
         });
         
-        let startX = 0;
-        document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-        document.addEventListener('touchend', e => {
-            const diff = startX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) diff > 0 ? nextRecipe() : prevRecipe();
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
         });
         
-        window.openBook = openBook;
-        window.nextRecipe = nextRecipe;
-        window.prevRecipe = prevRecipe;
-        window.openFilter = openFilter;
-        window.closeFilter = closeFilter;
-        window.resetFilters = resetFilters;
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextPage();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousPage();
+            }
+        }
+        
+        window.filterBy = filterBy;
+        window.filterByYear = filterByYear;
+        window.filterByCountry = filterByCountry;
+        window.filterByCategory = filterByCategory;
+        window.nextPage = nextPage;
+        window.previousPage = previousPage;
     </script>
 </body>
 </html>
