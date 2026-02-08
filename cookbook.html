@@ -99,13 +99,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         
-        .translate-dropdown {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 200;
-        }
-        
         .book-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -281,15 +274,11 @@
             opacity: 0.8;
         }
         
-        .translation-disclaimer {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: #92400e;
-            display: none;
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+            font-size: 24px;
         }
         
         /* Mobile Portrait - Photo first, scroll for recipe */
@@ -327,15 +316,6 @@
             }
             
             .filter-btn, .dropdown {
-                width: 100%;
-            }
-            
-            .translate-dropdown {
-                position: static;
-                margin-bottom: 15px;
-            }
-            
-            .translate-dropdown select {
                 width: 100%;
             }
         }
@@ -384,13 +364,6 @@
                 gap: 50px;
             }
         }
-        
-        .loading {
-            text-align: center;
-            padding: 100px 20px;
-            color: white;
-            font-size: 24px;
-        }
     </style>
 </head>
 <body>
@@ -398,15 +371,6 @@
         <a href="index.html" class="back-btn">← Back to Home</a>
         <h1>📖 VRIC Cookbook</h1>
         <p>A collection of cherished recipes from our community</p>
-    </div>
-    
-    <div class="translate-dropdown">
-        <select class="dropdown" id="translateSelect" onchange="translatePage()">
-            <option value="none">Original</option>
-            <option value="ar">العربية (Arabic)</option>
-            <option value="bn">বাংলা (Bangla)</option>
-            <option value="ur">اردو (Urdu)</option>
-        </select>
     </div>
     
     <div class="filters">
@@ -435,9 +399,6 @@
     
     <div id="bookContainer" class="book-container" style="display: none;">
         <div class="book">
-            <div class="translation-disclaimer" id="translationDisclaimer">
-                ⚠️ This is an automatic translation and may contain errors. For accuracy, please refer to the original recipe.
-            </div>
             <div id="pages"></div>
         </div>
         
@@ -447,31 +408,44 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
+            authDomain: "tasteofvric-97d8b.firebaseapp.com",
+            projectId: "tasteofvric-97d8b",
+            storageBucket: "tasteofvric-97d8b.firebasestorage.app",
+            messagingSenderId: "538483030204",
+            appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.doc = doc;
+        window.getDoc = getDoc;
+    </script>
+    
     <script>
-        const REPO_OWNER = 'VRICSisters';
-        const REPO_NAME = 'tasteofvric';
-        
         let allRecipes = [];
         let filteredRecipes = [];
         let currentPage = 0;
-        let currentLang = 'none';
-        
-        // Google Translate element
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                includedLanguages: 'ar,bn,ur',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
         
         async function loadCookbook() {
             try {
-                const response = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/cookbook.json?t=${Date.now()}`);
-                const cookbook = await response.json();
+                const cookbookDoc = await window.getDoc(window.doc(window.db, 'cookbook', 'data'));
                 
-                // ONLY load approved recipes
-                allRecipes = cookbook.approved || [];
+                if (cookbookDoc.exists()) {
+                    const cookbook = cookbookDoc.data();
+                    // ONLY show approved recipes - NO PII exposed
+                    allRecipes = cookbook.approved || [];
+                } else {
+                    allRecipes = [];
+                }
+                
                 filteredRecipes = [...allRecipes];
                 
                 const years = [...new Set(allRecipes.map(r => r.year))].sort().reverse();
@@ -568,11 +542,11 @@
                 // Use photo if available, otherwise placeholder
                 const photoSrc = recipe.photo || `https://via.placeholder.com/600x400/fcd34d/92400e?text=${encodeURIComponent(recipe.dishName)}`;
                 
-                // Format title with apostrophe-s
+                // Format title with apostrophe-s (ONLY firstName shown - PII protected)
                 const recipeTitle = `${recipe.firstName}'s ${recipe.dishName}`;
                 
                 page.innerHTML = `
-                    <div class="page-content translatable">
+                    <div class="page-content">
                         <div class="recipe-image-container">
                             <img src="${photoSrc}" alt="${recipe.dishName}" class="recipe-image">
                         </div>
@@ -623,32 +597,6 @@
             });
             
             updateNavButtons();
-        }
-        
-        function translatePage() {
-            const lang = document.getElementById('translateSelect').value;
-            const disclaimer = document.getElementById('translationDisclaimer');
-            
-            if (lang === 'none') {
-                disclaimer.style.display = 'none';
-                // Reset to original
-                if (window.google && window.google.translate) {
-                    const frame = document.querySelector('.goog-te-banner-frame');
-                    if (frame) {
-                        const closeBtn = frame.contentDocument.querySelector('.goog-close-link');
-                        if (closeBtn) closeBtn.click();
-                    }
-                }
-                location.reload();
-            } else {
-                disclaimer.style.display = 'block';
-                // Trigger Google Translate
-                const select = document.querySelector('.goog-te-combo');
-                if (select) {
-                    select.value = lang;
-                    select.dispatchEvent(new Event('change'));
-                }
-            }
         }
         
         function nextPage() {
@@ -705,11 +653,14 @@
             }
         }
         
+        window.filterBy = filterBy;
+        window.filterByYear = filterByYear;
+        window.filterByCountry = filterByCountry;
+        window.filterByCategory = filterByCategory;
+        window.nextPage = nextPage;
+        window.previousPage = previousPage;
+        
         loadCookbook();
     </script>
-    
-    <!-- Google Translate -->
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <div id="google_translate_element" style="display:none;"></div>
 </body>
 </html>
