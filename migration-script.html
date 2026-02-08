@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Migration Script</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        h1 { color: #00ff00; }
+        button {
+            padding: 15px 30px;
+            background: #00ff00;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover { background: #00dd00; }
+        button:disabled { background: #666; cursor: not-allowed; }
+        .log {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <h1>🔥 Firebase Migration Script</h1>
+    <p>This will migrate your data from GitHub JSON files to Firebase Firestore.</p>
+    <p><strong>⚠️ Run this ONCE, then delete this file!</strong></p>
+    
+    <button id="migrateBtn" onclick="runMigration()">Start Migration</button>
+    <button onclick="clearLog()">Clear Log</button>
+    
+    <div class="log" id="log"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
+            authDomain: "tasteofvric-97d8b.firebaseapp.com",
+            projectId: "tasteofvric-97d8b",
+            storageBucket: "tasteofvric-97d8b.firebasestorage.app",
+            messagingSenderId: "538483030204",
+            appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.collection = collection;
+    </script>
+
+    <script>
+        const REPO_OWNER = 'VRICSisters';
+        const REPO_NAME = 'tasteofvric';
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        async function runMigration() {
+            const btn = document.getElementById('migrateBtn');
+            btn.disabled = true;
+            clearLog();
+
+            log('🚀 Starting migration...', 'info');
+
+            try {
+                // Migrate cookbook
+                log('📖 Migrating cookbook...', 'info');
+                const cookbookRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/cookbook.json?t=${Date.now()}`);
+                const cookbook = await cookbookRes.json();
+
+                // Migrate approved recipes
+                if (cookbook.approved && cookbook.approved.length > 0) {
+                    for (let i = 0; i < cookbook.approved.length; i++) {
+                        const recipe = cookbook.approved[i];
+                        const recipeId = `recipe_${Date.now()}_${i}`;
+                        await window.setDoc(window.doc(window.db, 'cookbook', 'approved', recipeId), recipe);
+                        log(`✅ Migrated approved recipe: ${recipe.dishName}`, 'success');
+                    }
+                }
+
+                // Migrate pending recipes
+                if (cookbook.pending && cookbook.pending.length > 0) {
+                    for (let i = 0; i < cookbook.pending.length; i++) {
+                        const recipe = cookbook.pending[i];
+                        const recipeId = `pending_${Date.now()}_${i}`;
+                        await window.setDoc(window.doc(window.db, 'cookbook', 'pending', recipeId), recipe);
+                        log(`✅ Migrated pending recipe: ${recipe.dishName}`, 'success');
+                    }
+                } else {
+                    log('ℹ️ No pending recipes to migrate', 'info');
+                }
+
+                // Migrate entries
+                log('📝 Migrating entries...', 'info');
+                const entriesRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/entries.json?t=${Date.now()}`);
+                const entries = await entriesRes.json();
+
+                for (const year in entries) {
+                    const yearEntries = entries[year];
+                    for (let i = 0; i < yearEntries.length; i++) {
+                        const entry = yearEntries[i];
+                        const entryId = `entry_${i}`;
+                        await window.setDoc(window.doc(window.db, 'entries', year, 'entries', entryId), entry);
+                        log(`✅ Migrated ${year} entry: ${entry.dish}`, 'success');
+                    }
+                }
+
+                // Migrate judges
+                log('⚖️ Migrating judges...', 'info');
+                const judgesRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/judges.json?t=${Date.now()}`);
+                const judges = await judgesRes.json();
+
+                for (const year in judges) {
+                    const yearData = judges[year];
+                    await window.setDoc(window.doc(window.db, 'judges', year), yearData);
+                    log(`✅ Migrated ${year} judges data`, 'success');
+                }
+
+                // Migrate config
+                log('⚙️ Migrating config...', 'info');
+                const configRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/config.json?t=${Date.now()}`);
+                const config = await configRes.json();
+
+                await window.setDoc(window.doc(window.db, 'config', 'settings'), config);
+                log(`✅ Migrated config`, 'success');
+
+                log('', 'info');
+                log('🎉 Migration complete!', 'success');
+                log('✅ All data successfully migrated to Firebase', 'success');
+                log('⚠️ You can now delete this migration-script.html file', 'info');
+                log('⚠️ Upload the new HTML files to replace the old ones', 'info');
+
+            } catch (error) {
+                log(`❌ Migration failed: ${error.message}`, 'error');
+                console.error(error);
+            }
+
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>
