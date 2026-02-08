@@ -12,8 +12,8 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #f8f9fa;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,92 +22,103 @@
         }
         
         .container {
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
             background: white;
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 2px;
+            padding: 60px 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
         }
         
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
         h1 {
-            color: #333;
-            font-size: 36px;
-            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 42px;
+            font-weight: 400;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
         }
         
-        .year-button {
-            background: none;
-            border: none;
-            color: #667eea;
-            font-size: 24px;
-            font-weight: bold;
+        .year {
+            color: #95a5a6;
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 50px;
+            font-style: italic;
             cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            margin-bottom: 40px;
+            transition: color 0.3s;
         }
         
-        .year-button:hover {
-            background: #f0f4ff;
+        .year:hover {
+            color: #7f8c8d;
+        }
+        
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: #bdc3c7;
+            margin: 40px auto;
         }
         
         .menu-btn {
             display: block;
             width: 100%;
-            padding: 20px;
+            padding: 18px 30px;
             margin: 15px 0;
-            font-size: 18px;
-            font-weight: 600;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 400;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: white;
+            color: #2c3e50;
+            border: 1.5px solid #34495e;
+            border-radius: 2px;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
+            letter-spacing: 0.5px;
         }
         
         .menu-btn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #34495e;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
-        .menu-btn.secondary {
-            background: #10b981;
+        .menu-btn.primary {
+            background: #34495e;
+            color: white;
+            border-color: #34495e;
         }
         
-        .menu-btn.secondary:hover {
-            background: #059669;
-        }
-        
-        .menu-btn.judge {
-            background: #f59e0b;
-        }
-        
-        .menu-btn.judge:hover {
-            background: #d97706;
-        }
-        
-        .menu-btn.cookbook {
-            background: #8b5cf6;
-        }
-        
-        .menu-btn.cookbook:hover {
-            background: #7c3aed;
+        .menu-btn.primary:hover {
+            background: #2c3e50;
+            border-color: #2c3e50;
         }
         
         .menu-btn.disabled {
-            background: #9ca3af;
+            background: #ecf0f1;
+            color: #95a5a6;
+            border-color: #bdc3c7;
             cursor: not-allowed;
         }
         
         .menu-btn.disabled:hover {
             transform: none;
             box-shadow: none;
+        }
+        
+        .footer-text {
+            margin-top: 40px;
+            color: #95a5a6;
+            font-size: 13px;
+            font-style: italic;
         }
         
         .modal {
@@ -129,25 +140,34 @@
         
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 40px;
+            border-radius: 2px;
             max-width: 400px;
             width: 90%;
             text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
         
         .modal-content h3 {
-            margin-bottom: 20px;
-            color: #333;
+            font-size: 24px;
+            font-weight: 400;
+            color: #2c3e50;
+            margin-bottom: 25px;
         }
         
         .modal-content input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 15px;
+            border: 1.5px solid #bdc3c7;
+            border-radius: 2px;
             font-size: 16px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        .modal-content input:focus {
+            outline: none;
+            border-color: #34495e;
         }
         
         .modal-buttons {
@@ -158,55 +178,99 @@
         .modal-buttons button {
             flex: 1;
             padding: 12px;
-            border: none;
-            border-radius: 8px;
+            border: 1.5px solid #34495e;
+            border-radius: 2px;
             font-size: 16px;
-            font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
         .cancel-btn {
-            background: #e5e7eb;
-            color: #374151;
+            background: white;
+            color: #34495e;
+        }
+        
+        .cancel-btn:hover {
+            background: #ecf0f1;
         }
         
         .confirm-btn {
-            background: #667eea;
+            background: #34495e;
             color: white;
+        }
+        
+        .confirm-btn:hover {
+            background: #2c3e50;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 30px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .year {
+                font-size: 22px;
+            }
+            
+            .logo {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🍽️ Taste of VRIC</h1>
-        <button class="year-button" id="yearButton" onclick="showYearModal()">2026</button>
+        <div class="logo">🍽️</div>
+        <h1>Taste of VRIC</h1>
+        <div class="year" id="yearButton" onclick="showYearModal()">2026</div>
         
-        <a href="submit-entry.html" class="menu-btn" id="submitEntryBtn">
+        <div class="divider"></div>
+        
+        <a href="submit-entry.html" class="menu-btn primary" id="submitEntryBtn">
             Submit an Entry
         </a>
         
-        <a href="cookbook-submit.html" class="menu-btn secondary">
+        <a href="cookbook-submit.html" class="menu-btn">
             Contribute to the Cookbook
         </a>
         
-        <a href="cookbook.html" class="menu-btn cookbook">
+        <a href="cookbook.html" class="menu-btn">
             View Cookbook
         </a>
         
-        <a href="judges.html" class="menu-btn judge">
+        <button class="menu-btn" onclick="showJudgeModal()">
             Judges Only
-        </a>
+        </button>
+        
+        <p class="footer-text">A celebration of culinary excellence</p>
     </div>
     
     <!-- Year Change Modal -->
     <div id="yearModal" class="modal">
         <div class="modal-content">
             <h3>Change Year</h3>
-            <input type="password" id="yearPassword" placeholder="Enter admin password">
-            <input type="number" id="newYear" placeholder="Enter new year (e.g., 2027)">
+            <input type="password" id="yearPassword" placeholder="Admin password">
+            <input type="number" id="newYear" placeholder="Enter year (e.g., 2027)">
             <div class="modal-buttons">
                 <button class="cancel-btn" onclick="closeYearModal()">Cancel</button>
                 <button class="confirm-btn" onclick="changeYear()">Update</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Judge Password Modal -->
+    <div id="judgeModal" class="modal">
+        <div class="modal-content">
+            <h3>Judges Panel</h3>
+            <input type="password" id="judgePassword" placeholder="Enter judge password">
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeJudgeModal()">Cancel</button>
+                <button class="confirm-btn" onclick="judgeLogin()">Enter</button>
             </div>
         </div>
     </div>
@@ -228,10 +292,9 @@
                 
                 document.getElementById('yearButton').textContent = currentYear;
                 
-                // Update submit button based on year status
                 const submitBtn = document.getElementById('submitEntryBtn');
                 if (yearCompleted) {
-                    submitBtn.textContent = "This year's competition has ended!";
+                    submitBtn.textContent = "This year's competition has ended";
                     submitBtn.classList.add('disabled');
                     submitBtn.style.pointerEvents = 'none';
                 }
@@ -248,6 +311,15 @@
             document.getElementById('yearModal').classList.remove('active');
             document.getElementById('yearPassword').value = '';
             document.getElementById('newYear').value = '';
+        }
+        
+        function showJudgeModal() {
+            document.getElementById('judgeModal').classList.add('active');
+        }
+        
+        function closeJudgeModal() {
+            document.getElementById('judgeModal').classList.remove('active');
+            document.getElementById('judgePassword').value = '';
         }
         
         async function changeYear() {
@@ -288,14 +360,30 @@
                     })
                 });
                 
-                alert('Year updated! The page will reload in 3 seconds...');
+                alert('Year updated successfully!');
                 closeYearModal();
-                setTimeout(() => location.reload(), 3000);
+                setTimeout(() => location.reload(), 2000);
                 
             } catch (error) {
                 alert('Failed to update year: ' + error.message);
             }
         }
+        
+        function judgeLogin() {
+            const password = document.getElementById('judgePassword').value;
+            
+            if (password !== 'ILoveVR!C') {
+                alert('Incorrect password');
+                return;
+            }
+            
+            window.location.href = 'judges.html';
+        }
+        
+        // Allow Enter key on password fields
+        document.getElementById('judgePassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') judgeLogin();
+        });
         
         loadConfig();
     </script>
