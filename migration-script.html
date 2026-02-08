@@ -53,7 +53,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
@@ -71,6 +71,7 @@
         window.doc = doc;
         window.setDoc = setDoc;
         window.collection = collection;
+        window.addDoc = addDoc;
     </script>
 
     <script>
@@ -101,27 +102,12 @@
                 const cookbookRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/cookbook.json?t=${Date.now()}`);
                 const cookbook = await cookbookRes.json();
 
-                // Migrate approved recipes
-                if (cookbook.approved && cookbook.approved.length > 0) {
-                    for (let i = 0; i < cookbook.approved.length; i++) {
-                        const recipe = cookbook.approved[i];
-                        const recipeId = `recipe_${Date.now()}_${i}`;
-                        await window.setDoc(window.doc(window.db, 'cookbook', 'approved', recipeId), recipe);
-                        log(`✅ Migrated approved recipe: ${recipe.dishName}`, 'success');
-                    }
-                }
-
-                // Migrate pending recipes
-                if (cookbook.pending && cookbook.pending.length > 0) {
-                    for (let i = 0; i < cookbook.pending.length; i++) {
-                        const recipe = cookbook.pending[i];
-                        const recipeId = `pending_${Date.now()}_${i}`;
-                        await window.setDoc(window.doc(window.db, 'cookbook', 'pending', recipeId), recipe);
-                        log(`✅ Migrated pending recipe: ${recipe.dishName}`, 'success');
-                    }
-                } else {
-                    log('ℹ️ No pending recipes to migrate', 'info');
-                }
+                // Store cookbook data as a single document
+                await window.setDoc(window.doc(window.db, 'cookbook', 'data'), {
+                    approved: cookbook.approved || [],
+                    pending: cookbook.pending || []
+                });
+                log(`✅ Migrated cookbook (${cookbook.approved?.length || 0} approved, ${cookbook.pending?.length || 0} pending)`, 'success');
 
                 // Migrate entries
                 log('📝 Migrating entries...', 'info');
@@ -129,13 +115,10 @@
                 const entries = await entriesRes.json();
 
                 for (const year in entries) {
-                    const yearEntries = entries[year];
-                    for (let i = 0; i < yearEntries.length; i++) {
-                        const entry = yearEntries[i];
-                        const entryId = `entry_${i}`;
-                        await window.setDoc(window.doc(window.db, 'entries', year, 'entries', entryId), entry);
-                        log(`✅ Migrated ${year} entry: ${entry.dish}`, 'success');
-                    }
+                    await window.setDoc(window.doc(window.db, 'entries', year), {
+                        entries: entries[year]
+                    });
+                    log(`✅ Migrated ${year} entries (${entries[year].length} total)`, 'success');
                 }
 
                 // Migrate judges
@@ -144,8 +127,7 @@
                 const judges = await judgesRes.json();
 
                 for (const year in judges) {
-                    const yearData = judges[year];
-                    await window.setDoc(window.doc(window.db, 'judges', year), yearData);
+                    await window.setDoc(window.doc(window.db, 'judges', year), judges[year]);
                     log(`✅ Migrated ${year} judges data`, 'success');
                 }
 
