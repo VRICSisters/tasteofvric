@@ -455,12 +455,30 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
+            authDomain: "tasteofvric-97d8b.firebaseapp.com",
+            projectId: "tasteofvric-97d8b",
+            storageBucket: "tasteofvric-97d8b.firebasestorage.app",
+            messagingSenderId: "538483030204",
+            appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.doc = doc;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+    </script>
+
     <script>
-        const REPO_OWNER = 'VRICSisters';
-        const REPO_NAME = 'tasteofvric';
-        const DATA_TOKEN = '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'; // REMINDER: Replace with your GitHub token!
         const IMGBB_API_KEY = 'ecda6fd2f3949077b14a84c600294ff7';
-        
         let currentYear = new Date().getFullYear();
         
         // Auto-format phone number with hyphens
@@ -530,6 +548,8 @@
             window.scrollTo(0, 0);
         }
         
+        window.submitAnother = submitAnother;
+        
         document.getElementById('cookbookForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -564,8 +584,8 @@
                     photoURL = await uploadToImgBB(photoFile);
                 }
                 
-                const response = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/cookbook.json?t=${Date.now()}`);
-                const cookbook = await response.json();
+                const cookbookDoc = await window.getDoc(window.doc(window.db, 'cookbook', 'data'));
+                const cookbook = cookbookDoc.exists() ? cookbookDoc.data() : { approved: [], pending: [] };
                 
                 const newRecipe = {
                     firstName: name,
@@ -585,22 +605,10 @@
                     approved: false
                 };
                 
+                if (!cookbook.pending) cookbook.pending = [];
                 cookbook.pending.push(newRecipe);
                 
-                await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': `token ${DATA_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        event_type: 'update-cookbook',
-                        client_payload: {
-                            data: JSON.stringify(cookbook, null, 2)
-                        }
-                    })
-                });
+                await window.setDoc(window.doc(window.db, 'cookbook', 'data'), cookbook);
                 
                 document.getElementById('loading').style.display = 'none';
                 showConfirmation();
