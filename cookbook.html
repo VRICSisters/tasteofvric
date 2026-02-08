@@ -276,7 +276,6 @@
         .page {
             display: none;
             padding: 60px;
-            min-height: 600px;
             background: #fffbeb;
         }
         
@@ -494,18 +493,16 @@
         @media (max-width: 1024px) and (orientation: landscape) {
             .page {
                 padding: 40px 30px;
-                height: 100vh;
-                overflow: hidden;
             }
             
             .page-content {
                 grid-template-columns: 1fr 1fr;
                 gap: 40px;
-                height: 100%;
+                max-height: calc(100vh - 140px);
             }
             
             .recipe-image-container {
-                height: 100%;
+                max-height: calc(100vh - 140px);
                 overflow: hidden;
             }
             
@@ -516,7 +513,7 @@
             }
             
             .recipe-details {
-                height: 100%;
+                max-height: calc(100vh - 140px);
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
             }
@@ -570,6 +567,7 @@
         <div class="top-nav">
             <button onclick="previousPage()">← Previous</button>
             <button onclick="openFilters()">Filters</button>
+            <button id="resetBtn" onclick="resetFilters()" style="display: none; background: #ef4444;">Reset</button>
             <button onclick="nextPage()">Next →</button>
         </div>
         
@@ -740,7 +738,21 @@
                 return yearMatch && countryMatch && categoryMatch;
             });
             
+            checkResetButton();
             displayRecipes();
+        }
+        
+        function checkResetButton() {
+            const year = document.getElementById('yearFilter').value;
+            const country = document.getElementById('countryFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const resetBtn = document.getElementById('resetBtn');
+            
+            if (year !== 'all' || country !== 'all' || category !== 'all') {
+                resetBtn.style.display = 'block';
+            } else {
+                resetBtn.style.display = 'none';
+            }
         }
         
         function displayRecipes() {
@@ -886,6 +898,7 @@
             document.getElementById('yearFilter').value = 'all';
             document.getElementById('countryFilter').value = 'all';
             document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('resetBtn').style.display = 'none';
             filteredRecipes = [...allRecipes];
             displayRecipes();
             closeFilters();
