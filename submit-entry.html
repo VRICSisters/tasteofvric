@@ -263,9 +263,9 @@
                 
                 // Check for duplicate sticker number
                 const duplicate = entries.find(e => e.stickerNumber === stickerNumber);
-                if (duplicate) {
-                    throw new Error(`Sticker number ${stickerNumber} is already used by ${duplicate.name}`);
-                }
+               if (duplicate) {
+    throw new Error(`Sticker number ${stickerNumber} is already in use. Please double check your sticker or contact the organizer.`);
+}
                 
                 const newEntry = {
                     name,
