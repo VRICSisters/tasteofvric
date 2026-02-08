@@ -255,10 +255,10 @@
             background: #2c3e50;
         }
         
-        @media (max-width: 600px) {
+@media (max-width: 600px) {
             .container {
-                padding: 40px 30px;
-                margin-top: 80px;
+                padding: 40px 25px;
+                margin-top: 30px;
             }
             
             h1 {
@@ -274,18 +274,34 @@
             }
             
             .verse-container {
-                top: 10px;
-                padding: 6px 12px;
+                top: 8px;
+                left: 10px;
+                right: 10px;
+                transform: none;
+                width: auto;
+                padding: 8px 12px;
+                max-width: none;
             }
             
             .verse-text {
-                font-size: 11px;
+                font-size: 12px;
+                line-height: 1.5;
             }
             
             .verse-text.arabic {
-                font-size: 14px;
+                font-size: 15px;
+            }
+            
+            .verse-text.urdu {
+                font-size: 13px;
+            }
+            
+            .verse-ref {
+                font-size: 9px;
+                margin-top: 4px;
             }
         }
+        
     </style>
 </head>
 <body>
