@@ -89,6 +89,12 @@
             min-height: 100px;
         }
         
+        .duration-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
         .helper-text {
             font-size: 12px;
             color: #92400e;
@@ -200,7 +206,7 @@
             
             <div class="form-group">
                 <label>Cell Phone Number <span class="required">*</span></label>
-                <input type="tel" id="phone" required placeholder="555-123-4567">
+                <input type="tel" id="phone" required placeholder="555-123-4567" maxlength="12">
                 <p class="helper-text privacy-note">🔒 Your phone number will not be displayed publicly. It's only for our records.</p>
             </div>
             
@@ -238,12 +244,46 @@
             
             <div class="form-group">
                 <label>Total Prep Time? <span class="required">*</span></label>
-                <input type="text" id="prepTime" required placeholder="e.g., 30 minutes">
+                <div class="duration-group">
+                    <select id="prepHours" required>
+                        <option value="">Hours</option>
+                        <option value="0">0 hours</option>
+                        <option value="1">1 hour</option>
+                        <option value="2">2 hours</option>
+                        <option value="3">3 hours</option>
+                        <option value="4">4 hours</option>
+                        <option value="5">5+ hours</option>
+                    </select>
+                    <select id="prepMinutes" required>
+                        <option value="">Minutes</option>
+                        <option value="0">0 min</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45">45 min</option>
+                    </select>
+                </div>
             </div>
             
             <div class="form-group">
                 <label>Total Cook Time? <span class="required">*</span></label>
-                <input type="text" id="cookTime" required placeholder="e.g., 1 hour">
+                <div class="duration-group">
+                    <select id="cookHours" required>
+                        <option value="">Hours</option>
+                        <option value="0">0 hours</option>
+                        <option value="1">1 hour</option>
+                        <option value="2">2 hours</option>
+                        <option value="3">3 hours</option>
+                        <option value="4">4 hours</option>
+                        <option value="5">5+ hours</option>
+                    </select>
+                    <select id="cookMinutes" required>
+                        <option value="">Minutes</option>
+                        <option value="0">0 min</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45">45 min</option>
+                    </select>
+                </div>
             </div>
             
             <div class="form-group">
@@ -280,9 +320,22 @@
     <script>
         const REPO_OWNER = 'VRICSisters';
         const REPO_NAME = 'tasteofvric';
-        const DATA_TOKEN = 'YOUR_TOKEN_HERE'; // Replace with your token
+        const DATA_TOKEN = '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'; // REMINDER: Replace with your GitHub token!
         
-        let currentYear = new Date().getFullYear(); // Auto-detects current year
+        let currentYear = new Date().getFullYear();
+        
+        // Auto-format phone number with hyphens
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            
+            if (value.length <= 3) {
+                e.target.value = value;
+            } else if (value.length <= 6) {
+                e.target.value = value.slice(0, 3) + '-' + value.slice(3);
+            } else {
+                e.target.value = value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6, 10);
+            }
+        });
         
         // Photo preview
         document.getElementById('photo').addEventListener('change', function(e) {
@@ -336,6 +389,16 @@
             });
         }
         
+        function formatDuration(hours, minutes) {
+            const h = parseInt(hours);
+            const m = parseInt(minutes);
+            
+            if (h === 0 && m === 0) return '0 minutes';
+            if (h === 0) return `${m} minutes`;
+            if (m === 0) return h === 1 ? '1 hour' : `${h} hours`;
+            return h === 1 ? `1 hour ${m} minutes` : `${h} hours ${m} minutes`;
+        }
+        
         document.getElementById('cookbookForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -344,8 +407,15 @@
             const dishName = document.getElementById('dishName').value.trim();
             const country = document.getElementById('country').value.trim();
             const category = document.querySelector('input[name="category"]:checked').value;
-            const prepTime = document.getElementById('prepTime').value.trim();
-            const cookTime = document.getElementById('cookTime').value.trim();
+            
+            const prepHours = document.getElementById('prepHours').value;
+            const prepMinutes = document.getElementById('prepMinutes').value;
+            const prepTime = formatDuration(prepHours, prepMinutes);
+            
+            const cookHours = document.getElementById('cookHours').value;
+            const cookMinutes = document.getElementById('cookMinutes').value;
+            const cookTime = formatDuration(cookHours, cookMinutes);
+            
             const ingredients = document.getElementById('ingredients').value.trim();
             const instructions = document.getElementById('instructions').value.trim();
             const notes = document.getElementById('notes').value.trim();
