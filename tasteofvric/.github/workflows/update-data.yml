@@ -3,8 +3,9 @@ name: Update Competition Data
 on:
   repository_dispatch:
     types: [update-entries, update-cookbook, update-judges, update-config]
-  schedule:
-    - cron: '0 5 1 1 *'
+
+permissions:
+  contents: write
 
 jobs:
   update-data:
@@ -15,29 +16,42 @@ jobs:
         with:
           token: ${{ secrets.DATA_TOKEN }}
 
-      - name: Update data files
+      - name: Update cookbook data
+        if: github.event.action == 'update-cookbook'
         run: |
-          if [ "${{ github.event.action }}" == "update-entries" ]; then
-            echo '${{ github.event.client_payload.data }}' > data/entries.json
-          elif [ "${{ github.event.action }}" == "update-cookbook" ]; then
-            echo '${{ github.event.client_payload.data }}' > data/cookbook.json
-          elif [ "${{ github.event.action }}" == "update-judges" ]; then
-            echo '${{ github.event.client_payload.data }}' > data/judges.json
-          elif [ "${{ github.event.action }}" == "update-config" ]; then
-            echo '${{ github.event.client_payload.data }}' > data/config.json
-          fi
+          cat > data/cookbook.json << 'EOL'
+          ${{ github.event.client_payload.data }}
+          EOL
 
-      - name: Auto-increment year on Jan 1
-        if: github.event.schedule
+      - name: Update entries data
+        if: github.event.action == 'update-entries'
         run: |
-          CURRENT_YEAR=$(date +%Y)
-          CURRENT_CONFIG=$(cat data/config.json)
-          echo $CURRENT_CONFIG | jq --arg year "$CURRENT_YEAR" '.currentYear = ($year | tonumber)' > data/config.json
+          cat > data/entries.json << 'EOL'
+          ${{ github.event.client_payload.data }}
+          EOL
 
-      - name: Commit changes
+      - name: Update judges data
+        if: github.event.action == 'update-judges'
+        run: |
+          cat > data/judges.json << 'EOL'
+          ${{ github.event.client_payload.data }}
+          EOL
+
+      - name: Update config data
+        if: github.event.action == 'update-config'
+        run: |
+          cat > data/config.json << 'EOL'
+          ${{ github.event.client_payload.data }}
+          EOL
+
+      - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "VRIC Auto Update"
           git add data/
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update: ${{ github.event.action || 'yearly increment' }}"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update data: ${{ github.event.action }}"
+            git push
+          fi
