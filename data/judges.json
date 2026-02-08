@@ -1,1 +1,19 @@
-
+{
+  "2026": {
+    "judgeNames": ["Aalaa", "Shafia", "Ghousia", "Hanifa"],
+    "judgeCount": 4,
+    "scores": [],
+    "completed": true,
+    "winners": {
+      "Appetizer": "10",
+      "Entree": "11",
+      "Dessert": "7"
+    }
+  },
+  "2027": {
+    "judgeNames": [],
+    "judgeCount": 0,
+    "scores": [],
+    "completed": false
+  }
+}
