@@ -1,1 +1,9 @@
-
+{
+  "currentYear": 2027,
+  "adminPassword": "adminVR!C",
+  "judgePassword": "ILoveVR!C",
+  "yearCompleted": {
+    "2026": true,
+    "2027": false
+  }
+}
