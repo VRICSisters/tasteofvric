@@ -4,7 +4,7 @@ on:
   repository_dispatch:
     types: [update-entries, update-cookbook, update-judges, update-config]
   schedule:
-    - cron: '0 5 1 1 *'  # Run at 5 AM UTC on Jan 1st (12 AM EST)
+    - cron: '0 5 1 1 *'
 
 jobs:
   update-data:
