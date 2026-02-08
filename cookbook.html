@@ -29,6 +29,7 @@
             font-size: 48px;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 400;
         }
         
         .header p {
@@ -69,6 +70,7 @@
             border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -92,8 +94,16 @@
             border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .translate-dropdown {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
         }
         
         .book-container {
@@ -153,7 +163,7 @@
             font-size: 36px;
             color: #92400e;
             margin-bottom: 10px;
-            font-weight: 700;
+            font-weight: 400;
         }
         
         .recipe-meta {
@@ -180,6 +190,7 @@
             margin-bottom: 10px;
             border-bottom: 2px solid #fcd34d;
             padding-bottom: 5px;
+            font-weight: 400;
         }
         
         .recipe-section p, .recipe-section ul {
@@ -237,6 +248,7 @@
             border-radius: 25px;
             font-size: 18px;
             font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -261,11 +273,23 @@
         .empty-state h2 {
             font-size: 32px;
             margin-bottom: 15px;
+            font-weight: 400;
         }
         
         .empty-state p {
             font-size: 18px;
             opacity: 0.8;
+        }
+        
+        .translation-disclaimer {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #92400e;
+            display: none;
         }
         
         /* Mobile Portrait - Photo first, scroll for recipe */
@@ -305,9 +329,18 @@
             .filter-btn, .dropdown {
                 width: 100%;
             }
+            
+            .translate-dropdown {
+                position: static;
+                margin-bottom: 15px;
+            }
+            
+            .translate-dropdown select {
+                width: 100%;
+            }
         }
         
-        /* Mobile Landscape - Side by side like examples */
+        /* Mobile Landscape - Side by side */
         @media (max-width: 1024px) and (orientation: landscape) {
             .page {
                 padding: 40px 30px;
@@ -367,6 +400,15 @@
         <p>A collection of cherished recipes from our community</p>
     </div>
     
+    <div class="translate-dropdown">
+        <select class="dropdown" id="translateSelect" onchange="translatePage()">
+            <option value="none">Original</option>
+            <option value="ar">العربية (Arabic)</option>
+            <option value="bn">বাংলা (Bangla)</option>
+            <option value="ur">اردو (Urdu)</option>
+        </select>
+    </div>
+    
     <div class="filters">
         <button class="filter-btn active" onclick="filterBy('all')">All Recipes</button>
         <select class="dropdown" id="yearFilter" onchange="filterByYear()">
@@ -393,6 +435,9 @@
     
     <div id="bookContainer" class="book-container" style="display: none;">
         <div class="book">
+            <div class="translation-disclaimer" id="translationDisclaimer">
+                ⚠️ This is an automatic translation and may contain errors. For accuracy, please refer to the original recipe.
+            </div>
             <div id="pages"></div>
         </div>
         
@@ -409,16 +454,26 @@
         let allRecipes = [];
         let filteredRecipes = [];
         let currentPage = 0;
+        let currentLang = 'none';
+        
+        // Google Translate element
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                includedLanguages: 'ar,bn,ur',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
         
         async function loadCookbook() {
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/cookbook.json?t=${Date.now()}`);
                 const cookbook = await response.json();
                 
+                // ONLY load approved recipes
                 allRecipes = cookbook.approved || [];
                 filteredRecipes = [...allRecipes];
                 
-                // Populate year filter
                 const years = [...new Set(allRecipes.map(r => r.year))].sort().reverse();
                 const yearFilter = document.getElementById('yearFilter');
                 years.forEach(year => {
@@ -428,7 +483,6 @@
                     yearFilter.appendChild(option);
                 });
                 
-                // Populate country filter
                 const countries = [...new Set(allRecipes.map(r => r.country))].sort();
                 const countryFilter = document.getElementById('countryFilter');
                 countries.forEach(country => {
@@ -466,17 +520,14 @@
         }
         
         function filterByYear() {
-            const year = document.getElementById('yearFilter').value;
             applyFilters();
         }
         
         function filterByCountry() {
-            const country = document.getElementById('countryFilter').value;
             applyFilters();
         }
         
         function filterByCategory() {
-            const category = document.getElementById('categoryFilter').value;
             applyFilters();
         }
         
@@ -514,16 +565,20 @@
                 page.className = 'page';
                 if (index === 0) page.classList.add('active');
                 
-                const photoSrc = recipe.photo || 'https://via.placeholder.com/600x400/fcd34d/92400e?text=' + encodeURIComponent(recipe.dishName);
+                // Use photo if available, otherwise placeholder
+                const photoSrc = recipe.photo || `https://via.placeholder.com/600x400/fcd34d/92400e?text=${encodeURIComponent(recipe.dishName)}`;
+                
+                // Format title with apostrophe-s
+                const recipeTitle = `${recipe.firstName}'s ${recipe.dishName}`;
                 
                 page.innerHTML = `
-                    <div class="page-content">
+                    <div class="page-content translatable">
                         <div class="recipe-image-container">
                             <img src="${photoSrc}" alt="${recipe.dishName}" class="recipe-image">
                         </div>
                         
                         <div class="recipe-details">
-                            <h2>${recipe.dishName}</h2>
+                            <h2>${recipeTitle}</h2>
                             <div class="recipe-meta">
                                 <span>🌍 ${recipe.country}</span>
                                 <span>🍽️ ${recipe.category}</span>
@@ -570,6 +625,32 @@
             updateNavButtons();
         }
         
+        function translatePage() {
+            const lang = document.getElementById('translateSelect').value;
+            const disclaimer = document.getElementById('translationDisclaimer');
+            
+            if (lang === 'none') {
+                disclaimer.style.display = 'none';
+                // Reset to original
+                if (window.google && window.google.translate) {
+                    const frame = document.querySelector('.goog-te-banner-frame');
+                    if (frame) {
+                        const closeBtn = frame.contentDocument.querySelector('.goog-close-link');
+                        if (closeBtn) closeBtn.click();
+                    }
+                }
+                location.reload();
+            } else {
+                disclaimer.style.display = 'block';
+                // Trigger Google Translate
+                const select = document.querySelector('.goog-te-combo');
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event('change'));
+                }
+            }
+        }
+        
         function nextPage() {
             if (currentPage < filteredRecipes.length - 1) {
                 document.querySelectorAll('.page')[currentPage].classList.remove('active');
@@ -595,7 +676,6 @@
             document.getElementById('nextBtn').disabled = currentPage === filteredRecipes.length - 1;
         }
         
-        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') {
                 previousPage();
@@ -604,7 +684,6 @@
             }
         });
         
-        // Touch swipe navigation
         let touchStartX = 0;
         let touchEndX = 0;
         
@@ -628,5 +707,9 @@
         
         loadCookbook();
     </script>
+    
+    <!-- Google Translate -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none;"></div>
 </body>
 </html>
