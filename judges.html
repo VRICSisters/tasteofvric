@@ -13,36 +13,18 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
         
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .back-btn {
-            display: inline-block;
-            color: #f59e0b;
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        
-        .back-btn:hover {
-            text-decoration: underline;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         
         .screen {
@@ -53,231 +35,225 @@
             display: block;
         }
         
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .setup-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
             font-weight: 600;
-            font-size: 14px;
+            color: #333;
         }
         
-        input[type="password"], input[type="number"], input[type="text"], select, textarea {
+        input, select, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 16px;
-            transition: border 0.3s;
-            font-family: inherit;
         }
         
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #f59e0b;
+            border-color: #667eea;
         }
         
-        textarea {
-            resize: vertical;
-            min-height: 80px;
+        .judge-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        .btn {
+        button {
             width: 100%;
             padding: 15px;
-            background: #f59e0b;
+            background: #667eea;
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
+            transition: background 0.3s;
         }
         
-        .btn:hover {
-            background: #d97706;
+        button:hover {
+            background: #5568d3;
         }
         
-        .btn:disabled {
-            background: #9ca3af;
+        button:disabled {
+            background: #ccc;
             cursor: not-allowed;
         }
         
-        .btn.secondary {
-            background: #6b7280;
+        .judge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
         }
         
-        .btn.secondary:hover {
-            background: #4b5563;
+        .judge-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
         }
         
-        .btn.danger {
-            background: #ef4444;
+        .judge-card:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
         }
         
-        .btn.danger:hover {
-            background: #dc2626;
+        .judge-card.selected {
+            background: #667eea;
+            color: white;
+            border-color: #5568d3;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 30px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
         }
         
         .rating-group {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .rating-group h3 {
             color: #333;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             font-size: 16px;
-        }
-        
-        .rating-desc {
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 15px;
         }
         
         .rating-buttons {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
+            gap: 10px;
         }
         
         .rating-btn {
-            padding: 18px 12px;
-            font-size: 18px;
-            font-weight: bold;
-            border: 2px solid #ddd;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
             background: white;
             border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
         
-        .rating-btn.score-1 {
-            border-color: #dc2626;
-            color: #dc2626;
+        .rating-btn:hover {
+            transform: translateY(-2px);
         }
         
-        .rating-btn.score-1.selected {
-            background: #dc2626;
+        .rating-btn.selected {
             color: white;
+            border-width: 3px;
         }
         
-        .rating-btn.score-2 {
-            border-color: #f97316;
-            color: #f97316;
+        .rating-btn[data-value="1"] { border-color: #dc2626; }
+        .rating-btn[data-value="1"].selected { background: #dc2626; border-color: #991b1b; }
+        
+        .rating-btn[data-value="2"] { border-color: #f97316; }
+        .rating-btn[data-value="2"].selected { background: #f97316; border-color: #c2410c; }
+        
+        .rating-btn[data-value="3"] { border-color: #fbbf24; }
+        .rating-btn[data-value="3"].selected { background: #fbbf24; border-color: #d97706; color: #000; }
+        
+        .rating-btn[data-value="4"] { border-color: #84cc16; }
+        .rating-btn[data-value="4"].selected { background: #84cc16; border-color: #4d7c0f; }
+        
+        .rating-btn[data-value="5"] { border-color: #22c55e; }
+        .rating-btn[data-value="5"].selected { background: #22c55e; border-color: #15803d; }
+        
+        .results {
+            margin-top: 30px;
         }
         
-        .rating-btn.score-2.selected {
-            background: #f97316;
-            color: white;
+        .category-results {
+            margin-bottom: 30px;
         }
         
-        .rating-btn.score-3 {
-            border-color: #fbbf24;
-            color: #ca8a04;
+        .category-results h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
         }
         
-        .rating-btn.score-3.selected {
-            background: #fbbf24;
-            color: white;
+        .winner-card {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
         
-        .rating-btn.score-4 {
-            border-color: #84cc16;
-            color: #4d7c0f;
-        }
-        
-        .rating-btn.score-4.selected {
-            background: #84cc16;
-            color: white;
-        }
-        
-        .rating-btn.score-5 {
-            border-color: #22c55e;
-            color: #15803d;
-        }
-        
-        .rating-btn.score-5.selected {
-            background: #22c55e;
-            color: white;
-        }
-        
-        .current-judge {
-            background: #f59e0b;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .dish-info {
-            background: #fef3c7;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #f59e0b;
-        }
-        
-        .dish-info h3 {
-            color: #92400e;
+        .winner-card h4 {
+            color: #333;
+            font-size: 24px;
             margin-bottom: 5px;
         }
         
-        .dish-info p {
-            color: #78350f;
-            font-size: 14px;
-        }
-        
-        .error {
-            background: #fee2e2;
-            border: 2px solid #ef4444;
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .success {
-            background: #d1fae5;
-            border: 2px solid #10b981;
-            color: #065f46;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .progress {
-            background: #e5e7eb;
-            height: 8px;
-            border-radius: 4px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            background: #f59e0b;
-            height: 100%;
-            transition: width 0.3s;
-        }
-        
-        .emergency {
-            margin-top: 30px;
+        .runner-up {
+            background: #e9ecef;
             padding: 15px;
-            background: #fee2e2;
             border-radius: 8px;
-            text-align: center;
-            font-size: 12px;
-            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        .emergency-contact {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #dc2626;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
         }
         
         .modal {
@@ -303,8 +279,6 @@
             border-radius: 12px;
             max-width: 500px;
             width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
         }
         
         .modal-content h3 {
@@ -312,360 +286,320 @@
             color: #333;
         }
         
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
+        .tie-option {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .winner-card {
-            background: #fef3c7;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border-left: 4px solid #f59e0b;
-        }
-        
-        .winner-card h4 {
-            color: #92400e;
             margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
         
-        .winner-card .winner-name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #f59e0b;
-            margin: 10px 0;
+        .tie-option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
         }
         
-        .winner-card .winner-dish {
-            color: #78350f;
-            font-size: 16px;
+        .tie-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #5568d3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="container screen active">
         <a href="index.html" class="back-btn">← Back to Home</a>
+        <h1>⚖️ Judges Panel Setup</h1>
         
-        <!-- Login Screen -->
-        <div id="loginScreen" class="screen active">
-            <h1>👨‍⚖️ Judges Panel</h1>
+        <div class="setup-form">
             <div class="form-group">
-                <label>Enter Judge Password</label>
-                <input type="password" id="judgePassword" placeholder="Enter password">
-            </div>
-            <button class="btn" onclick="login()">Login</button>
-        </div>
-        
-        <!-- Judge Setup Screen -->
-        <div id="setupScreen" class="screen">
-            <h1>Setup Judges</h1>
-            <p style="color: #666; margin-bottom: 20px;">This is the first time logging in for this year. Please set up the judging panel.</p>
-            <div class="form-group">
-                <label>How many judges this year?</label>
+                <label>Number of Judges</label>
                 <input type="number" id="judgeCount" min="1" max="10" value="4">
             </div>
-            <div id="judgeNamesContainer"></div>
-            <button class="btn" onclick="saveJudgeSetup()">Save & Continue</button>
-        </div>
-        
-        <!-- Judge Selection Screen -->
-        <div id="judgeSelectScreen" class="screen">
-            <h1>Select Your Name</h1>
-            <div id="judgeButtons"></div>
-        </div>
-        
-        <!-- Dish Selection Screen -->
-        <div id="dishSelectScreen" class="screen">
-            <div class="current-judge" id="currentJudgeName"></div>
-            <h1>Select a Dish to Rate</h1>
-            <div class="progress">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <p style="text-align: center; color: #666; margin-bottom: 20px;" id="progressText">0 / 0 rated</p>
+            
             <div class="form-group">
-                <label>Choose Sticker Number</label>
-                <select id="stickerSelect">
-                    <option value="">Select a sticker number...</option>
-                </select>
-            </div>
-            <button class="btn" onclick="startRating()">Rate This Dish</button>
-            <button class="btn secondary" onclick="changeJudge()" style="margin-top: 10px;">Change Judge</button>
-            <button class="btn danger" id="completeBtn" onclick="showCompleteModal()" style="margin-top: 20px; display: none;">Complete Scoring for This Year</button>
-            <div class="emergency" id="emergencyContact" style="display: none;">
-                In case of emergency with this app, please text Br Usman at 305-763-0271
-            </div>
-        </div>
-        
-        <!-- Rating Screen -->
-        <div id="ratingScreen" class="screen">
-            <div class="current-judge" id="ratingJudgeName"></div>
-            <div class="dish-info">
-                <h3 id="dishName"></h3>
-                <p id="dishCategory"></p>
+                <label>Judge Names (one per line)</label>
+                <div class="judge-inputs" id="judgeInputs"></div>
             </div>
             
+            <button onclick="startJudging()">Start Judging</button>
+        </div>
+    </div>
+    
+    <!-- Judge Selection Screen -->
+    <div id="judgeSelectScreen" class="container screen">
+        <h1>Select Your Judge</h1>
+        <div class="judge-grid" id="judgeGrid"></div>
+    </div>
+    
+    <!-- Dish Selection Screen -->
+    <div id="dishSelectScreen" class="container screen">
+        <h1 id="judgeWelcome"></h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar">0 / 0 rated</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Select Dish to Rate</label>
+            <select id="dishSelect" onchange="loadRatingForm()">
+                <option value="">Choose a sticker number...</option>
+            </select>
+        </div>
+        
+        <button onclick="backToJudgeSelect()">Change Judge</button>
+        
+        <div id="completeButton" style="display: none; margin-top: 20px;">
+            <button onclick="showCompleteModal()" style="background: #22c55e;">Complete Scoring</button>
+        </div>
+    </div>
+    
+    <!-- Rating Screen -->
+    <div id="ratingScreen" class="container screen">
+        <h1 id="dishTitle"></h1>
+        
+        <form id="ratingForm">
             <div class="rating-group">
                 <h3>Taste & Flavor</h3>
-                <div class="rating-desc">Balance and seasoning. Does it taste good? Would you want more?</div>
-                <div class="rating-buttons" id="tasteRating"></div>
+                <div class="rating-buttons" id="taste"></div>
             </div>
             
             <div class="rating-group">
                 <h3>Texture & Doneness</h3>
-                <div class="rating-desc">Cooked correctly? Does it feel right for the dish type?</div>
-                <div class="rating-buttons" id="textureRating"></div>
+                <div class="rating-buttons" id="texture"></div>
             </div>
             
             <div class="rating-group">
                 <h3>Intentionality & Thoughtfulness</h3>
-                <div class="rating-desc">Did the cook show care or technique? Well-prepared for its style?</div>
-                <div class="rating-buttons" id="intentionalityRating"></div>
+                <div class="rating-buttons" id="intentionality"></div>
             </div>
             
             <div class="rating-group">
                 <h3>Presentation</h3>
-                <div class="rating-desc">How neat and visually appealing? Consider plating and organization.</div>
-                <div class="rating-buttons" id="presentationRating"></div>
+                <div class="rating-buttons" id="presentation"></div>
             </div>
             
             <div class="rating-group">
                 <h3>Category Fit</h3>
-                <div class="rating-desc">Does it belong in this category?</div>
-                <div class="rating-buttons" id="categoryFitRating"></div>
+                <div class="rating-buttons" id="categoryFit"></div>
             </div>
             
             <div class="form-group">
                 <label>Notes (Optional)</label>
-                <textarea id="notes" placeholder="Any additional comments..."></textarea>
+                <textarea id="notes" rows="3" placeholder="Any additional comments..."></textarea>
             </div>
             
-            <button class="btn" id="submitRatingBtn" onclick="submitRating()" disabled>Submit Rating</button>
-            <button class="btn secondary" onclick="cancelRating()">Cancel</button>
-        </div>
-        
-        <!-- Results Screen -->
-        <div id="resultsScreen" class="screen">
-            <h1>🏆 Competition Results</h1>
-            <div id="winnersContainer"></div>
-            <button class="btn" onclick="location.href='index.html'">Back to Home</button>
-        </div>
+            <button type="submit">Submit Rating</button>
+            <button type="button" onclick="backToDishSelect()" style="background: #6c757d; margin-top: 10px;">Back</button>
+        </form>
+    </div>
+    
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="container screen">
+        <h1>🏆 Competition Results</h1>
+        <div id="resultsContent"></div>
     </div>
     
     <!-- Complete Scoring Modal -->
     <div id="completeModal" class="modal">
         <div class="modal-content">
-            <h3>Complete Scoring?</h3>
-            <p style="margin-bottom: 20px; color: #666;">Are you sure ALL judges have finished rating ALL dishes? This action cannot be undone.</p>
-            <div class="form-group">
-                <label>Enter Admin Password</label>
-                <input type="password" id="completePassword">
-            </div>
-            <div class="modal-buttons">
-                <button class="btn secondary" onclick="closeCompleteModal()">Cancel</button>
-                <button class="btn danger" onclick="completeScoring()">Complete & Lock Year</button>
+            <h3>Complete Scoring</h3>
+            <p>Enter admin password to finalize results:</p>
+            <input type="password" id="completePassword" placeholder="Admin password">
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button onclick="closeCompleteModal()" style="background: #6c757d;">Cancel</button>
+                <button onclick="completeScoring()" style="background: #22c55e;">Complete</button>
             </div>
         </div>
     </div>
     
-    <!-- Tie Breaker Modal -->
-    <div id="tieModal" class="modal">
+    <!-- Tiebreaker Modal -->
+    <div id="tiebreakerModal" class="modal">
         <div class="modal-content">
-            <h3>Tie Detected!</h3>
-            <p id="tieMessage" style="margin-bottom: 20px; color: #666;"></p>
+            <h3>Tiebreaker Vote</h3>
+            <p id="tieCategory"></p>
             <div id="tieOptions"></div>
+            <button onclick="submitTiebreaker()" style="margin-top: 20px;">Submit Decision</button>
         </div>
     </div>
+    
+    <div id="emergencyContact" class="emergency-contact" style="display: none;">
+        📞 Emergency: Text Br Usman at 305-763-0271
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
+            authDomain: "tasteofvric-97d8b.firebaseapp.com",
+            projectId: "tasteofvric-97d8b",
+            storageBucket: "tasteofvric-97d8b.firebasestorage.app",
+            messagingSenderId: "538483030204",
+            appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.doc = doc;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+    </script>
 
     <script>
-        const REPO_OWNER = 'VRICSisters';
-        const REPO_NAME = 'tasteofvric';
-        const DATA_TOKEN = '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'; // Replace with your token
-        
         let currentYear = 2026;
         let currentJudge = '';
-        let currentJudgeIndex = -1;
-        let judgesData = null;
-        let entriesData = null;
-        let currentSticker = null;
-        let ratings = {
-            taste: null,
-            texture: null,
-            intentionality: null,
-            presentation: null,
-            categoryFit: null
-        };
-        let ties = {};
+        let currentDish = '';
+        let allJudges = [];
+        let allEntries = [];
+        let allScores = [];
+        let judgesData = {};
+        let tiebreakers = {};
         
-        async function login() {
-            const password = document.getElementById('judgePassword').value;
+        async function loadYear() {
+            const configDoc = await window.getDoc(window.doc(window.db, 'config', 'settings'));
+            if (configDoc.exists()) {
+                currentYear = configDoc.data().currentYear;
+            }
+            await loadJudgesData();
+        }
+        
+        async function loadJudgesData() {
+            const judgesDoc = await window.getDoc(window.doc(window.db, 'judges', currentYear.toString()));
             
-            if (password !== 'ILoveVR!C') {
-                alert('Incorrect password');
-                return;
+            if (judgesDoc.exists()) {
+                judgesData = judgesDoc.data();
+                allJudges = judgesData.judges || [];
+                allScores = judgesData.scores || [];
+                
+                if (judgesData.completed) {
+                    showResults();
+                } else if (allJudges.length > 0) {
+                    showJudgeSelect();
+                } else {
+                    showSetup();
+                }
+            } else {
+                showSetup();
             }
             
-            try {
-                // Load config
-                const configRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/config.json?t=${Date.now()}`);
-                const config = await configRes.json();
-                currentYear = config.currentYear;
-                
-                // Load judges data
-                const judgesRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/judges.json?t=${Date.now()}`);
-                judgesData = await judgesRes.json();
-                
-                // Load entries data
-                const entriesRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/entries.json?t=${Date.now()}`);
-                entriesData = await entriesRes.json();
-                
-                // Check if year is completed
-                if (judgesData[currentYear]?.completed) {
-                    showResults();
-                    return;
-                }
-                
-                // Check if judges are set up
-                if (!judgesData[currentYear] || judgesData[currentYear].judgeCount === 0) {
-                    showScreen('setupScreen');
-                    generateJudgeNameInputs(4);
-                } else {
-                    showScreen('judgeSelectScreen');
-                    displayJudgeButtons();
-                }
-                
-            } catch (error) {
-                alert('Failed to load data: ' + error.message);
+            const entriesDoc = await window.getDoc(window.doc(window.db, 'entries', currentYear.toString()));
+            if (entriesDoc.exists()) {
+                allEntries = entriesDoc.data().entries || [];
             }
         }
         
-        function generateJudgeNameInputs(count) {
-            const container = document.getElementById('judgeNamesContainer');
-            container.innerHTML = '';
+        function showSetup() {
+            hideAllScreens();
+            document.getElementById('setupScreen').classList.add('active');
             
-            for (let i = 0; i < count; i++) {
-                const div = document.createElement('div');
-                div.className = 'form-group';
-                div.innerHTML = `
-                    <label>Judge ${i + 1} Name</label>
-                    <input type="text" id="judgeName${i}" placeholder="Enter judge name" required>
-                `;
-                container.appendChild(div);
-            }
+            const count = document.getElementById('judgeCount').value || 4;
+            updateJudgeInputs(count);
         }
         
         document.getElementById('judgeCount')?.addEventListener('change', function() {
-            generateJudgeNameInputs(parseInt(this.value));
+            updateJudgeInputs(this.value);
         });
         
-        async function saveJudgeSetup() {
-            const count = parseInt(document.getElementById('judgeCount').value);
-            const names = [];
+        function updateJudgeInputs(count) {
+            const container = document.getElementById('judgeInputs');
+            container.innerHTML = '';
             
-            for (let i = 0; i < count; i++) {
-                const name = document.getElementById(`judgeName${i}`).value.trim();
-                if (!name) {
-                    alert(`Please enter a name for Judge ${i + 1}`);
-                    return;
-                }
-                names.push(name);
-            }
-            
-            judgesData[currentYear] = {
-                judgeNames: names,
-                judgeCount: count,
-                scores: [],
-                completed: false
-            };
-            
-            try {
-                await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': `token ${DATA_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        event_type: 'update-judges',
-                        client_payload: {
-                            data: JSON.stringify(judgesData, null, 2)
-                        }
-                    })
-                });
-                
-                showScreen('judgeSelectScreen');
-                displayJudgeButtons();
-                
-            } catch (error) {
-                alert('Failed to save judges: ' + error.message);
+            for (let i = 1; i <= count; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = `Judge ${i} Name`;
+                input.id = `judge${i}`;
+                input.required = true;
+                container.appendChild(input);
             }
         }
         
-        function displayJudgeButtons() {
-            const container = document.getElementById('judgeButtons');
-            container.innerHTML = '';
+        async function startJudging() {
+            const count = parseInt(document.getElementById('judgeCount').value);
+            allJudges = [];
             
-            judgesData[currentYear].judgeNames.forEach((name, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'btn';
-                btn.textContent = name;
-                btn.style.marginBottom = '10px';
-                btn.onclick = () => selectJudge(name, index);
-                container.appendChild(btn);
+            for (let i = 1; i <= count; i++) {
+                const name = document.getElementById(`judge${i}`).value.trim();
+                if (!name) {
+                    alert(`Please enter name for Judge ${i}`);
+                    return;
+                }
+                allJudges.push(name);
+            }
+            
+            judgesData = {
+                judges: allJudges,
+                scores: [],
+                completed: false,
+                year: currentYear
+            };
+            
+            await window.setDoc(window.doc(window.db, 'judges', currentYear.toString()), judgesData);
+            
+            showJudgeSelect();
+        }
+        
+        function showJudgeSelect() {
+            hideAllScreens();
+            document.getElementById('judgeSelectScreen').classList.add('active');
+            
+            const grid = document.getElementById('judgeGrid');
+            grid.innerHTML = '';
+            
+            allJudges.forEach(judge => {
+                const card = document.createElement('div');
+                card.className = 'judge-card';
+                card.textContent = judge;
+                card.onclick = () => selectJudge(judge);
+                grid.appendChild(card);
             });
         }
         
-        function selectJudge(name, index) {
-            currentJudge = name;
-            currentJudgeIndex = index;
-            showScreen('dishSelectScreen');
-            document.getElementById('currentJudgeName').textContent = name;
-            loadDishOptions();
-            updateProgress();
-            
-            // Show complete button and emergency contact only for Judge 1
-            if (index === 0) {
-                document.getElementById('completeBtn').style.display = 'block';
-                document.getElementById('emergencyContact').style.display = 'block';
-            } else {
-                document.getElementById('completeBtn').style.display = 'none';
-                document.getElementById('emergencyContact').style.display = 'none';
-            }
+        function selectJudge(judge) {
+            currentJudge = judge;
+            showDishSelect();
         }
         
-        function loadDishOptions() {
-            const select = document.getElementById('stickerSelect');
-            select.innerHTML = '<option value="">Select a sticker number...</option>';
+        function showDishSelect() {
+            hideAllScreens();
+            document.getElementById('dishSelectScreen').classList.add('active');
+            document.getElementById('judgeWelcome').textContent = `Welcome, ${currentJudge}!`;
             
-            const currentEntries = entriesData[currentYear] || [];
-            const currentScores = judgesData[currentYear].scores || [];
+            // Show emergency contact only for Judge 1
+            if (currentJudge === allJudges[0]) {
+                document.getElementById('emergencyContact').style.display = 'block';
+            } else {
+                document.getElementById('emergencyContact').style.display = 'none';
+            }
             
-            // Get dishes already rated by this judge
-            const ratedStickers = currentScores
+            updateDishList();
+            updateProgress();
+            checkCompleteButton();
+        }
+        
+        function updateDishList() {
+            const select = document.getElementById('dishSelect');
+            select.innerHTML = '<option value="">Choose a sticker number...</option>';
+            
+            // Get dishes this judge hasn't rated yet
+            const ratedStickers = allScores
                 .filter(s => s.judge === currentJudge)
                 .map(s => s.stickerNumber);
             
-            currentEntries.forEach(entry => {
+            allEntries.forEach(entry => {
                 const option = document.createElement('option');
                 option.value = entry.stickerNumber;
+                option.textContent = `#${entry.stickerNumber} - ${entry.dish}`;
                 
+                // Mark as rated
                 if (ratedStickers.includes(entry.stickerNumber)) {
-                    option.textContent = `${entry.stickerNumber} - ${entry.dish} (Already Rated)`;
-                    option.style.color = '#9ca3af';
-                } else {
-                    option.textContent = `${entry.stickerNumber} - ${entry.dish}`;
+                    option.textContent += ' ✓';
                 }
                 
                 select.appendChild(option);
@@ -673,172 +607,130 @@
         }
         
         function updateProgress() {
-            const currentEntries = entriesData[currentYear] || [];
-            const currentScores = judgesData[currentYear].scores || [];
-            const ratedCount = currentScores.filter(s => s.judge === currentJudge).length;
-            const totalCount = currentEntries.length;
+            const totalDishes = allEntries.length;
+            const ratedDishes = allScores.filter(s => s.judge === currentJudge).length;
+            const percentage = totalDishes > 0 ? (ratedDishes / totalDishes) * 100 : 0;
             
-            const percentage = totalCount > 0 ? (ratedCount / totalCount) * 100 : 0;
-            document.getElementById('progressBar').style.width = percentage + '%';
-            document.getElementById('progressText').textContent = `${ratedCount} / ${totalCount} rated`;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = `${ratedDishes} / ${totalDishes} rated`;
         }
         
-        function startRating() {
-            const sticker = document.getElementById('stickerSelect').value;
-            
-            if (!sticker) {
-                alert('Please select a sticker number');
+        function checkCompleteButton() {
+            // Show complete button only for Judge 1
+            if (currentJudge !== allJudges[0]) {
+                document.getElementById('completeButton').style.display = 'none';
                 return;
             }
             
-            currentSticker = sticker;
-            const entry = entriesData[currentYear].find(e => e.stickerNumber === sticker);
+            // Check if at least 80% of dishes are rated by all judges
+            const totalDishes = allEntries.length;
+            const requiredRatings = Math.ceil(totalDishes * 0.8);
             
-            if (!entry) {
-                alert('Entry not found');
-                return;
-            }
+            const allJudgesReady = allJudges.every(judge => {
+                const judgeRatings = allScores.filter(s => s.judge === judge).length;
+                return judgeRatings >= requiredRatings;
+            });
             
-            // Load existing rating if editing
-            const existingRating = judgesData[currentYear].scores.find(
-                s => s.judge === currentJudge && s.stickerNumber === sticker
-            );
-            
-            if (existingRating) {
-                ratings = {
-                    taste: existingRating.taste,
-                    texture: existingRating.texture,
-                    intentionality: existingRating.intentionality,
-                    presentation: existingRating.presentation,
-                    categoryFit: existingRating.categoryFit
-                };
-                document.getElementById('notes').value = existingRating.notes || '';
+            if (allJudgesReady) {
+                document.getElementById('completeButton').style.display = 'block';
             } else {
-                ratings = {
-                    taste: null,
-                    texture: null,
-                    intentionality: null,
-                    presentation: null,
-                    categoryFit: null
-                };
-                document.getElementById('notes').value = '';
+                document.getElementById('completeButton').style.display = 'none';
             }
-            
-            document.getElementById('dishName').textContent = `Sticker #${entry.stickerNumber}: ${entry.dish}`;
-            document.getElementById('dishCategory').textContent = `Category: ${entry.category}`;
-            document.getElementById('ratingJudgeName').textContent = currentJudge;
-            
-            showScreen('ratingScreen');
-            createRatingButtons();
-            updateSubmitButton();
         }
         
-        function createRatingButtons() {
+        function loadRatingForm() {
+            const stickerNumber = document.getElementById('dishSelect').value;
+            if (!stickerNumber) return;
+            
+            currentDish = stickerNumber;
+            const entry = allEntries.find(e => e.stickerNumber === stickerNumber);
+            
+            hideAllScreens();
+            document.getElementById('ratingScreen').classList.add('active');
+            document.getElementById('dishTitle').textContent = `Rate Dish #${stickerNumber}`;
+            
+            // Create rating buttons
             ['taste', 'texture', 'intentionality', 'presentation', 'categoryFit'].forEach(category => {
-                const container = document.getElementById(`${category}Rating`);
+                const container = document.getElementById(category);
                 container.innerHTML = '';
                 
                 for (let i = 1; i <= 5; i++) {
                     const btn = document.createElement('button');
-                    btn.className = `rating-btn score-${i}`;
+                    btn.type = 'button';
+                    btn.className = 'rating-btn';
+                    btn.dataset.value = i;
+                    btn.dataset.category = category;
                     btn.textContent = i;
-                    btn.onclick = () => selectRating(category, i, btn);
-                    
-                    if (ratings[category] === i) {
-                        btn.classList.add('selected');
-                    }
-                    
+                    btn.onclick = () => selectRating(category, i);
                     container.appendChild(btn);
                 }
             });
-        }
-        
-        function selectRating(category, value, btn) {
-            ratings[category] = value;
-            btn.parentElement.querySelectorAll('.rating-btn').forEach(b => {
-                b.classList.remove('selected');
-            });
-            btn.classList.add('selected');
-            updateSubmitButton();
-        }
-        
-        function updateSubmitButton() {
-            const allRated = ratings.taste && ratings.texture && ratings.intentionality && 
-                           ratings.presentation && ratings.categoryFit;
-            document.getElementById('submitRatingBtn').disabled = !allRated;
-        }
-        
-        async function submitRating() {
-            const notes = document.getElementById('notes').value.trim();
             
-            try {
-                // Remove existing rating if editing
-                judgesData[currentYear].scores = judgesData[currentYear].scores.filter(
-                    s => !(s.judge === currentJudge && s.stickerNumber === currentSticker)
-                );
-                
-                // Add new rating
-                judgesData[currentYear].scores.push({
-                    judge: currentJudge,
-                    stickerNumber: currentSticker,
-                    taste: ratings.taste,
-                    texture: ratings.texture,
-                    intentionality: ratings.intentionality,
-                    presentation: ratings.presentation,
-                    categoryFit: ratings.categoryFit,
-                    notes: notes,
-                    timestamp: new Date().toISOString()
+            // Load existing rating if it exists
+            const existingRating = allScores.find(s => s.judge === currentJudge && s.stickerNumber === stickerNumber);
+            if (existingRating) {
+                document.getElementById('notes').value = existingRating.notes || '';
+                ['taste', 'texture', 'intentionality', 'presentation', 'categoryFit'].forEach(cat => {
+                    selectRating(cat, existingRating[cat]);
                 });
-                
-                await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': `token ${DATA_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        event_type: 'update-judges',
-                        client_payload: {
-                            data: JSON.stringify(judgesData, null, 2)
-                        }
-                    })
-                });
-                
-                showScreen('dishSelectScreen');
-                loadDishOptions();
-                updateProgress();
-                
-            } catch (error) {
-                alert('Failed to save rating: ' + error.message);
             }
         }
         
-        function cancelRating() {
-            showScreen('dishSelectScreen');
+        function selectRating(category, value) {
+            const container = document.getElementById(category);
+            container.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            const btn = container.querySelector(`[data-value="${value}"]`);
+            if (btn) btn.classList.add('selected');
         }
         
-        function changeJudge() {
-            currentJudge = '';
-            currentJudgeIndex = -1;
-            showScreen('judgeSelectScreen');
-        }
-        
-        function showCompleteModal() {
-            const currentEntries = entriesData[currentYear] || [];
-            const currentScores = judgesData[currentYear].scores || [];
-            const judgeCount = judgesData[currentYear].judgeCount;
+        document.getElementById('ratingForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            // Calculate completion percentage
-            const totalNeeded = currentEntries.length * judgeCount;
-            const currentTotal = currentScores.length;
-            const percentage = (currentTotal / totalNeeded) * 100;
+            const ratings = {};
+            let allRated = true;
             
-            if (percentage < 80) {
-                alert(`Only ${percentage.toFixed(0)}% of dishes have been rated. Please ensure at least 80% are complete before closing the year.`);
+            ['taste', 'texture', 'intentionality', 'presentation', 'categoryFit'].forEach(cat => {
+                const selected = document.querySelector(`#${cat} .rating-btn.selected`);
+                if (selected) {
+                    ratings[cat] = parseInt(selected.dataset.value);
+                } else {
+                    allRated = false;
+                }
+            });
+            
+            if (!allRated) {
+                alert('Please rate all categories');
                 return;
             }
             
+            const newRating = {
+                judge: currentJudge,
+                stickerNumber: currentDish,
+                taste: ratings.taste,
+                texture: ratings.texture,
+                intentionality: ratings.intentionality,
+                presentation: ratings.presentation,
+                categoryFit: ratings.categoryFit,
+                notes: document.getElementById('notes').value.trim(),
+                timestamp: new Date().toISOString()
+            };
+            
+            // Remove existing rating if editing
+            allScores = allScores.filter(s => !(s.judge === currentJudge && s.stickerNumber === currentDish));
+            allScores.push(newRating);
+            
+            judgesData.scores = allScores;
+            await window.setDoc(window.doc(window.db, 'judges', currentYear.toString()), judgesData);
+            
+            alert('Rating submitted!');
+            showDishSelect();
+        });
+        
+        function showCompleteModal() {
             document.getElementById('completeModal').classList.add('active');
         }
         
@@ -851,214 +743,196 @@
             const password = document.getElementById('completePassword').value;
             
             if (password !== 'adminVR!C') {
-                alert('Incorrect password');
+                alert('Incorrect admin password');
                 return;
             }
             
-            try {
-                // Calculate winners
-                const winners = calculateWinners();
-                
-                // Check for ties
-                ties = {};
-                Object.keys(winners).forEach(category => {
-                    if (winners[category].tie) {
-                        ties[category] = winners[category].dishes;
-                    }
-                });
-                
-                if (Object.keys(ties).length > 0) {
-                    closeCompleteModal();
-                    showTieBreaker();
-                    return;
-                }
-                
-                // No ties, finalize
-                await finalizeYear(winners);
-                
-            } catch (error) {
-                alert('Failed to complete scoring: ' + error.message);
+            // Check for ties
+            const hasTies = await checkForTies();
+            
+            if (hasTies) {
+                closeCompleteModal();
+                return; // Tiebreaker modal will handle completion
             }
+            
+            // No ties, complete scoring
+            await finalizeResults();
         }
         
-        function calculateWinners() {
-            const currentEntries = entriesData[currentYear] || [];
-            const currentScores = judgesData[currentYear].scores || [];
+        async function checkForTies() {
             const categories = ['Appetizer', 'Entree', 'Dessert'];
-            const winners = {};
+            let hasTies = false;
+            tiebreakers = {};
             
-            categories.forEach(category => {
-                const categoryEntries = currentEntries.filter(e => e.category === category);
-                const scores = {};
+            for (const category of categories) {
+                const categoryEntries = allEntries.filter(e => e.category === category);
+                const averages = {};
                 
                 categoryEntries.forEach(entry => {
-                    const entryScores = currentScores.filter(s => s.stickerNumber === entry.stickerNumber);
-                    if (entryScores.length > 0) {
-                        const avgTotal = entryScores.reduce((sum, s) => 
-                            sum + s.taste + s.texture + s.intentionality + s.presentation + s.categoryFit, 0
-                        ) / entryScores.length;
-                        
-                        scores[entry.stickerNumber] = {
-                            total: avgTotal,
-                            dish: entry.dish,
-                            name: entry.name
-                        };
+                    const scores = allScores.filter(s => s.stickerNumber === entry.stickerNumber);
+                    if (scores.length > 0) {
+                        const total = scores.reduce((sum, s) => sum + s.taste + s.texture + s.intentionality + s.presentation + s.categoryFit, 0);
+                        averages[entry.stickerNumber] = total / scores.length;
                     }
                 });
                 
-                // Find highest score
-                const sorted = Object.entries(scores).sort((a, b) => b[1].total - a[1].total);
+                const sorted = Object.entries(averages).sort((a, b) => b[1] - a[1]);
                 
-                if (sorted.length > 0) {
-                    const topScore = sorted[0][1].total;
-                    const topDishes = sorted.filter(s => s[1].total === topScore);
-                    
-                    if (topDishes.length > 1) {
-                        winners[category] = {
-                            tie: true,
-                            dishes: topDishes.map(d => ({
-                                sticker: d[0],
-                                dish: d[1].dish,
-                                name: d[1].name,
-                                score: d[1].total
-                            }))
-                        };
-                    } else {
-                        winners[category] = {
-                            sticker: sorted[0][0],
-                            dish: sorted[0][1].dish,
-                            name: sorted[0][1].name,
-                            score: sorted[0][1].total
-                        };
-                    }
+                // Check for tie at first place
+                if (sorted.length > 1 && sorted[0][1] === sorted[1][1]) {
+                    hasTies = true;
+                    showTiebreakerModal(category, sorted.filter(s => s[1] === sorted[0][1]));
+                    break;
                 }
-            });
+            }
             
-            return winners;
+            return hasTies;
         }
         
-        function showTieBreaker() {
-            const modal = document.getElementById('tieModal');
-            const message = document.getElementById('tieMessage');
-            const options = document.getElementById('tieOptions');
+        function showTiebreakerModal(category, tiedDishes) {
+            document.getElementById('tieCategory').textContent = `Choose the winner for ${category}:`;
             
-            const categories = Object.keys(ties);
-            const firstCategory = categories[0];
-            const tiedDishes = ties[firstCategory];
+            const optionsContainer = document.getElementById('tieOptions');
+            optionsContainer.innerHTML = '';
             
-            message.textContent = `There is a tie in the ${firstCategory} category. Vote in person, then select the winner:`;
-            
-            options.innerHTML = '';
-            tiedDishes.forEach(dish => {
-                const btn = document.createElement('button');
-                btn.className = 'btn';
-                btn.style.marginBottom = '10px';
-                btn.textContent = `Sticker #${dish.sticker} - ${dish.dish} (${dish.score.toFixed(2)})`;
-                btn.onclick = () => selectTieWinner(firstCategory, dish.sticker);
-                options.appendChild(btn);
+            tiedDishes.forEach(([sticker, score]) => {
+                const entry = allEntries.find(e => e.stickerNumber === sticker);
+                const option = document.createElement('div');
+                option.className = 'tie-option';
+                option.innerHTML = `<strong>#${sticker}</strong> - ${entry.dish}<br><small>Score: ${score.toFixed(2)}</small>`;
+                option.onclick = () => {
+                    optionsContainer.querySelectorAll('.tie-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    tiebreakers[category] = sticker;
+                };
+                optionsContainer.appendChild(option);
             });
             
-            modal.classList.add('active');
+            document.getElementById('tiebreakerModal').classList.add('active');
         }
         
-        async function selectTieWinner(category, sticker) {
-            delete ties[category];
+        async function submitTiebreaker() {
+            // Make sure a choice was made
+            const categories = Object.keys(tiebreakers);
+            if (categories.length === 0) {
+                alert('Please select a winner');
+                return;
+            }
             
-            if (Object.keys(ties).length > 0) {
-                showTieBreaker();
-            } else {
-                document.getElementById('tieModal').classList.remove('active');
-                
-                // Recalculate winners with tie-breaker selections
-                const winners = calculateWinners();
-                // Apply manual tie selections here if needed
-                
-                await finalizeYear(winners);
+            document.getElementById('tiebreakerModal').classList.remove('active');
+            
+            // Check if there are more ties
+            const hasTies = await checkForTies();
+            
+            if (!hasTies) {
+                await finalizeResults();
             }
         }
         
-        async function finalizeYear(winners) {
-            judgesData[currentYear].completed = true;
-            judgesData[currentYear].winners = {};
-            
-            Object.keys(winners).forEach(category => {
-                if (!winners[category].tie) {
-                    judgesData[currentYear].winners[category] = winners[category].sticker;
-                }
-            });
-            
-            // Update judges data
-            await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Authorization': `token ${DATA_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    event_type: 'update-judges',
-                    client_payload: {
-                        data: JSON.stringify(judgesData, null, 2)
-                    }
-                })
-            });
+        async function finalizeResults() {
+            judgesData.completed = true;
+            judgesData.tiebreakers = tiebreakers;
+            await window.setDoc(window.doc(window.db, 'judges', currentYear.toString()), judgesData);
             
             // Update config to mark year as completed
-            const configRes = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/config.json?t=${Date.now()}`);
-            const config = await configRes.json();
+            const configDoc = await window.getDoc(window.doc(window.db, 'config', 'settings'));
+            const config = configDoc.data();
             config.yearCompleted[currentYear] = true;
+            await window.setDoc(window.doc(window.db, 'config', 'settings'), config);
             
-            await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Authorization': `token ${DATA_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    event_type: 'update-config',
-                    client_payload: {
-                        data: JSON.stringify(config, null, 2)
-                    }
-                })
-            });
-            
-            closeCompleteModal();
+            alert('Scoring completed! Results are now visible.');
             showResults();
         }
         
         function showResults() {
-            const container = document.getElementById('winnersContainer');
-            container.innerHTML = '';
+            hideAllScreens();
+            document.getElementById('resultsScreen').classList.add('active');
             
-            const winners = judgesData[currentYear].winners || {};
             const categories = ['Appetizer', 'Entree', 'Dessert'];
+            let html = '';
             
             categories.forEach(category => {
-                const winnerSticker = winners[category];
-                if (winnerSticker) {
-                    const entry = entriesData[currentYear].find(e => e.stickerNumber === winnerSticker);
-                    if (entry) {
-                        const card = document.createElement('div');
-                        card.className = 'winner-card';
-                        card.innerHTML = `
-                            <h4>${category} Winner</h4>
-                            <div class="winner-name">${entry.name}</div>
-                            <div class="winner-dish">${entry.dish}</div>
-                            <p style="color: #78350f; margin-top: 10px;">Sticker #${entry.stickerNumber}</p>
-                        `;
-                        container.appendChild(card);
+                const categoryEntries = allEntries.filter(e => e.category === category);
+                const averages = {};
+                
+                categoryEntries.forEach(entry => {
+                    const scores = allScores.filter(s => s.stickerNumber === entry.stickerNumber);
+                    if (scores.length > 0) {
+                        const total = scores.reduce((sum, s) => sum + s.taste + s.texture + s.intentionality + s.presentation + s.categoryFit, 0);
+                        averages[entry.stickerNumber] = {
+                            score: total / scores.length,
+                            entry: entry
+                        };
+                    }
+                });
+                
+                let sorted = Object.entries(averages).sort((a, b) => b[1].score - a[1].score);
+                
+                // Apply tiebreaker if exists
+                if (judgesData.tiebreakers && judgesData.tiebreakers[category]) {
+                    const winner = judgesData.tiebreakers[category];
+                    sorted = sorted.sort((a, b) => {
+                        if (a[0] === winner) return -1;
+                        if (b[0] === winner) return 1;
+                        return b[1].score - a[1].score;
+                    });
+                }
+                
+                html += `<div class="category-results">`;
+                html += `<h3>${category}</h3>`;
+                
+                if (sorted.length > 0) {
+                    const winner = sorted[0];
+                    html += `<div class="winner-card">`;
+                    html += `<h4>🥇 #${winner[0]} - ${winner[1].entry.dish}</h4>`;
+                    html += `<p>by ${winner[1].entry.name}</p>`;
+                    html += `<p>Score: ${winner[1].score.toFixed(2)} / 25</p>`;
+                    html += `</div>`;
+                    
+                    if (sorted.length > 1) {
+                        html += `<div class="runner-up">`;
+                        html += `<strong>🥈 #${sorted[1][0]} - ${sorted[1][1].entry.dish}</strong>`;
+                        html += ` by ${sorted[1][1].entry.name} (${sorted[1][1].score.toFixed(2)})`;
+                        html += `</div>`;
+                    }
+                    
+                    if (sorted.length > 2) {
+                        html += `<div class="runner-up">`;
+                        html += `<strong>🥉 #${sorted[2][0]} - ${sorted[2][1].entry.dish}</strong>`;
+                        html += ` by ${sorted[2][1].entry.name} (${sorted[2][1].score.toFixed(2)})`;
+                        html += `</div>`;
                     }
                 }
+                
+                html += `</div>`;
             });
             
-            showScreen('resultsScreen');
+            document.getElementById('resultsContent').innerHTML = html;
         }
         
-        function showScreen(screenId) {
+        function hideAllScreens() {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
         }
+        
+        function backToJudgeSelect() {
+            showJudgeSelect();
+        }
+        
+        function backToDishSelect() {
+            showDishSelect();
+        }
+        
+        window.startJudging = startJudging;
+        window.selectJudge = selectJudge;
+        window.loadRatingForm = loadRatingForm;
+        window.backToJudgeSelect = backToJudgeSelect;
+        window.backToDishSelect = backToDishSelect;
+        window.showCompleteModal = showCompleteModal;
+        window.closeCompleteModal = closeCompleteModal;
+        window.completeScoring = completeScoring;
+        window.submitTiebreaker = submitTiebreaker;
+        
+        loadYear();
     </script>
 </body>
 </html>
