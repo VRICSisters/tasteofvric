@@ -2,15 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#10b981">
     <title>VRIC Cookbook</title>
     <style>
         :root {
             --color-green: #10b981;
             --color-dark-green: #059669;
+            --color-parchment: #fef6e4;
             --touch-target-min: 44px;
             --nav-arrow-size: 50px;
+            --spine-width: 3px;
+            
             --safe-area-top: env(safe-area-inset-top, 0px);
             --safe-area-bottom: env(safe-area-inset-bottom, 0px);
             --safe-area-left: env(safe-area-inset-left, 0px);
@@ -25,42 +28,38 @@
         }
         
         html {
-            -webkit-text-size-adjust: 100%;
+            font-size: 16px;
+            -webkit-text-size-adjust: none;
             -webkit-font-smoothing: antialiased;
         }
         
         body {
             font-family: 'Georgia', 'Times New Roman', serif;
             background: linear-gradient(135deg, var(--color-green) 0%, var(--color-dark-green) 100%);
-            min-height: 100vh;
-            min-height: 100dvh;
-            padding: 20px;
-            overflow-x: hidden;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
         }
         
         /* Closed Book Screen */
         #closedBook {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
+            inset: 0;
             background: linear-gradient(135deg, var(--color-green) 0%, var(--color-dark-green) 100%);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             padding: max(var(--safe-area-top), 20px) max(var(--safe-area-right), 20px) max(var(--safe-area-bottom), 20px) max(var(--safe-area-left), 20px);
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             touch-action: manipulation;
         }
         
         #closedBook.hidden {
             opacity: 0;
-            transform: scale(0.95);
             pointer-events: none;
         }
         
@@ -71,13 +70,11 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.4);
             text-align: center;
             max-width: min(400px, 90vw);
-            width: 100%;
             animation: bookFloat 3s ease-in-out infinite;
-            will-change: transform;
         }
         
         @keyframes bookFloat {
-            0%, 100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
         
@@ -107,9 +104,6 @@
             background: rgba(255,255,255,0.2);
             padding: 12px 24px;
             border-radius: 25px;
-            min-height: var(--touch-target-min);
-            display: inline-flex;
-            align-items: center;
         }
         
         .back-link {
@@ -122,311 +116,174 @@
             background: rgba(255,255,255,0.2);
             border-radius: 8px;
             font-weight: 600;
-            min-height: var(--touch-target-min);
-            display: inline-flex;
-            align-items: center;
-            touch-action: manipulation;
         }
         
         /* Main Cookbook */
         #mainCookbook {
             display: none;
+            position: fixed;
+            inset: 0;
+            padding: max(var(--safe-area-top), 20px) max(var(--safe-area-right), 20px) max(var(--safe-area-bottom), 80px) max(var(--safe-area-left), 20px);
         }
         
         #mainCookbook.open {
             display: block;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-        }
-        
-        .header h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            font-weight: 400;
-        }
-        
-        .header p {
-            font-size: 18px;
-            font-style: italic;
-            opacity: 0.9;
-        }
-        
-        .back-btn {
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-weight: 600;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        .filters {
-            display: none;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255,255,255,0.95);
+        /* Recipe Book Container */
+        .recipe-book {
+            width: 100%;
+            height: 100%;
+            background: var(--color-parchment);
             border-radius: 12px;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            max-width: 90%;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
         }
         
-        .filters.active {
+        /* Portrait Mode - Vertical Stack */
+        .recipe-page {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .recipe-page.active {
             display: flex;
             flex-direction: column;
         }
         
-        .filter-backdrop {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .photo-panel {
+            width: 100%;
+            height: 40%;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .photo-panel img {
             width: 100%;
             height: 100%;
-            height: 100dvh;
-            background: rgba(0,0,0,0.6);
-            z-index: 998;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            transition: opacity 0.3s ease;
-        }
-        
-        .filter-backdrop.active {
-            display: block;
-        }
-        
-        .filter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .filter-header h2 {
-            font-size: 24px;
-            color: #059669;
-        }
-        
-        .close-filters {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .filter-trigger-btn {
-            padding: 12px 24px;
-            background: white;
-            color: #059669;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            margin: 0 auto 20px;
-            display: block;
-        }
-        
-        .filter-btn {
-            padding: 12px 24px;
-            background: white;
-            color: #059669;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        
-        .filter-btn.active {
-            background: #f59e0b;
-            color: white;
-        }
-        
-        .dropdown {
-            padding: 12px 24px;
-            background: white;
-            color: #059669;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .book-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            perspective: 2000px;
-        }
-        
-        .book {
-            position: relative;
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            overflow: hidden;
-        }
-        
-        .page {
-            display: none;
-            padding: 60px;
-            min-height: 600px;
-            background: #fffbeb;
-        }
-        
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .page-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: start;
-        }
-        
-        .recipe-image {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             object-fit: cover;
-            aspect-ratio: 4/3;
         }
         
-        .recipe-details h2 {
-            font-size: 36px;
-            color: #92400e;
-            margin-bottom: 10px;
-            font-weight: 400;
+        .spine-horizontal {
+            width: 100%;
+            height: var(--spine-width);
+            background: linear-gradient(90deg, #8b7355 0%, #6b5844 50%, #8b7355 100%);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+        
+        .spine-vertical {
+            display: none;
+        }
+        
+        .recipe-panel {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px;
+        }
+        
+        .recipe-title {
+            font-size: 28px;
+            color: #2c1810;
+            margin-bottom: 8px;
         }
         
         .recipe-meta {
             display: flex;
-            gap: 20px;
+            gap: 12px;
+            flex-wrap: wrap;
             margin-bottom: 20px;
             font-size: 14px;
-            color: #78350f;
-        }
-        
-        .recipe-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            color: #6b5d50;
         }
         
         .recipe-section {
-            margin-bottom: 25px;
+            background: rgba(255,255,255,0.5);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
         }
         
         .recipe-section h3 {
-            font-size: 20px;
-            color: #92400e;
+            font-size: 18px;
+            color: #8b7355;
             margin-bottom: 10px;
-            border-bottom: 2px solid #fcd34d;
+            border-bottom: 1px solid rgba(212,175,55,0.3);
             padding-bottom: 5px;
-            font-weight: 400;
         }
         
-        .recipe-section p, .recipe-section ul {
-            color: #78350f;
-            line-height: 1.8;
+        .recipe-section p,
+        .recipe-section ul {
+            color: #2c1810;
+            line-height: 1.7;
             font-size: 15px;
         }
         
         .recipe-section ul {
-            list-style-position: inside;
-            padding-left: 0;
+            list-style: none;
         }
         
         .recipe-section ul li {
+            padding-left: 20px;
+            position: relative;
             margin-bottom: 8px;
+        }
+        
+        .recipe-section ul li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: #8a9a5b;
+            font-weight: bold;
         }
         
         .instructions {
             white-space: pre-line;
         }
         
-        .page-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #fcd34d;
+        /* Landscape Mode - Side by Side */
+        @media (orientation: landscape) and (min-width: 640px) {
+            .recipe-page.active {
+                flex-direction: row;
+            }
+            
+            .photo-panel {
+                width: 45%;
+                height: 100%;
+            }
+            
+            .spine-horizontal {
+                display: none;
+            }
+            
+            .spine-vertical {
+                display: block;
+                width: var(--spine-width);
+                height: 100%;
+                background: linear-gradient(180deg, #8b7355 0%, #6b5844 50%, #8b7355 100%);
+                box-shadow: 1px 0 3px rgba(0,0,0,0.3);
+                flex-shrink: 0;
+            }
+            
+            .recipe-panel {
+                width: 55%;
+                height: 100%;
+            }
         }
         
-        .page-number {
-            color: #92400e;
-            font-style: italic;
-            font-size: 14px;
-        }
-        
-        .attribution {
-            color: #78350f;
-            font-size: 14px;
-            font-style: italic;
-        }
-        
-        .nav-buttons {
-            display: none;
-        }
-        
+        /* Navigation Arrows */
         .nav-arrow {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
             width: var(--nav-arrow-size);
             height: var(--nav-arrow-size);
-            min-height: var(--touch-target-min);
             min-width: var(--touch-target-min);
+            min-height: var(--touch-target-min);
             background: rgba(255,255,255,0.9);
             border: none;
             border-radius: 50%;
@@ -434,20 +291,18 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 90;
+            z-index: 100;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             touch-action: manipulation;
-            user-select: none;
         }
         
-        .nav-arrow:active:not(.disabled) {
+        .nav-arrow:active {
             transform: translateY(-50%) scale(0.9);
         }
         
         .nav-arrow.disabled {
             opacity: 0.3;
-            cursor: not-allowed;
             pointer-events: none;
         }
         
@@ -478,123 +333,111 @@
             margin-left: 3px;
         }
         
-        @media (orientation: landscape) and (min-width: 700px) {
-            .nav-arrow.right {
-                right: max(var(--safe-area-right), 10px);
-            }
+        /* Filter Button */
+        .filter-btn {
+            position: fixed;
+            top: max(var(--safe-area-top), 20px);
+            right: max(var(--safe-area-right), 20px);
+            padding: 10px 20px;
+            background: white;
+            color: var(--color-dark-green);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 100;
+            min-height: var(--touch-target-min);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .empty-state {
+        /* Filter Modal */
+        .filter-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 998;
+        }
+        
+        .filter-backdrop.active {
+            display: block;
+        }
+        
+        .filter-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-parchment);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 90%;
+            width: 400px;
+            max-height: calc(100dvh - 80px);
+            overflow-y: auto;
+            z-index: 999;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        
+        .filter-modal.active {
+            display: block;
+        }
+        
+        .filter-modal h2 {
+            margin-bottom: 20px;
+            color: var(--color-dark-green);
+        }
+        
+        .filter-modal select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        
+        .filter-modal button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        
+        .btn-close {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-reset {
+            background: #6b7280;
+            color: white;
+        }
+        
+        /* Loading & Empty */
+        #loading, #emptyState {
             text-align: center;
             padding: 100px 20px;
             color: white;
         }
         
-        .empty-state h2 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            font-weight: 400;
-        }
-        
-        .empty-state p {
-            font-size: 18px;
-            opacity: 0.8;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 100px 20px;
-            color: white;
+        #loading h2, #emptyState h2 {
             font-size: 24px;
-        }
-        
-        /* Mobile Portrait - Photo first, scroll for recipe */
-        @media (max-width: 768px) and (orientation: portrait) {
-            .page {
-                padding: 30px 20px;
-                min-height: auto;
-            }
-            
-            .page-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .recipe-image {
-                width: 100%;
-                max-height: 300px;
-            }
-            
-            .recipe-details h2 {
-                font-size: 28px;
-            }
-            
-            .recipe-section h3 {
-                font-size: 18px;
-            }
-            
-            .header h1 {
-                font-size: 32px;
-            }
-            
-            .filters {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-btn, .dropdown {
-                width: 100%;
-            }
-        }
-        
-        /* Mobile Landscape - Side by side */
-        @media (max-width: 1024px) and (orientation: landscape) {
-            .page {
-                padding: 40px 30px;
-            }
-            
-            .page-content {
-                grid-template-columns: 1fr 1fr;
-                gap: 40px;
-            }
-            
-            .recipe-image {
-                max-height: 400px;
-            }
-            
-            .recipe-details h2 {
-                font-size: 24px;
-            }
-            
-            .recipe-section {
-                margin-bottom: 15px;
-            }
-            
-            .recipe-section h3 {
-                font-size: 16px;
-            }
-            
-            .recipe-section p, .recipe-section ul {
-                font-size: 13px;
-                line-height: 1.6;
-            }
-        }
-        
-        /* Tablet */
-        @media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
-            .page {
-                padding: 50px 40px;
-            }
-            
-            .page-content {
-                grid-template-columns: 1fr 1fr;
-                gap: 50px;
-            }
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <!-- Closed Book Screen -->
+    <!-- Closed Book -->
     <div id="closedBook" onclick="openBook()">
         <a href="index.html" class="back-link" onclick="event.stopPropagation()">← Home</a>
         <div class="book-cover">
@@ -607,51 +450,47 @@
     
     <!-- Main Cookbook -->
     <div id="mainCookbook">
-    <div class="header">
-        <a href="index.html" class="back-btn">← Back to Home</a>
-        <h1>📖 VRIC Cookbook</h1>
-        <p>A collection of cherished recipes from our community</p>
+        <div id="loading">
+            <h2>Loading recipes...</h2>
+        </div>
+        
+        <div id="emptyState" style="display: none;">
+            <h2>No Recipes Found</h2>
+            <p>Try adjusting your filters</p>
+        </div>
+        
+        <div class="recipe-book" id="recipeBook" style="display: none;">
+            <div id="pages"></div>
+            
+            <div class="nav-arrow left" id="prevArrow" onclick="previousPage()"></div>
+            <div class="nav-arrow right" id="nextArrow" onclick="nextPage()"></div>
+            
+            <button class="filter-btn" onclick="openFilters()">
+                <span>🔍</span>
+                <span>Filter</span>
+            </button>
+        </div>
     </div>
     
-    <button class="filter-trigger-btn" onclick="openFilters()">Filter Recipes</button>
-    
+    <!-- Filter Modal -->
     <div class="filter-backdrop" id="filterBackdrop" onclick="closeFilters()"></div>
-    <div class="filters" id="filtersModal">
-        <div class="filter-header">
-            <h2>Filter Recipes</h2>
-            <button class="close-filters" onclick="closeFilters()">Close</button>
-        </div>
-        <select class="dropdown" id="yearFilter" onchange="filterByYear()">
+    <div class="filter-modal" id="filterModal">
+        <h2>Filter Recipes</h2>
+        <select id="yearFilter" onchange="applyFilters()">
             <option value="all">All Years</option>
         </select>
-        <select class="dropdown" id="countryFilter" onchange="filterByCountry()">
+        <select id="countryFilter" onchange="applyFilters()">
             <option value="all">All Countries</option>
         </select>
-        <select class="dropdown" id="categoryFilter" onchange="filterByCategory()">
+        <select id="categoryFilter" onchange="applyFilters()">
             <option value="all">All Categories</option>
             <option value="Appetizer">Appetizer</option>
             <option value="Entree">Entree</option>
             <option value="Dessert">Dessert</option>
             <option value="Drink">Drink</option>
         </select>
-        <button class="filter-btn" onclick="resetFilters()">Reset All Filters</button>
-    </div>
-    
-    <div id="loading" class="loading">Loading cookbook...</div>
-    
-    <div id="emptyState" class="empty-state" style="display: none;">
-        <h2>No Recipes Found</h2>
-        <p>Try adjusting your filters or check back later for new recipes!</p>
-    </div>
-    
-    <div id="bookContainer" class="book-container" style="display: none;">
-        <div class="book">
-            <div id="pages"></div>
-        </div>
-        
-        <!-- Circular Navigation Arrows -->
-        <div class="nav-arrow left" id="prevArrow" onclick="previousPage()"></div>
-        <div class="nav-arrow right" id="nextArrow" onclick="nextPage()"></div>
+        <button class="btn-reset" onclick="resetFilters()">Reset All</button>
+        <button class="btn-close" onclick="closeFilters()">Close</button>
     </div>
 
     <script type="module">
@@ -670,16 +509,12 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Make Firebase functions available globally
         window.firebaseDB = db;
         window.firebaseDoc = doc;
         window.firebaseGetDoc = getDoc;
-        
-        // Signal that Firebase is loaded
         window.firebaseReady = true;
-        if (window.onFirebaseReady) {
-            window.onFirebaseReady();
-        }
+        
+        if (window.onFirebaseReady) window.onFirebaseReady();
     </script>
     
     <script>
@@ -687,14 +522,15 @@
         let filteredRecipes = [];
         let currentPage = 0;
         
-        // Wait for Firebase to load
-        window.onFirebaseReady = function() {
-            loadCookbook();
-        };
+        window.onFirebaseReady = loadCookbook;
+        if (window.firebaseReady) loadCookbook();
         
-        // If Firebase is already loaded, start immediately
-        if (window.firebaseReady) {
-            loadCookbook();
+        function openBook() {
+            document.getElementById('closedBook').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('closedBook').style.display = 'none';
+                document.getElementById('mainCookbook').classList.add('open');
+            }, 600);
         }
         
         async function loadCookbook() {
@@ -702,15 +538,14 @@
                 const cookbookDoc = await window.firebaseGetDoc(window.firebaseDoc(window.firebaseDB, 'cookbook', 'data'));
                 
                 if (cookbookDoc.exists()) {
-                    const cookbook = cookbookDoc.data();
-                    // ONLY show approved recipes - NO PII exposed
-                    allRecipes = cookbook.approved || [];
+                    allRecipes = cookbookDoc.data().approved || [];
                 } else {
                     allRecipes = [];
                 }
                 
                 filteredRecipes = [...allRecipes];
                 
+                // Populate filters
                 const years = [...new Set(allRecipes.map(r => r.year))].sort().reverse();
                 const yearFilter = document.getElementById('yearFilter');
                 years.forEach(year => {
@@ -736,51 +571,11 @@
                 } else {
                     displayRecipes();
                 }
-                
             } catch (error) {
                 console.error('Failed to load cookbook:', error);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('emptyState').style.display = 'block';
             }
-        }
-        
-        function filterBy(type) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            document.getElementById('yearFilter').value = 'all';
-            document.getElementById('countryFilter').value = 'all';
-            document.getElementById('categoryFilter').value = 'all';
-            
-            filteredRecipes = [...allRecipes];
-            displayRecipes();
-        }
-        
-        function filterByYear() {
-            applyFilters();
-        }
-        
-        function filterByCountry() {
-            applyFilters();
-        }
-        
-        function filterByCategory() {
-            applyFilters();
-        }
-        
-        function applyFilters() {
-            const year = document.getElementById('yearFilter').value;
-            const country = document.getElementById('countryFilter').value;
-            const category = document.getElementById('categoryFilter').value;
-            
-            filteredRecipes = allRecipes.filter(recipe => {
-                const yearMatch = year === 'all' || recipe.year == year;
-                const countryMatch = country === 'all' || recipe.country === country;
-                const categoryMatch = category === 'all' || recipe.category === category;
-                return yearMatch && countryMatch && categoryMatch;
-            });
-            
-            displayRecipes();
         }
         
         function displayRecipes() {
@@ -789,70 +584,60 @@
             currentPage = 0;
             
             if (filteredRecipes.length === 0) {
-                document.getElementById('bookContainer').style.display = 'none';
                 document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('recipeBook').style.display = 'none';
                 return;
             }
             
             document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('bookContainer').style.display = 'block';
+            document.getElementById('recipeBook').style.display = 'block';
             
             filteredRecipes.forEach((recipe, index) => {
                 const page = document.createElement('div');
-                page.className = 'page';
+                page.className = 'recipe-page';
                 if (index === 0) page.classList.add('active');
                 
-                // Use photo if available, otherwise placeholder
-                const photoSrc = recipe.photo || `https://via.placeholder.com/600x400/fcd34d/92400e?text=${encodeURIComponent(recipe.dishName)}`;
-                
-                // Format title with apostrophe-s (ONLY firstName shown - PII protected)
-                const recipeTitle = `${recipe.firstName}'s ${recipe.dishName}`;
+                const photoSrc = recipe.photo || `https://via.placeholder.com/800x600/d4af37/2c1810?text=${encodeURIComponent(recipe.dishName)}`;
                 
                 page.innerHTML = `
-                    <div class="page-content">
-                        <div class="recipe-image-container">
-                            <img src="${photoSrc}" alt="${recipe.dishName}" class="recipe-image">
+                    <div class="photo-panel">
+                        <img src="${photoSrc}" alt="${recipe.dishName}">
+                    </div>
+                    
+                    <div class="spine-horizontal"></div>
+                    <div class="spine-vertical"></div>
+                    
+                    <div class="recipe-panel">
+                        <h1 class="recipe-title">${recipe.firstName}'s ${recipe.dishName}</h1>
+                        <div class="recipe-meta">
+                            <span>🌍 ${recipe.country}</span>
+                            <span>🍽️ ${recipe.category}</span>
+                            <span>📅 ${recipe.year}</span>
                         </div>
                         
-                        <div class="recipe-details">
-                            <h2>${recipeTitle}</h2>
-                            <div class="recipe-meta">
-                                <span>🌍 ${recipe.country}</span>
-                                <span>🍽️ ${recipe.category}</span>
-                                <span>📅 ${recipe.year}</span>
-                            </div>
-                            
-                            <div class="recipe-section">
-                                <h3>Time</h3>
-                                <p><strong>Prep:</strong> ${recipe.prepTime} | <strong>Cook:</strong> ${recipe.cookTime}</p>
-                            </div>
-                            
-                            <div class="recipe-section">
-                                <h3>Ingredients</h3>
-                                <ul>
-                                    ${recipe.ingredients.split('\n').filter(i => i.trim()).map(ingredient => 
-                                        `<li>${ingredient.trim()}</li>`
-                                    ).join('')}
-                                </ul>
-                            </div>
-                            
-                            <div class="recipe-section">
-                                <h3>Instructions</h3>
-                                <div class="instructions">${recipe.instructions}</div>
-                            </div>
-                            
-                            ${recipe.notes ? `
-                            <div class="recipe-section">
-                                <h3>Notes</h3>
-                                <p>${recipe.notes}</p>
-                            </div>
-                            ` : ''}
-                            
-                            <div class="page-footer">
-                                <div class="attribution">Recipe by ${recipe.firstName}</div>
-                                <div class="page-number">Page ${index + 1} of ${filteredRecipes.length}</div>
-                            </div>
+                        <div class="recipe-section">
+                            <h3>Time</h3>
+                            <p><strong>Prep:</strong> ${recipe.prepTime} | <strong>Cook:</strong> ${recipe.cookTime}</p>
                         </div>
+                        
+                        <div class="recipe-section">
+                            <h3>Ingredients</h3>
+                            <ul>
+                                ${recipe.ingredients.split('\n').filter(i => i.trim()).map(i => `<li>${i.trim()}</li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="recipe-section">
+                            <h3>Instructions</h3>
+                            <div class="instructions">${recipe.instructions}</div>
+                        </div>
+                        
+                        ${recipe.notes ? `
+                        <div class="recipe-section">
+                            <h3>Notes</h3>
+                            <p>${recipe.notes}</p>
+                        </div>
+                        ` : ''}
                     </div>
                 `;
                 
@@ -863,81 +648,45 @@
         }
         
         function nextPage() {
-            if (currentPage < filteredRecipes.length - 1) {
-                document.querySelectorAll('.page')[currentPage].classList.remove('active');
-                currentPage++;
-                document.querySelectorAll('.page')[currentPage].classList.add('active');
-                updateNavButtons();
-            }
+            const pages = document.querySelectorAll('.recipe-page');
+            pages[currentPage].classList.remove('active');
+            
+            // Circular navigation
+            currentPage = (currentPage + 1) % filteredRecipes.length;
+            
+            pages[currentPage].classList.add('active');
+            updateNavButtons();
         }
         
         function previousPage() {
-            if (currentPage > 0) {
-                document.querySelectorAll('.page')[currentPage].classList.remove('active');
-                currentPage--;
-                document.querySelectorAll('.page')[currentPage].classList.add('active');
-                updateNavButtons();
-            }
+            const pages = document.querySelectorAll('.recipe-page');
+            pages[currentPage].classList.remove('active');
+            
+            // Circular navigation
+            currentPage = (currentPage - 1 + filteredRecipes.length) % filteredRecipes.length;
+            
+            pages[currentPage].classList.add('active');
+            updateNavButtons();
         }
         
         function updateNavButtons() {
-            const prevArrow = document.getElementById('prevArrow');
-            const nextArrow = document.getElementById('nextArrow');
+            // No need to disable arrows since navigation is circular
+            document.getElementById('prevArrow').classList.remove('disabled');
+            document.getElementById('nextArrow').classList.remove('disabled');
+        }
+        
+        function applyFilters() {
+            const year = document.getElementById('yearFilter').value;
+            const country = document.getElementById('countryFilter').value;
+            const category = document.getElementById('categoryFilter').value;
             
-            if (prevArrow) {
-                if (currentPage === 0) {
-                    prevArrow.classList.add('disabled');
-                } else {
-                    prevArrow.classList.remove('disabled');
-                }
-            }
+            filteredRecipes = allRecipes.filter(recipe => {
+                return (year === 'all' || recipe.year == year) &&
+                       (country === 'all' || recipe.country === country) &&
+                       (category === 'all' || recipe.category === category);
+            });
             
-            if (nextArrow) {
-                if (currentPage === filteredRecipes.length - 1) {
-                    nextArrow.classList.add('disabled');
-                } else {
-                    nextArrow.classList.remove('disabled');
-                }
-            }
-        }
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                previousPage();
-            } else if (e.key === 'ArrowRight') {
-                nextPage();
-            }
-        });
-        
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                nextPage();
-            }
-            if (touchEndX > touchStartX + 50) {
-                previousPage();
-            }
-        }
-        
-        function openFilters() {
-            document.getElementById('filtersModal').classList.add('active');
-            document.getElementById('filterBackdrop').classList.add('active');
-        }
-        
-        function closeFilters() {
-            document.getElementById('filtersModal').classList.remove('active');
-            document.getElementById('filterBackdrop').classList.remove('active');
+            displayRecipes();
         }
         
         function resetFilters() {
@@ -949,25 +698,41 @@
             closeFilters();
         }
         
-        function openBook() {
-            document.getElementById('closedBook').classList.add('hidden');
-            setTimeout(() => {
-                document.getElementById('closedBook').style.display = 'none';
-                document.getElementById('mainCookbook').classList.add('open');
-            }, 500);
+        function openFilters() {
+            document.getElementById('filterModal').classList.add('active');
+            document.getElementById('filterBackdrop').classList.add('active');
         }
         
-        window.filterBy = filterBy;
-        window.filterByYear = filterByYear;
-        window.filterByCountry = filterByCountry;
-        window.filterByCategory = filterByCategory;
-        window.nextPage = nextPage;
-        window.previousPage = previousPage;
+        function closeFilters() {
+            document.getElementById('filterModal').classList.remove('active');
+            document.getElementById('filterBackdrop').classList.remove('active');
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') previousPage();
+            if (e.key === 'ArrowRight') nextPage();
+        });
+        
+        // Swipe gestures
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        document.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? nextPage() : previousPage();
+            }
+        });
+        
         window.openBook = openBook;
+        window.previousPage = previousPage;
+        window.nextPage = nextPage;
         window.openFilters = openFilters;
         window.closeFilters = closeFilters;
+        window.applyFilters = applyFilters;
         window.resetFilters = resetFilters;
     </script>
-    </div>
 </body>
 </html>
