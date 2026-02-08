@@ -1,1 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste of VRIC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .year-button {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            margin-bottom: 40px;
+        }
+        
+        .year-button:hover {
+            background: #f0f4ff;
+        }
+        
+        .menu-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .menu-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .menu-btn.secondary {
+            background: #10b981;
+        }
+        
+        .menu-btn.secondary:hover {
+            background: #059669;
+        }
+        
+        .menu-btn.judge {
+            background: #f59e0b;
+        }
+        
+        .menu-btn.judge:hover {
+            background: #d97706;
+        }
+        
+        .menu-btn.cookbook {
+            background: #8b5cf6;
+        }
+        
+        .menu-btn.cookbook:hover {
+            background: #7c3aed;
+        }
+        
+        .menu-btn.disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .menu-btn.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .cancel-btn {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .confirm-btn {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ Taste of VRIC</h1>
+        <button class="year-button" id="yearButton" onclick="showYearModal()">2026</button>
+        
+        <a href="submit-entry.html" class="menu-btn" id="submitEntryBtn">
+            Submit an Entry
+        </a>
+        
+        <a href="cookbook-submit.html" class="menu-btn secondary">
+            Contribute to the Cookbook
+        </a>
+        
+        <a href="cookbook.html" class="menu-btn cookbook">
+            View Cookbook
+        </a>
+        
+        <a href="judges.html" class="menu-btn judge">
+            Judges Only
+        </a>
+    </div>
+    
+    <!-- Year Change Modal -->
+    <div id="yearModal" class="modal">
+        <div class="modal-content">
+            <h3>Change Year</h3>
+            <input type="password" id="yearPassword" placeholder="Enter admin password">
+            <input type="number" id="newYear" placeholder="Enter new year (e.g., 2027)">
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeYearModal()">Cancel</button>
+                <button class="confirm-btn" onclick="changeYear()">Update</button>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        const REPO_OWNER = 'VRICSisters';
+        const REPO_NAME = 'tasteofvric';
+        const DATA_TOKEN = 'YOUR_TOKEN_HERE'; // Replace with your token
+        
+        let currentYear = 2026;
+        let yearCompleted = false;
+        
+        async function loadConfig() {
+            try {
+                const response = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/config.json?t=${Date.now()}`);
+                const config = await response.json();
+                currentYear = config.currentYear;
+                yearCompleted = config.yearCompleted[currentYear] || false;
+                
+                document.getElementById('yearButton').textContent = currentYear;
+                
+                // Update submit button based on year status
+                const submitBtn = document.getElementById('submitEntryBtn');
+                if (yearCompleted) {
+                    submitBtn.textContent = "This year's competition has ended!";
+                    submitBtn.classList.add('disabled');
+                    submitBtn.style.pointerEvents = 'none';
+                }
+            } catch (error) {
+                console.error('Failed to load config:', error);
+            }
+        }
+        
+        function showYearModal() {
+            document.getElementById('yearModal').classList.add('active');
+        }
+        
+        function closeYearModal() {
+            document.getElementById('yearModal').classList.remove('active');
+            document.getElementById('yearPassword').value = '';
+            document.getElementById('newYear').value = '';
+        }
+        
+        async function changeYear() {
+            const password = document.getElementById('yearPassword').value;
+            const newYear = parseInt(document.getElementById('newYear').value);
+            
+            if (password !== 'adminVR!C') {
+                alert('Incorrect password');
+                return;
+            }
+            
+            if (!newYear || newYear < 2026) {
+                alert('Invalid year');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/config.json?t=${Date.now()}`);
+                const config = await response.json();
+                
+                config.currentYear = newYear;
+                if (!config.yearCompleted[newYear]) {
+                    config.yearCompleted[newYear] = false;
+                }
+                
+                await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Authorization': `token ${DATA_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        event_type: 'update-config',
+                        client_payload: {
+                            data: JSON.stringify(config, null, 2)
+                        }
+                    })
+                });
+                
+                alert('Year updated! The page will reload in 3 seconds...');
+                closeYearModal();
+                setTimeout(() => location.reload(), 3000);
+                
+            } catch (error) {
+                alert('Failed to update year: ' + error.message);
+            }
+        }
+        
+        loadConfig();
+    </script>
+</body>
+</html>
