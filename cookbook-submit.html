@@ -27,6 +27,14 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
         
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
         h1 {
             color: #92400e;
             margin-bottom: 15px;
@@ -175,26 +183,6 @@
             font-size: 15px;
         }
         
-        .success {
-            background: #d1fae5;
-            border: 2px solid #10b981;
-            color: #065f46;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            display: none;
-            text-align: center;
-            font-size: 16px;
-            line-height: 1.8;
-        }
-        
-        .success-arabic {
-            font-size: 18px;
-            font-weight: 600;
-            color: #047857;
-            margin-bottom: 10px;
-        }
-        
         .loading {
             text-align: center;
             padding: 20px;
@@ -210,6 +198,84 @@
             border-radius: 6px;
             display: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        /* Confirmation Screen */
+        .confirmation {
+            text-align: center;
+            padding: 60px 40px;
+        }
+        
+        .confirmation-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+        
+        .confirmation h2 {
+            color: #92400e;
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-arabic {
+            font-size: 28px;
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: 20px;
+            direction: rtl;
+        }
+        
+        .confirmation-message {
+            font-size: 18px;
+            color: #78350f;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .conf-btn {
+            padding: 16px 32px;
+            border: 2px solid #92400e;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .conf-btn.primary {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        
+        .conf-btn.primary:hover {
+            background: #059669;
+            border-color: #059669;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .conf-btn.secondary {
+            background: white;
+            color: #92400e;
+            border-color: #92400e;
+        }
+        
+        .conf-btn.secondary:hover {
+            background: #92400e;
+            color: white;
+            transform: translateY(-1px);
         }
         
         @media (max-width: 600px) {
@@ -232,119 +298,162 @@
             input[type="text"], input[type="tel"], input[type="number"], select, textarea {
                 font-size: 16px;
             }
+            
+            .confirmation {
+                padding: 40px 20px;
+            }
+            
+            .confirmation-icon {
+                font-size: 60px;
+            }
+            
+            .confirmation h2 {
+                font-size: 24px;
+            }
+            
+            .confirmation-arabic {
+                font-size: 22px;
+            }
+            
+            .confirmation-message {
+                font-size: 16px;
+            }
+            
+            .confirmation-buttons {
+                flex-direction: column;
+            }
+            
+            .conf-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-btn">← Back to Home</a>
-        
-        <h1>📖 VRIC Cookbook</h1>
-        <p class="subtitle">Share your favorite recipe with the community</p>
-        
-        <div id="error" class="error"></div>
-        <div id="success" class="success">
-            <div class="success-arabic">جزاك الله خيرا</div>
-            JazakAllahu Khairan for sharing your recipe!<br>
-            May each bite be written as a reward for you!
-        </div>
-        <div id="loading" class="loading">Submitting your recipe...</div>
-        
-        <form id="cookbookForm">
-            <div class="form-group">
-                <label>First Name <span class="required">*</span></label>
-                <input type="text" id="name" required placeholder="e.g., Sarah">
-            </div>
+        <!-- Form Screen -->
+        <div id="formScreen" class="screen active">
+            <a href="index.html" class="back-btn">← Back to Home</a>
             
-            <div class="form-group">
-                <label>Cell Phone Number <span class="required">*</span></label>
-                <input type="tel" id="phone" required placeholder="555-123-4567" maxlength="12">
-                <p class="helper-text privacy-note">🔒 Your phone number will not be displayed publicly. It's only for our records.</p>
-            </div>
+            <h1>📖 VRIC Cookbook</h1>
+            <p class="subtitle">Share your favorite recipe with the community</p>
             
-            <div class="form-group">
-                <label>What is the name of your dish? <span class="required">*</span></label>
-                <input type="text" id="dishName" required placeholder="e.g., Chicken Karahi">
-            </div>
+            <div id="error" class="error"></div>
+            <div id="loading" class="loading">Submitting your recipe...</div>
             
-            <div class="form-group">
-                <label>What country is your dish from? <span class="required">*</span></label>
-                <input type="text" id="country" required placeholder="e.g., Pakistan">
-            </div>
-            
-            <div class="form-group">
-                <label>Category of Dish <span class="required">*</span></label>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="cat-appetizer" name="category" value="Appetizer" required>
-                        <label for="cat-appetizer">Appetizer</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="cat-entree" name="category" value="Entree" required>
-                        <label for="cat-entree">Entree</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="cat-dessert" name="category" value="Dessert" required>
-                        <label for="cat-dessert">Dessert</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="cat-drink" name="category" value="Drink" required>
-                        <label for="cat-drink">Drink</label>
+            <form id="cookbookForm">
+                <div class="form-group">
+                    <label>First Name <span class="required">*</span></label>
+                    <input type="text" id="name" required placeholder="e.g., Sarah">
+                </div>
+                
+                <div class="form-group">
+                    <label>Cell Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" required placeholder="555-123-4567" maxlength="12">
+                    <p class="helper-text privacy-note">🔒 Your phone number will not be displayed publicly. It's only for our records.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>What is the name of your dish? <span class="required">*</span></label>
+                    <input type="text" id="dishName" required placeholder="e.g., Chicken Karahi">
+                </div>
+                
+                <div class="form-group">
+                    <label>What country is your dish from? <span class="required">*</span></label>
+                    <input type="text" id="country" required placeholder="e.g., Pakistan">
+                </div>
+                
+                <div class="form-group">
+                    <label>Category of Dish <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="cat-appetizer" name="category" value="Appetizer" required>
+                            <label for="cat-appetizer">Appetizer</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="cat-entree" name="category" value="Entree" required>
+                            <label for="cat-entree">Entree</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="cat-dessert" name="category" value="Dessert" required>
+                            <label for="cat-dessert">Dessert</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="cat-drink" name="category" value="Drink" required>
+                            <label for="cat-drink">Drink</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Total Prep Time? <span class="required">*</span></label>
-                <div class="duration-group">
-                    <input type="number" id="prepDuration" required placeholder="Enter time" min="0">
-                    <select id="prepUnit" required>
-                        <option value="minutes">Minutes</option>
-                        <option value="hours">Hours</option>
-                    </select>
+                
+                <div class="form-group">
+                    <label>Total Prep Time? <span class="required">*</span></label>
+                    <div class="duration-group">
+                        <input type="number" id="prepDuration" required placeholder="Enter time" min="0">
+                        <select id="prepUnit" required>
+                            <option value="minutes">Minutes</option>
+                            <option value="hours">Hours</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Total Cook Time? <span class="required">*</span></label>
-                <div class="duration-group">
-                    <input type="number" id="cookDuration" required placeholder="Enter time" min="0">
-                    <select id="cookUnit" required>
-                        <option value="minutes">Minutes</option>
-                        <option value="hours">Hours</option>
-                    </select>
+                
+                <div class="form-group">
+                    <label>Total Cook Time? <span class="required">*</span></label>
+                    <div class="duration-group">
+                        <input type="number" id="cookDuration" required placeholder="Enter time" min="0">
+                        <select id="cookUnit" required>
+                            <option value="minutes">Minutes</option>
+                            <option value="hours">Hours</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>What ingredients did you use? Please include measurements. <span class="required">*</span></label>
-                <textarea id="ingredients" required placeholder="List all ingredients with measurements, e.g.:
+                
+                <div class="form-group">
+                    <label>What ingredients did you use? Please include measurements. <span class="required">*</span></label>
+                    <textarea id="ingredients" required placeholder="List all ingredients with measurements, e.g.:
 2 lbs chicken
 1 cup yogurt
 2 tsp salt"></textarea>
-                <p class="helper-text">Ensure you list all allergens such as nuts, gluten, dairy, etc.</p>
+                    <p class="helper-text">Ensure you list all allergens such as nuts, gluten, dairy, etc.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>What instructions would someone follow to recreate this dish? <span class="required">*</span></label>
+                    <textarea id="instructions" required placeholder="Step-by-step instructions with amounts, times, and other steps..."></textarea>
+                    <p class="helper-text">Be sure to include amounts, times, and other steps.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Additional Notes</label>
+                    <textarea id="notes" placeholder="Any tips, variations, or serving suggestions..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload a photo of your dish</label>
+                    <input type="file" id="photo" accept="image/*">
+                    <p class="helper-text">Photos will be resized and compressed automatically</p>
+                    <img id="photoPreview" class="photo-preview">
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Recipe</button>
+            </form>
+        </div>
+        
+        <!-- Confirmation Screen -->
+        <div id="confirmationScreen" class="screen">
+            <div class="confirmation">
+                <div class="confirmation-icon">✨</div>
+                <h2>Recipe Submitted!</h2>
+                <div class="confirmation-arabic">جزاك الله خيرا</div>
+                <div class="confirmation-message">
+                    JazakAllahu Khairan for sharing your recipe!<br>
+                    May each bite be written as a reward for you!
+                </div>
+                <div class="confirmation-buttons">
+                    <button class="conf-btn primary" onclick="submitAnother()">Submit Another Recipe</button>
+                    <a href="index.html" class="conf-btn secondary">Back to Home</a>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label>What instructions would someone follow to recreate this dish? <span class="required">*</span></label>
-                <textarea id="instructions" required placeholder="Step-by-step instructions with amounts, times, and other steps..."></textarea>
-                <p class="helper-text">Be sure to include amounts, times, and other steps.</p>
-            </div>
-            
-            <div class="form-group">
-                <label>Additional Notes</label>
-                <textarea id="notes" placeholder="Any tips, variations, or serving suggestions..."></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>Upload a photo of your dish</label>
-                <input type="file" id="photo" accept="image/*">
-                <p class="helper-text">Photos will be resized and compressed automatically</p>
-                <img id="photoPreview" class="photo-preview">
-            </div>
-            
-            <button type="submit" class="submit-btn">Submit Recipe</button>
-        </form>
+        </div>
     </div>
 
     <script>
@@ -426,6 +535,21 @@
             return `${num} ${unit}`;
         }
         
+        function showConfirmation() {
+            document.getElementById('formScreen').classList.remove('active');
+            document.getElementById('confirmationScreen').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function submitAnother() {
+            document.getElementById('confirmationScreen').classList.remove('active');
+            document.getElementById('formScreen').classList.add('active');
+            document.getElementById('cookbookForm').reset();
+            document.getElementById('photoPreview').style.display = 'none';
+            document.querySelector('.submit-btn').disabled = false;
+            window.scrollTo(0, 0);
+        }
+        
         document.getElementById('cookbookForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -450,7 +574,6 @@
             
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
-            document.getElementById('success').style.display = 'none';
             document.querySelector('.submit-btn').disabled = true;
             
             try {
@@ -504,14 +627,7 @@
                 });
                 
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('success').style.display = 'block';
-                
-                document.getElementById('cookbookForm').reset();
-                document.getElementById('photoPreview').style.display = 'none';
-                
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 5000);
+                showConfirmation();
                 
             } catch (error) {
                 document.getElementById('loading').style.display = 'none';
