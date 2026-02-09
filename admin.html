@@ -12,8 +12,8 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
             padding: 20px;
         }
         
@@ -23,27 +23,21 @@
             background: white;
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .login-container {
-            max-width: 450px;
-            margin: 0 auto;
+            max-width: 400px;
+            margin: 100px auto;
             background: white;
             border-radius: 12px;
-            padding: 50px 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         h1 {
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 30px;
-            font-weight: 600;
         }
         
         .controls {
@@ -56,20 +50,17 @@
         
         button {
             padding: 12px 24px;
-            background: #3B82F6;
+            background: #667eea;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            transition: all 0.3s;
         }
         
         button:hover {
-            background: #2563EB;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            background: #5568d3;
         }
         
         .export-btn {
@@ -78,7 +69,6 @@
         
         .export-btn:hover {
             background: #059669;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
         
         .delete-btn {
@@ -396,16 +386,11 @@
             cursor: pointer;
             font-weight: 600;
             color: #6b7280;
-            transition: all 0.3s;
-        }
-        
-        .tab:hover {
-            color: #3B82F6;
         }
         
         .tab.active {
-            color: #3B82F6;
-            border-bottom-color: #3B82F6;
+            color: #667eea;
+            border-bottom-color: #667eea;
         }
         
         .tab-content {
@@ -479,45 +464,15 @@
             margin-top: 15px;
         }
     </style>
-    <script>
-        // Define adminLogin early so it's available for inline handlers
-        function adminLogin() {
-            const password = document.getElementById('adminPassword').value;
-            
-            if (password !== 'adminVR!C') {
-                alert('Incorrect password');
-                return;
-            }
-            
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            
-            // Call these after a short delay to ensure DOM and other functions are loaded
-            setTimeout(() => {
-                if (typeof loadYearOptions === 'function') loadYearOptions();
-                if (typeof loadData === 'function') loadData();
-                if (typeof loadCookbook === 'function') loadCookbook();
-                
-                if (typeof autoRefreshInterval !== 'undefined') {
-                    autoRefreshInterval = setInterval(() => {
-                        loadData();
-                        loadCookbook();
-                    }, 10000);
-                }
-            }, 100);
-        }
-    </script>
 </head>
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
-        <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" style="width: 100px; height: 100px; margin: 0 auto 20px; display: block;">
-        <h1 style="color: #2c3e50; font-size: 28px; font-weight: 600; margin-bottom: 10px;">Admin Panel</h1>
-        <p style="color: #6b7280; font-size: 14px; margin-bottom: 30px; line-height: 1.6;">Use this panel to manage competition results and scores and approve, edit or deny recipe submissions.</p>
+        <h1>🔐 Admin Login</h1>
         <div style="margin-bottom: 20px;">
-            <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; margin-bottom: 15px;" onkeypress="if(event.key==='Enter') adminLogin()">
+            <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%; margin-bottom: 15px;">
         </div>
-        <button onclick="adminLogin()" style="width: 100%; background: #3B82F6; padding: 12px; border-radius: 8px; color: white; font-weight: 600; font-size: 16px;">Login</button>
+        <button onclick="adminLogin()" style="width: 100%;">Login</button>
     </div>
     
     <!-- Main Dashboard -->
@@ -589,22 +544,21 @@
                 </div>
             </div>
             
-            <!-- Cookbook Approval Tab -->
+            <!-- Cookbook Tab -->
             <div id="cookbookTab" class="tab-content">
                 <div id="cookbookLoading" class="loading">Loading cookbook submissions...</div>
                 
                 <div id="cookbookContent" style="display: none;">
                     <h2>Pending Approvals</h2>
                     <div id="pendingRecipes"></div>
+                    
+                    <h2 style="margin-top: 40px;">Approved Recipes</h2>
+                    <div id="approvedRecipes"></div>
                 </div>
             </div>
             
             <!-- Manage Cookbook Tab -->
             <div id="manage-cookbookTab" class="tab-content">
-                <div class="controls">
-                    <button class="export-btn" onclick="exportCookbookCSV()">📥 Export All Recipes (CSV)</button>
-                </div>
-                
                 <div id="manageLoading" class="loading">Loading cookbook...</div>
                 
                 <div id="manageContent" style="display: none;">
@@ -676,6 +630,34 @@
         let duplicates = [];
         let wrongCategories = [];
         let autoRefreshInterval = null;
+        
+        // Enter key support for login
+        document.getElementById('adminPassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
+            }
+        });
+        
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password !== 'adminVR!C') {
+                alert('Incorrect password');
+                return;
+            }
+            
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            loadYearOptions();
+            loadData();
+            loadCookbook();
+            
+            autoRefreshInterval = setInterval(() => {
+                loadData();
+                loadCookbook();
+            }, 10000);
+        }
         
         async function loadYearOptions() {
             try {
@@ -1021,6 +1003,7 @@
                 }
                 
                 displayPendingRecipes();
+                displayApprovedRecipes();
                 
                 const pendingCount = cookbook.pending?.length || 0;
                 const badge = document.getElementById('pendingCount');
@@ -1053,14 +1036,13 @@
                 card.innerHTML = `
                     <h3 style="color: #92400e; margin-bottom: 10px;">${recipe.dishName}</h3>
                     <p style="color: #78350f; margin-bottom: 5px;"><strong>By:</strong> ${recipe.name}</p>
-                    <p id="contact-${index}" style="color: #78350f; margin-bottom: 5px; display: none;"><strong>Phone:</strong> ${recipe.phone}</p>
+                    <p style="color: #78350f; margin-bottom: 5px;"><strong>Phone:</strong> ${recipe.phone}</p>
                     <p style="color: #78350f; margin-bottom: 5px;"><strong>Category:</strong> ${recipe.category}</p>
                     <p style="color: #78350f; margin-bottom: 5px;"><strong>Country:</strong> ${recipe.country}</p>
                     ${recipe.photo ? `<img src="${recipe.photo}" class="recipe-preview" style="margin: 10px 0;">` : ''}
                     <div style="margin-top: 15px;">
                         <button class="approve-btn" onclick="approveRecipe(${index})">Approve</button>
                         <button class="reject-btn" onclick="rejectRecipe(${index})" style="margin-left: 10px;">Reject</button>
-                        <button class="contact-btn" onclick="showContact(${index})" style="margin-left: 10px; background: #3B82F6; padding: 6px 12px; font-size: 12px; color: white; border: none; border-radius: 8px; cursor: pointer;">Contact</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1124,18 +1106,6 @@
             }
         }
         
-        function showContact(index) {
-            const password = prompt('Enter password to view contact information:');
-            if (password === 'adminVR!C') {
-                const contactElement = document.getElementById(`contact-${index}`);
-                if (contactElement) {
-                    contactElement.style.display = 'block';
-                }
-            } else if (password !== null) {
-                alert('Incorrect password');
-            }
-        }
-        
         async function loadManageCookbook() {
             document.getElementById('manageLoading').style.display = 'block';
             document.getElementById('manageContent').style.display = 'none';
@@ -1169,23 +1139,7 @@
             
             cookbook.approved.forEach((recipe, index) => {
                 const card = document.createElement('div');
-                card.style.cssText = 'margin-bottom: 10px; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden;';
-                
-                const header = document.createElement('div');
-                header.style.cssText = 'background: #f3f4f6; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;';
-                header.onclick = () => toggleRecipe(index);
-                header.innerHTML = `
-                    <div>
-                        <strong style="color: #2c3e50; font-size: 16px;">${recipe.firstName}'s ${recipe.dishName}</strong>
-                        <span style="margin-left: 15px; color: #6b7280; font-size: 14px;">${recipe.category} • ${recipe.country} • ${recipe.year}</span>
-                    </div>
-                    <span id="arrow-${index}" style="font-size: 20px; transition: transform 0.3s;">▼</span>
-                `;
-                
-                const content = document.createElement('div');
-                content.id = `recipe-content-${index}`;
-                content.style.cssText = 'display: none; padding: 20px; background: white;';
-                content.className = 'recipe-edit-card';
+                card.className = 'recipe-edit-card';
                 
                 // Parse existing duration
                 let prepNum = 0, prepUnit = 'minutes';
@@ -1206,115 +1160,8 @@
                     }
                 }
                 
-                content.innerHTML = `
-                    <div id="contact-manage-${index}" style="color: #3B82F6; margin-bottom: 15px; padding: 10px; background: #EFF6FF; border-radius: 6px; display: none;">
-                        <strong>Name:</strong> ${recipe.name}<br>
-                        <strong>Phone:</strong> ${recipe.phone}
-                    </div>
-                    
-                    <div class="edit-form-group">
-                        <label>Dish Name</label>
-                        <input type="text" id="dishName-${index}" value="${recipe.dishName}">
-                    </div>
-                    
-                    <div class="edit-form-group">
-                        <label>Country of Origin</label>
-                        <input type="text" id="country-${index}" value="${recipe.country}">
-                    </div>
-                    
-                    <div class="edit-form-group">
-                        <label>Category</label>
-                        <select id="category-${index}">
-                            <option value="Appetizer" ${recipe.category === 'Appetizer' ? 'selected' : ''}>Appetizer</option>
-                            <option value="Entree" ${recipe.category === 'Entree' ? 'selected' : ''}>Entree</option>
-                            <option value="Dessert" ${recipe.category === 'Dessert' ? 'selected' : ''}>Dessert</option>
-                            <option value="Drink" ${recipe.category === 'Drink' ? 'selected' : ''}>Drink</option>
-                        </select>
-                    </div>
-                    
-                    <div class="time-inputs">
-                        <div class="time-input-group">
-                            <label>Prep Time</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="number" id="prepDuration-${index}" value="${prepNum}" min="0" style="width: 100px;">
-                                <select id="prepUnit-${index}" style="width: 120px;">
-                                    <option value="minutes" ${prepUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
-                                    <option value="hours" ${prepUnit === 'hours' ? 'selected' : ''}>Hours</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="time-input-group">
-                            <label>Cook Time</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="number" id="cookDuration-${index}" value="${cookNum}" min="0" style="width: 100px;">
-                                <select id="cookUnit-${index}" style="width: 120px;">
-                                    <option value="minutes" ${cookUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
-                                    <option value="hours" ${cookUnit === 'hours' ? 'selected' : ''}>Hours</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="edit-form-group">
-                        <label>Ingredients</label>
-                        <textarea id="ingredients-${index}">${recipe.ingredients}</textarea>
-                    </div>
-                    
-                    <div class="edit-form-group">
-                        <label>Instructions</label>
-                        <textarea id="instructions-${index}">${recipe.instructions}</textarea>
-                    </div>
-                    
-                    <div class="edit-form-group">
-                        <label>Notes</label>
-                        <textarea id="notes-${index}">${recipe.notes || ''}</textarea>
-                    </div>
-                    
-                    <div class="photo-upload-section">
-                        <label>Photo</label>
-                        ${recipe.photo ? `<img src="${recipe.photo}" class="current-photo">` : '<p style="color: #999;">No photo uploaded</p>'}
-                        <input type="file" id="photo-${index}" accept="image/*">
-                        <p style="font-size: 12px; color: #666; margin-top: 5px;">Upload a new photo to replace the current one</p>
-                    </div>
-                    
-                    <div class="edit-buttons">
-                        <button style="background: #3B82F6; padding: 6px 12px; font-size: 12px;" onclick="showContactManage(${index})">Contact</button>
-                        <button class="save-recipe-btn" onclick="saveRecipe(${index})">Save Changes</button>
-                        <button class="delete-recipe-btn" onclick="deleteRecipe(${index})">Delete Recipe</button>
-                    </div>
-                `;
-                
-                card.appendChild(header);
-                card.appendChild(content);
-                container.appendChild(card);
-            });
-        }
-        
-        function toggleRecipe(index) {
-            const content = document.getElementById(`recipe-content-${index}`);
-            const arrow = document.getElementById(`arrow-${index}`);
-            
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                content.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
-        
-        function showContactManage(index) {
-            const password = prompt('Enter password to view contact information:');
-            if (password === 'adminVR!C') {
-                const contactElement = document.getElementById(`contact-manage-${index}`);
-                if (contactElement) {
-                    contactElement.style.display = 'block';
-                }
-            } else if (password !== null) {
-                alert('Incorrect password');
-            }
-        }
+                card.innerHTML = `
+                    <h4>${recipe.firstName}'s ${recipe.dishName}</h4>
                     
                     <div class="edit-form-group">
                         <label>Dish Name</label>
@@ -1476,43 +1323,6 @@
             }
         }
         
-        function exportCookbookCSV() {
-            if (!cookbook.approved || cookbook.approved.length === 0) {
-                alert('No recipes to export');
-                return;
-            }
-            
-            const headers = ['Dish Name', 'First Name', 'Full Name', 'Phone', 'Category', 'Country', 'Year', 'Prep Time', 'Cook Time', 'Ingredients', 'Instructions', 'Notes', 'Photo URL'];
-            const rows = cookbook.approved.map(recipe => [
-                recipe.dishName || '',
-                recipe.firstName || '',
-                recipe.name || '',
-                recipe.phone || '',
-                recipe.category || '',
-                recipe.country || '',
-                recipe.year || '',
-                recipe.prepTime || '',
-                recipe.cookTime || '',
-                (recipe.ingredients || '').replace(/\n/g, ' | '),
-                (recipe.instructions || '').replace(/\n/g, ' | '),
-                (recipe.notes || '').replace(/\n/g, ' | '),
-                recipe.photo || ''
-            ]);
-            
-            const csvContent = [
-                headers.join(','),
-                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-            ].join('\n');
-            
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `vric-cookbook-${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
         function showTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -1535,15 +1345,11 @@
         window.changeYear = changeYear;
         window.filterByCategory = filterByCategory;
         window.exportCSV = exportCSV;
-        window.exportCookbookCSV = exportCookbookCSV;
         window.approveRecipe = approveRecipe;
         window.rejectRecipe = rejectRecipe;
         window.saveRecipe = saveRecipe;
         window.deleteRecipe = deleteRecipe;
         window.showTab = showTab;
-        window.showContact = showContact;
-        window.showContactManage = showContactManage;
-        window.toggleRecipe = toggleRecipe;
     </script>
 </body>
 </html>
