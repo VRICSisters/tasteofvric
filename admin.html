@@ -27,12 +27,17 @@
         }
         
         .login-container {
-            max-width: 400px;
-            margin: 100px auto;
+            max-width: 450px;
+            margin: 0 auto;
             background: white;
             border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 50px 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
         }
         
         h1 {
@@ -478,11 +483,13 @@
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
-        <h1>🔐 Admin Login</h1>
+        <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" style="width: 100px; height: 100px; margin: 0 auto 20px; display: block;">
+        <h1 style="color: #2c3e50; font-size: 28px; font-weight: 600; margin-bottom: 10px;">Admin Panel</h1>
+        <p style="color: #6b7280; font-size: 14px; margin-bottom: 30px; line-height: 1.6;">Use this panel to manage competition results and scores and approve, edit or deny recipe submissions.</p>
         <div style="margin-bottom: 20px;">
-            <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%; margin-bottom: 15px;">
+            <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; margin-bottom: 15px;" onkeypress="if(event.key==='Enter') adminLogin()">
         </div>
-        <button onclick="adminLogin()" style="width: 100%;">Login</button>
+        <button onclick="adminLogin()" style="width: 100%; background: #3B82F6; padding: 12px; border-radius: 8px; color: white; font-weight: 600; font-size: 16px;">Login</button>
     </div>
     
     <!-- Main Dashboard -->
