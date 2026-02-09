@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taste of VRIC</title>
+    <title>Taste of VRIC - Competition</title>
     <style>
         * {
             margin: 0;
@@ -12,359 +12,159 @@
         }
         
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
         }
         
-        .verse-container {
-            position: fixed;
-            top: 8px;
-            left: 10px;
-            right: 10px;
-            transform: none;
-            width: auto;
-            text-align: center;
-            cursor: pointer;
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 4px;
-            transition: all 0.3s;
-            max-width: none;
-            z-index: 100;
-        }
-        
-        .verse-container:hover {
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .verse-text {
-            font-size: 12px;
-            color: #5a6c7d;
-            line-height: 1.5;
-        }
-        
-        .verse-text.arabic {
-            font-size: 15px;
-            font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', serif;
-            direction: rtl;
-        }
-        
-        .verse-text.urdu {
-            font-size: 13px;
-            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
-            direction: rtl;
-        }
-        
-        .verse-text.bangla {
-            font-size: 12px;
-            font-family: 'SolaimanLipi', 'Kalpurush', 'Vrinda', serif;
-        }
-        
-        .verse-ref {
-            font-size: 9px;
-            color: #95a5a6;
-            margin-top: 4px;
-            font-style: italic;
-        }
-        
         .container {
-            max-width: 600px;
-            width: 100%;
-            background: white;
-            border-radius: 2px;
-            padding: 60px 50px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
             text-align: center;
-            margin-top: 30px;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         
         .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        
+        .header h1 {
             font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        h1 {
             color: #2c3e50;
-            font-size: 42px;
-            font-weight: 400;
-            margin-bottom: 15px;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-        }
-        
-        .year {
-            color: #95a5a6;
-            font-size: 28px;
+            margin-bottom: 10px;
             font-weight: 300;
-            margin-bottom: 50px;
-            font-style: italic;
-            cursor: pointer;
-            transition: color 0.3s;
         }
         
-        .year:hover {
-            color: #7f8c8d;
+        .header p {
+            font-size: 18px;
+            color: #6c757d;
         }
         
-        .divider {
-            width: 60px;
-            height: 1px;
-            background: #bdc3c7;
-            margin: 40px auto;
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
         }
         
-        .menu-btn {
-            display: block;
-            width: 100%;
-            padding: 18px 30px;
-            margin: 15px 0;
-            font-size: 16px;
-            font-weight: 400;
-            font-family: 'Georgia', 'Times New Roman', serif;
+        .card {
             background: white;
-            color: #2c3e50;
-            border: 1.5px solid #34495e;
-            border-radius: 2px;
-            cursor: pointer;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             transition: all 0.3s;
             text-decoration: none;
-            letter-spacing: 0.5px;
+            color: inherit;
+            display: block;
         }
         
-        .menu-btn:hover {
-            background: #34495e;
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
         }
         
-        .menu-btn.primary {
-            background: #34495e;
-            color: white;
-            border-color: #34495e;
-        }
-        
-        .menu-btn.primary:hover {
-            background: #2c3e50;
-            border-color: #2c3e50;
-        }
-        
-        .menu-btn.disabled {
-            background: #ecf0f1;
-            color: #95a5a6;
-            border-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
-        .menu-btn.disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .footer-text {
-            margin-top: 40px;
-            color: #95a5a6;
-            font-size: 13px;
-            font-style: italic;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 2px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        
-        .modal-content h3 {
-            font-size: 24px;
-            font-weight: 400;
+        .card h2 {
+            font-size: 28px;
             color: #2c3e50;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
+            font-weight: 400;
+            position: relative;
+            display: inline-block;
         }
         
-        .modal-content input {
-            width: 100%;
-            padding: 15px;
-            border: 1.5px solid #bdc3c7;
-            border-radius: 2px;
+        .card h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #4169E1;
+        }
+        
+        .card p {
+            color: #6c757d;
             font-size: 16px;
-            margin-bottom: 20px;
-            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
         }
         
-        .modal-content input:focus {
-            outline: none;
-            border-color: #34495e;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: 1.5px solid #34495e;
-            border-radius: 2px;
-            font-size: 16px;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .cancel-btn {
-            background: white;
-            color: #34495e;
-        }
-        
-        .cancel-btn:hover {
-            background: #ecf0f1;
-        }
-        
-        .confirm-btn {
-            background: #34495e;
+        .card.admin {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
         
-        .confirm-btn:hover {
-            background: #2c3e50;
+        .card.admin h2 {
+            color: white;
         }
         
-        @media (max-width: 600px) {
-            .container {
-                padding: 40px 25px;
-                margin-top: 30px;
-            }
-            
-            h1 {
+        .card.admin h2::after {
+            background: white;
+        }
+        
+        .card.admin p {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .year-2027 {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
                 font-size: 32px;
             }
             
-            .year {
-                font-size: 22px;
-            }
-            
-            .logo {
-                font-size: 36px;
-            }
-            
-            .verse-container {
-                top: 8px;
-                left: 10px;
-                right: 10px;
-                transform: none;
-                width: auto;
-                padding: 8px 12px;
-                max-width: none;
-            }
-            
-            .verse-text {
-                font-size: 10px;
-                line-height: 1.5;
-            }
-            
-            .verse-text.arabic {
-                font-size: 13px;
-            }
-            
-            .verse-text.urdu {
-                font-size: 13px;
-            }
-            
-            .verse-ref {
-                font-size: 9px;
-                margin-top: 4px;
+            .cards {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="verse-container" onclick="toggleVerse()">
-        <div class="verse-text arabic" id="verseText">يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِن طَيِّبَاتِ مَا رَزَقْنَاكُمْ وَاشْكُرُوا لِلَّهِ إِن كُنتُمْ إِيَّاهُ تَعْبُدُونَ</div>
-        <div class="verse-ref">Quran 2:172</div>
-    </div>
-    
     <div class="container">
-        <div class="logo">🍽️</div>
-        <h1>Taste of VRIC</h1>
-        <div class="year" id="yearButton" onclick="showYearModal()">2026</div>
-        
-        <div class="divider"></div>
-        
-        <a href="submit-entry.html" class="menu-btn primary" id="submitEntryBtn">
-            Submit an Entry
-        </a>
-        
-        <a href="cookbook-submit.html" class="menu-btn">
-            Contribute to the Cookbook
-        </a>
-        
-        <a href="cookbook.html" class="menu-btn">
-            View Cookbook
-        </a>
-        
-        <button class="menu-btn" onclick="showJudgeModal()">
-            Judges Only
-        </button>
-        
-        <p class="footer-text">A celebration of culinary excellence</p>
-    </div>
-    
-    <!-- Year Change Modal -->
-    <div id="yearModal" class="modal">
-        <div class="modal-content">
-            <h3>Change Year</h3>
-            <input type="password" id="yearPassword" placeholder="Admin password">
-            <input type="number" id="newYear" placeholder="Enter year (e.g., 2027)">
-            <div class="modal-buttons">
-                <button class="cancel-btn" onclick="closeYearModal()">Cancel</button>
-                <button class="confirm-btn" onclick="changeYear()">Update</button>
-            </div>
+        <div class="header">
+            <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" class="logo">
+            <h1>Taste of VRIC</h1>
+            <p>Annual cooking competition celebrating our community's diverse culinary traditions</p>
         </div>
-    </div>
-    
-    <!-- Judge Password Modal -->
-    <div id="judgeModal" class="modal">
-        <div class="modal-content">
-            <h3>Judges Panel</h3>
-            <input type="password" id="judgePassword" placeholder="Enter judge password">
-            <div class="modal-buttons">
-                <button class="cancel-btn" onclick="closeJudgeModal()">Cancel</button>
-                <button class="confirm-btn" onclick="judgeLogin()">Enter</button>
-            </div>
+        
+        <div class="cards">
+            <a href="cookbook.html" class="card">
+                <h2>View Cookbook</h2>
+                <p>Browse through our collection of winning recipes from past competitions</p>
+            </a>
+            
+            <a href="entry.html" class="card year-2027" id="submitEntry">
+                <h2>Submit an Entry</h2>
+                <p>Enter your signature dish into this year's competition</p>
+            </a>
+            
+            <a href="judges.html" class="card year-2027" id="judgesCorner">
+                <h2>Judges Corner</h2>
+                <p>Access judging panel and scoring tools</p>
+            </a>
+            
+            <a href="admin.html" class="card admin">
+                <h2>Admin Panel</h2>
+                <p>Manage competition data, entries, and results</p>
+            </a>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
@@ -378,165 +178,26 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.db = db;
-        window.doc = doc;
-        window.getDoc = getDoc;
-        window.setDoc = setDoc;
-    </script>
-
-    <script>
-        let currentYear = 2026;
-        let yearCompleted = false;
-        
-        // Verse toggle functionality
-        const verses = [
-            {
-                lang: 'arabic',
-                text: 'يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِن طَيِّبَاتِ مَا رَزَقْنَاكُمْ وَاشْكُرُوا لِلَّهِ إِن كُنتُمْ إِيَّاهُ تَعْبُدُونَ',
-                className: 'arabic'
-            },
-            {
-                lang: 'english',
-                text: 'O you who have believed, eat from the good things which We have provided for you and be grateful to Allah if it is [indeed] Him that you worship.',
-                className: ''
-            },
-            {
-                lang: 'bangla',
-                text: 'হে মুমিনগণ! আমি তোমাদেরকে যে হালাল রিযিক দান করেছি তা থেকে খাও এবং আল্লাহর কৃতজ্ঞতা প্রকাশ কর, যদি তোমরা তাঁরই ইবাদত কর।',
-                className: 'bangla'
-            },
-            {
-                lang: 'urdu',
-                text: 'اے ایمان والو! جو پاک چیزیں ہم نے تمہیں دی ہیں ان میں سے کھاؤ اور اللہ کا شکر ادا کرو اگر تم اسی کی عبادت کرتے ہو۔',
-                className: 'urdu'
-            }
-        ];
-        
-        let currentVerseIndex = 0;
-        
-        function toggleVerse() {
-            currentVerseIndex = (currentVerseIndex + 1) % verses.length;
-            const verseElement = document.getElementById('verseText');
-            const currentVerse = verses[currentVerseIndex];
-            
-            verseElement.textContent = currentVerse.text;
-            verseElement.className = 'verse-text ' + currentVerse.className;
-        }
-        
-        async function loadConfig() {
+        // Check current year and show/hide buttons
+        async function checkYear() {
             try {
-                const configDoc = await window.getDoc(window.doc(window.db, 'config', 'settings'));
+                const configDoc = await getDoc(doc(db, 'config', 'settings'));
                 
                 if (configDoc.exists()) {
-                    const config = configDoc.data();
-                    currentYear = config.currentYear;
-                    yearCompleted = config.yearCompleted[currentYear] || false;
+                    const currentYear = configDoc.data().currentYear || 2026;
                     
-                    document.getElementById('yearButton').textContent = currentYear;
-                    
-                    const submitBtn = document.getElementById('submitEntryBtn');
-                    if (yearCompleted) {
-                        submitBtn.textContent = "This year's competition has ended";
-                        submitBtn.classList.add('disabled');
-                        submitBtn.style.pointerEvents = 'none';
+                    // Show Submit Entry and Judges Corner only for 2027+
+                    if (currentYear >= 2027) {
+                        document.getElementById('submitEntry').style.display = 'block';
+                        document.getElementById('judgesCorner').style.display = 'block';
                     }
                 }
             } catch (error) {
-                console.error('Failed to load config:', error);
+                console.error('Error checking year:', error);
             }
         }
         
-        function showYearModal() {
-            document.getElementById('yearModal').classList.add('active');
-        }
-        
-        function closeYearModal() {
-            document.getElementById('yearModal').classList.remove('active');
-            document.getElementById('yearPassword').value = '';
-            document.getElementById('newYear').value = '';
-        }
-        
-        function showJudgeModal() {
-            document.getElementById('judgeModal').classList.add('active');
-            // Focus on password field
-            setTimeout(() => {
-                document.getElementById('judgePassword').focus();
-            }, 100);
-        }
-        
-        function closeJudgeModal() {
-            document.getElementById('judgeModal').classList.remove('active');
-            document.getElementById('judgePassword').value = '';
-        }
-        
-        async function changeYear() {
-            const password = document.getElementById('yearPassword').value;
-            const newYear = parseInt(document.getElementById('newYear').value);
-            
-            if (password !== 'adminVR!C') {
-                alert('Incorrect password');
-                return;
-            }
-            
-            if (!newYear || newYear < 2026) {
-                alert('Invalid year');
-                return;
-            }
-            
-            try {
-                const configDoc = await window.getDoc(window.doc(window.db, 'config', 'settings'));
-                const config = configDoc.exists() ? configDoc.data() : { yearCompleted: {} };
-                
-                config.currentYear = newYear;
-                if (!config.yearCompleted[newYear]) {
-                    config.yearCompleted[newYear] = false;
-                }
-                
-                await window.setDoc(window.doc(window.db, 'config', 'settings'), config);
-                
-                alert('Year updated successfully!');
-                closeYearModal();
-                setTimeout(() => location.reload(), 1000);
-                
-            } catch (error) {
-                alert('Failed to update year: ' + error.message);
-            }
-        }
-        
-        function judgeLogin() {
-            const password = document.getElementById('judgePassword').value;
-            
-            if (password !== 'ILoveVR!C') {
-                alert('Incorrect password');
-                return;
-            }
-            
-            window.location.href = 'judges.html';
-        }
-        
-        // Enter key support for judge password
-        document.getElementById('judgePassword')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                judgeLogin();
-            }
-        });
-        
-        // Enter key support for year change
-        document.getElementById('newYear')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                changeYear();
-            }
-        });
-        
-        window.toggleVerse = toggleVerse;
-        window.showYearModal = showYearModal;
-        window.closeYearModal = closeYearModal;
-        window.showJudgeModal = showJudgeModal;
-        window.closeJudgeModal = closeJudgeModal;
-        window.changeYear = changeYear;
-        window.judgeLogin = judgeLogin;
-        
-        loadConfig();
+        checkYear();
     </script>
 </body>
 </html>
