@@ -180,8 +180,12 @@
         
         .btn-primary:hover {
             background: #2563EB;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(-1px);
         }
         
         .btn-secondary {
@@ -192,7 +196,12 @@
         
         .btn-secondary:hover {
             background: #EFF6FF;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn-secondary:active {
+            transform: translateY(-1px);
         }
         
         .btn-outline {
@@ -205,26 +214,80 @@
             border-color: #3B82F6;
             color: #3B82F6;
             background: #EFF6FF;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
         }
         
-        .year-info {
-            margin-top: 30px;
-            padding: 15px;
-            background: #f3f4f6;
-            border-radius: 8px;
-            border-left: 4px solid #3B82F6;
+        .btn-outline:active {
+            transform: translateY(-1px);
         }
         
-        .year-info h3 {
-            font-size: clamp(16px, 4vw, 20px);
+        /* Password Modal */
+        .password-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        
+        .password-modal.active {
+            display: flex;
+        }
+        
+        .password-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .password-content h3 {
+            margin-bottom: 20px;
             color: #2c3e50;
-            margin-bottom: 10px;
         }
         
-        .year-info p {
-            font-size: clamp(13px, 3.2vw, 15px);
+        .password-content input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .password-content input:focus {
+            outline: none;
+            border-color: #3B82F6;
+        }
+        
+        .password-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .password-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-cancel {
+            background: #e5e7eb;
             color: #6b7280;
-            line-height: 1.6;
+        }
+        
+        .btn-submit {
+            background: #3B82F6;
+            color: white;
         }
         
         @media (max-width: 600px) {
@@ -260,28 +323,35 @@
         <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" class="logo-img">
         
         <h1>Taste of VRIC</h1>
-        <p class="subtitle">Hosted by VRIC Women</p>
+        <p class="subtitle">Annual Cooking Competition</p>
         
         <div class="year-display" onclick="toggleYearSelector()" id="yearDisplay">2026</div>
         
         <div class="year-selector" id="yearSelector">
-            <button class="year-btn" onclick="selectYear(2024)">2024</button>
-            <button class="year-btn" onclick="selectYear(2025)">2025</button>
             <button class="year-btn active" onclick="selectYear(2026)">2026</button>
             <button class="year-btn" onclick="selectYear(2027)">2027</button>
+            <button class="year-btn" onclick="selectYear(2028)">2028</button>
         </div>
         
         <div class="button-group">
-            <a href="cookbook.html" class="btn btn-primary">View Cookbook</a>
+            <a href="cookbook.html" class="btn btn-primary">View the Cookbook</a>
+            <a href="cookbook-submit.html" class="btn btn-secondary">Contribute your Recipe</a>
             
             <div id="competitionButtons">
                 <!-- These will be shown/hidden based on year -->
             </div>
         </div>
-        
-        <div class="year-info">
-            <h3 id="yearTitle">2026 Competition</h3>
-            <p id="yearDescription">Browse our collection of cherished recipes from the community.</p>
+    </div>
+    
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-content">
+            <h3>Admin Access</h3>
+            <input type="password" id="passwordInput" placeholder="Enter password" onkeypress="if(event.key==='Enter') checkPassword()">
+            <div class="password-buttons">
+                <button class="btn-cancel" onclick="closePasswordModal()">Cancel</button>
+                <button class="btn-submit" onclick="checkPassword()">Submit</button>
+            </div>
         </div>
     </div>
 
@@ -306,6 +376,7 @@
     <script>
         let currentVerseIndex = 0;
         let selectedYear = 2026;
+        let isAuthenticated = false;
         
         const verses = [
             {
@@ -362,22 +433,36 @@
             // Hide selector after selection
             document.getElementById('yearSelector').classList.remove('active');
             
-            // Update year info
-            document.getElementById('yearTitle').textContent = `${year} Competition`;
-            
-            if (year >= 2027) {
-                document.getElementById('yearDescription').textContent = `The ${year} competition is now open! Submit your entry and view our growing collection of recipes.`;
-            } else {
-                document.getElementById('yearDescription').textContent = 'Browse our collection of cherished recipes from the community.';
-            }
-            
             // Show/hide competition buttons based on year
             updateCompetitionButtons();
         }
         
         function toggleYearSelector() {
-            const selector = document.getElementById('yearSelector');
-            selector.classList.toggle('active');
+            if (!isAuthenticated) {
+                document.getElementById('passwordModal').classList.add('active');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            } else {
+                const selector = document.getElementById('yearSelector');
+                selector.classList.toggle('active');
+            }
+        }
+        
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === 'adminVR!C') {
+                isAuthenticated = true;
+                closePasswordModal();
+                document.getElementById('yearSelector').classList.add('active');
+            } else {
+                alert('Incorrect password');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+        
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('active');
         }
         
         function updateCompetitionButtons() {
@@ -385,8 +470,7 @@
             
             if (selectedYear >= 2027) {
                 buttonsContainer.innerHTML = `
-                    <a href="cookbook-submit.html" class="btn btn-secondary">Submit an Entry</a>
-                    <a href="judges.html" class="btn btn-outline">Judges Corner</a>
+                    <a href="judges.html" class="btn btn-outline">Access Judges Corner</a>
                 `;
             } else {
                 buttonsContainer.innerHTML = '';
@@ -397,12 +481,14 @@
         displayVerse();
         updateCompetitionButtons();
         
-        // Auto-rotate verses every 5 seconds
-        setInterval(rotateVerse, 5000);
+        // Auto-rotate verses every 7 seconds
+        setInterval(rotateVerse, 7000);
         
         window.selectYear = selectYear;
         window.rotateVerse = rotateVerse;
         window.toggleYearSelector = toggleYearSelector;
+        window.checkPassword = checkPassword;
+        window.closePasswordModal = closePasswordModal;
     </script>
 </body>
 </html>
