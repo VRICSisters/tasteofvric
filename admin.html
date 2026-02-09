@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taste of VRIC</title>
+    <title>Admin Dashboard - Taste of VRIC</title>
     <style>
         * {
             margin: 0;
@@ -12,232 +12,252 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f8f9fa;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-        
-        .verse-container {
-            position: fixed;
-            top: 8px;
-            left: 10px;
-            right: 10px;
-            text-align: center;
-            cursor: pointer;
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.95);
-            border-radius: 4px;
-            transition: all 0.3s;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .verse-container:hover {
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        
-        .verse-text {
-            font-size: clamp(10px, 2.5vw, 12px);
-            color: #5a6c7d;
-            line-height: 1.5;
-        }
-        
-        .verse-text.arabic {
-            font-size: clamp(12px, 3vw, 15px);
-            font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', serif;
-            direction: rtl;
-        }
-        
-        .verse-text.urdu {
-            font-size: clamp(11px, 2.8vw, 13px);
-            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
-            direction: rtl;
-        }
-        
-        .verse-text.bangla {
-            font-size: clamp(10px, 2.5vw, 12px);
-            font-family: 'SolaimanLipi', 'Kalpurush', 'Vrinda', serif;
-        }
-        
-        .verse-ref {
-            font-size: clamp(8px, 2vw, 9px);
-            color: #95a5a6;
-            margin-top: 4px;
-            font-style: italic;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
         }
         
         .container {
-            max-width: 600px;
-            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
             background: white;
-            border-radius: 8px;
-            padding: clamp(30px, 8vw, 60px) clamp(20px, 5vw, 50px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            text-align: center;
-            margin-top: 60px;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .logo-img {
-            width: clamp(80px, 20vw, 120px);
-            height: clamp(80px, 20vw, 120px);
-            margin: 0 auto 20px;
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         h1 {
-            color: #2c3e50;
-            font-size: clamp(28px, 7vw, 42px);
-            font-weight: 600;
-            margin-bottom: 15px;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-        }
-        
-        .subtitle {
-            color: #7f8c8d;
-            font-size: clamp(14px, 3.5vw, 18px);
-            margin-bottom: 10px;
-            font-weight: 400;
-        }
-        
-        .year-display {
-            color: #3B82F6;
-            font-size: clamp(16px, 4vw, 20px);
-            font-weight: 600;
+            color: #333;
             margin-bottom: 30px;
-            cursor: pointer;
-            user-select: none;
         }
         
-        .year-display:hover {
-            opacity: 0.8;
-        }
-        
-        .year-selector {
-            display: none;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
             flex-wrap: wrap;
         }
         
-        .year-selector.active {
-            display: flex;
-        }
-        
-        .year-btn {
-            padding: 10px 20px;
-            background: white;
-            color: #2c3e50;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: clamp(14px, 3.5vw, 16px);
-            font-weight: 600;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-        
-        .year-btn:hover {
-            border-color: #3B82F6;
-            color: #3B82F6;
-        }
-        
-        .year-btn.active {
-            background: #3B82F6;
+        button {
+            padding: 12px 24px;
+            background: #667eea;
             color: white;
-            border-color: #3B82F6;
-        }
-        
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .btn {
-            display: block;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: clamp(15px, 4vw, 18px);
-            font-weight: 600;
-            transition: all 0.3s;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
-            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
         }
         
-        .btn-primary {
-            background: #3B82F6;
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .export-btn {
+            background: #10b981;
+        }
+        
+        .export-btn:hover {
+            background: #059669;
+        }
+        
+        .delete-btn {
+            background: #ef4444;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+        
+        .approve-btn {
+            background: #10b981;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .approve-btn:hover {
+            background: #059669;
+        }
+        
+        .reject-btn {
+            background: #ef4444;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .reject-btn:hover {
+            background: #dc2626;
+        }
+        
+        .save-recipe-btn {
+            background: #10b981;
             color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
         }
         
-        .btn-primary:hover {
-            background: #2563EB;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        .save-recipe-btn:hover {
+            background: #059669;
         }
         
-        .btn-primary:active {
-            transform: translateY(-1px);
+        .delete-recipe-btn {
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
         }
         
-        .btn-secondary {
+        .delete-recipe-btn:hover {
+            background: #dc2626;
+        }
+        
+        select, input[type="password"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
             background: white;
-            color: #3B82F6;
-            border: 2px solid #3B82F6;
         }
         
-        .btn-secondary:hover {
-            background: #EFF6FF;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        select.inline-edit {
+            padding: 4px 8px;
+            font-size: 13px;
         }
         
-        .btn-secondary:active {
-            transform: translateY(-1px);
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
         }
         
-        .btn-outline {
-            background: transparent;
-            color: #6b7280;
-            border: 2px solid #e5e7eb;
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
         }
         
-        .btn-outline:hover {
-            border-color: #3B82F6;
-            color: #3B82F6;
-            background: #EFF6FF;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            position: sticky;
+            top: 0;
         }
         
-        .btn-outline:active {
-            transform: translateY(-1px);
+        .duplicate-warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
         }
         
-        /* Password Modal */
-        .password-modal {
+        .wrong-category {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .averages {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .averages h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        
+        .category-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .avg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .avg-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .avg-card h4 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .avg-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .avg-card .rank {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .modal {
             display: none;
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0,0,0,0.5);
             align-items: center;
             justify-content: center;
-            z-index: 200;
+            z-index: 1000;
         }
         
-        .password-modal.active {
+        .modal.active {
             display: flex;
         }
         
-        .password-content {
+        .modal-content {
             background: white;
             padding: 30px;
             border-radius: 12px;
@@ -246,249 +266,1099 @@
             text-align: center;
         }
         
-        .password-content h3 {
+        .modal-content h3 {
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #333;
         }
         
-        .password-content input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 15px;
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #666;
         }
         
-        .password-content input:focus {
-            outline: none;
-            border-color: #3B82F6;
-        }
-        
-        .password-buttons {
+        .modal-buttons {
             display: flex;
             gap: 10px;
         }
         
-        .password-buttons button {
+        .modal-buttons button {
             flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
+            padding: 12px;
         }
         
-        .btn-cancel {
-            background: #e5e7eb;
+        .cancel-btn {
+            background: #6b7280;
+        }
+        
+        .cancel-btn:hover {
+            background: #4b5563;
+        }
+        
+        .duplicate-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .wrong-badge {
+            display: inline-block;
+            background: #ef4444;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .alert-box {
+            border: 2px solid;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-box h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .alert-box ul {
+            list-style: none;
+        }
+        
+        .alert-box li {
+            margin: 5px 0;
+        }
+        
+        .alert-warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert-info {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+        
+        .pending-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .recipe-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
             color: #6b7280;
         }
         
-        .btn-submit {
-            background: #3B82F6;
-            color: white;
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
         }
         
-        @media (max-width: 600px) {
-            .container {
-                margin-top: 70px;
-            }
-            
-            .year-selector {
-                gap: 8px;
-            }
-            
-            .year-btn {
-                padding: 8px 16px;
-            }
-            
-            .button-group {
-                gap: 12px;
-            }
-            
-            .btn {
-                padding: 12px 24px;
-            }
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .recipe-edit-card {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .recipe-edit-card h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .edit-form-group {
+            margin-bottom: 15px;
+        }
+        
+        .edit-form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .edit-form-group input,
+        .edit-form-group textarea,
+        .edit-form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .edit-form-group textarea {
+            min-height: 80px;
+            font-family: monospace;
+        }
+        
+        .duration-edit-group {
+            display: grid;
+            grid-template-columns: 60% 38%;
+            gap: 2%;
+        }
+        
+        .photo-upload-section {
+            margin: 15px 0;
+        }
+        
+        .current-photo {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .edit-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="verse-container" onclick="rotateVerse()">
-        <div class="verse-text arabic" id="verseText"></div>
-        <div class="verse-ref" id="verseRef"></div>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <h1>🔐 Admin Login</h1>
+        <div style="margin-bottom: 20px;">
+            <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%; margin-bottom: 15px;">
+        </div>
+        <button onclick="adminLogin()" style="width: 100%;">Login</button>
     </div>
     
-    <div class="container">
-        <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" class="logo-img">
-        
-        <h1>Taste of VRIC</h1>
-        <p class="subtitle">Hosted by VRIC Women</p>
-        
-        <div class="year-display" onclick="toggleYearSelector()" id="yearDisplay">2026</div>
-        
-        <div class="year-selector" id="yearSelector">
-            <button class="year-btn active" onclick="selectYear(2026)">2026</button>
-            <button class="year-btn" onclick="selectYear(2027)">2027</button>
-            <button class="year-btn" onclick="selectYear(2028)">2028</button>
-        </div>
-        
-        <div class="button-group">
-            <a href="cookbook.html" class="btn btn-primary">View the Cookbook</a>
-            <a href="cookbook-submit.html" class="btn btn-secondary">Contribute your Recipe</a>
+    <!-- Main Dashboard -->
+    <div id="dashboard" style="display: none;">
+        <div class="container">
+            <h1>📊 Admin Dashboard - <span id="yearDisplay">2026</span></h1>
             
-            <div id="competitionButtons">
-                <!-- These will be shown/hidden based on year -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('competition')">Competition Data</button>
+                <button class="tab" onclick="showTab('cookbook')">Cookbook Approval <span id="pendingCount" class="pending-badge" style="display: none;">0</span></button>
+                <button class="tab" onclick="showTab('manage-cookbook')">Manage Cookbook</button>
+            </div>
+            
+            <!-- Competition Tab -->
+            <div id="competitionTab" class="tab-content active">
+                <div class="controls">
+                    <button onclick="loadData()">Refresh Data</button>
+                    <button class="export-btn" onclick="exportCSV()">Export as CSV</button>
+                    <select id="categoryFilter" onchange="filterByCategory()">
+                        <option value="all">All Categories</option>
+                        <option value="Appetizer">Appetizer</option>
+                        <option value="Entree">Entree</option>
+                        <option value="Dessert">Dessert</option>
+                    </select>
+                    <select id="yearSelect" onchange="changeYear()">
+                    </select>
+                </div>
+                
+                <div id="wrongCategoryAlert" class="alert-box alert-error" style="display: none;">
+                    <h3>❌ Wrong Category Detected</h3>
+                    <ul id="wrongCategoryList"></ul>
+                </div>
+                
+                <div id="duplicatesAlert" class="alert-box alert-warning" style="display: none;">
+                    <h3>⚠️ Duplicate Entries Detected</h3>
+                    <ul id="duplicatesList"></ul>
+                </div>
+                
+                <div id="loading" class="loading">Loading data...</div>
+                
+                <div id="content" style="display: none;">
+                    <div class="averages">
+                        <h2>Rankings by Category</h2>
+                        <div id="categoriesContainer"></div>
+                    </div>
+                    
+                    <h2>All Ratings (Raw Data)</h2>
+                    <div style="overflow-x: auto;">
+                        <table id="ratingsTable">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Judge</th>
+                                    <th>Sticker</th>
+                                    <th>Category</th>
+                                    <th>Taste</th>
+                                    <th>Texture</th>
+                                    <th>Intentionality</th>
+                                    <th>Presentation</th>
+                                    <th>Category Fit</th>
+                                    <th>Total</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ratingsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cookbook Approval Tab -->
+            <div id="cookbookTab" class="tab-content">
+                <div id="cookbookLoading" class="loading">Loading cookbook submissions...</div>
+                
+                <div id="cookbookContent" style="display: none;">
+                    <h2>Pending Approvals</h2>
+                    <div id="pendingRecipes"></div>
+                </div>
+            </div>
+            
+            <!-- Manage Cookbook Tab -->
+            <div id="manage-cookbookTab" class="tab-content">
+                <div id="manageLoading" class="loading">Loading cookbook...</div>
+                
+                <div id="manageContent" style="display: none;">
+                    <h2>Edit Approved Recipes</h2>
+                    <div id="manageRecipes"></div>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Password Modal -->
-    <div class="password-modal" id="passwordModal">
-        <div class="password-content">
-            <h3>Admin Access</h3>
-            <input type="password" id="passwordInput" placeholder="Enter password" onkeypress="if(event.key==='Enter') checkPassword()">
-            <div class="password-buttons">
-                <button class="btn-cancel" onclick="closePasswordModal()">Cancel</button>
-                <button class="btn-submit" onclick="checkPassword()">Submit</button>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Delete Rating?</h3>
+            <p id="deleteDetails"></p>
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                <button class="delete-btn" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        const app = initializeApp({
+        const firebaseConfig = {
             apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
             authDomain: "tasteofvric-97d8b.firebaseapp.com",
             projectId: "tasteofvric-97d8b",
             storageBucket: "tasteofvric-97d8b.firebasestorage.app",
             messagingSenderId: "538483030204",
             appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
-        });
+        };
 
-        window.db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
         window.doc = doc;
         window.getDoc = getDoc;
+        window.setDoc = setDoc;
     </script>
-    
+
     <script>
-        let currentVerseIndex = 0;
-        let selectedYear = 2026;
-        let isAuthenticated = false;
+        const IMGBB_API_KEY = 'ecda6fd2f3949077b14a84c600294ff7';
         
-        const verses = [
-            {
-                text: "يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِن طَيِّبَاتِ مَا رَزَقْنَاكُمْ وَاشْكُرُوا لِلَّهِ إِن كُنتُمْ إِيَّاهُ تَعْبُدُونَ",
-                ref: "Quran 2:172",
-                lang: "arabic"
-            },
-            {
-                text: "O you who believe! Eat of the good things that We have provided for you, and be grateful to Allah, if it is Him you worship.",
-                ref: "Quran 2:172",
-                lang: "english"
-            },
-            {
-                text: "اے ایمان والو! جو پاکیزہ چیزیں ہم نے تمہیں دی ہیں ان میں سے کھاؤ اور اللہ کا شکر ادا کرو اگر تم اسی کی عبادت کرتے ہو",
-                ref: "Quran 2:172",
-                lang: "urdu"
-            },
-            {
-                text: "হে মুমিনগণ! আমি তোমাদেরকে যেসব উত্তম বস্তু দান করেছি তা থেকে তোমরা আহার কর এবং আল্লাহর প্রতি কৃতজ্ঞতা প্রকাশ কর",
-                ref: "Quran 2:172",
-                lang: "bangla"
-            },
-            {
-                text: "¡Oh, creyentes! Comed de las cosas buenas que os hemos proveído y agradeced a Allah, si es sólo a Él a quien adoráis.",
-                ref: "Corán 2:172",
-                lang: "spanish"
+        const CORRECT_CATEGORIES = {
+            '2': 'Appetizer',
+            '1': 'Dessert',
+            '3': 'Dessert',
+            '4': 'Appetizer',
+            '5': 'Entree',
+            '7': 'Dessert',
+            '9': 'Entree',
+            '10': 'Appetizer',
+            '6': 'Entree',
+            '11': 'Entree',
+            '12': 'Dessert',
+            '8': 'Appetizer'
+        };
+        
+        let currentYear = 2026;
+        let allRatings = [];
+        let allEntries = [];
+        let allJudges = {};
+        let cookbook = {};
+        let deleteIndex = -1;
+        let duplicates = [];
+        let wrongCategories = [];
+        let autoRefreshInterval = null;
+        
+        // Enter key support for login
+        document.getElementById('adminPassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
             }
-        ];
+        });
         
-        function rotateVerse() {
-            currentVerseIndex = (currentVerseIndex + 1) % verses.length;
-            displayVerse();
-        }
-        
-        function displayVerse() {
-            const verse = verses[currentVerseIndex];
-            document.getElementById('verseText').textContent = verse.text;
-            document.getElementById('verseText').className = `verse-text ${verse.lang}`;
-            document.getElementById('verseRef').textContent = verse.ref;
-        }
-        
-        function selectYear(year) {
-            selectedYear = year;
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
             
-            // Update year display
-            document.getElementById('yearDisplay').textContent = year;
-            
-            // Update active button
-            document.querySelectorAll('.year-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Hide selector after selection
-            document.getElementById('yearSelector').classList.remove('active');
-            
-            // Show/hide competition buttons based on year
-            updateCompetitionButtons();
-        }
-        
-        function toggleYearSelector() {
-            if (!isAuthenticated) {
-                document.getElementById('passwordModal').classList.add('active');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-            } else {
-                const selector = document.getElementById('yearSelector');
-                selector.classList.toggle('active');
-            }
-        }
-        
-        function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            if (password === 'adminVR!C') {
-                isAuthenticated = true;
-                closePasswordModal();
-                document.getElementById('yearSelector').classList.add('active');
-            } else {
+            if (password !== 'adminVR!C') {
                 alert('Incorrect password');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
+                return;
             }
-        }
-        
-        function closePasswordModal() {
-            document.getElementById('passwordModal').classList.remove('active');
-        }
-        
-        function updateCompetitionButtons() {
-            const buttonsContainer = document.getElementById('competitionButtons');
             
-            if (selectedYear >= 2027) {
-                buttonsContainer.innerHTML = `
-                    <a href="judges.html" class="btn btn-outline">Access Judges Corner</a>
-                `;
-            } else {
-                buttonsContainer.innerHTML = '';
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            loadYearOptions();
+            loadData();
+            loadCookbook();
+            
+            autoRefreshInterval = setInterval(() => {
+                loadData();
+                loadCookbook();
+            }, 10000);
+        }
+        
+        async function loadYearOptions() {
+            try {
+                const configDoc = await window.getDoc(window.doc(window.db, 'config', 'settings'));
+                
+                if (configDoc.exists()) {
+                    const config = configDoc.data();
+                    const years = Object.keys(config.yearCompleted || {}).sort().reverse();
+                    
+                    const select = document.getElementById('yearSelect');
+                    select.innerHTML = '';
+                    
+                    years.forEach(year => {
+                        const option = document.createElement('option');
+                        option.value = year;
+                        option.textContent = year;
+                        if (parseInt(year) === currentYear) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load years:', error);
             }
         }
         
-        // Initialize
-        displayVerse();
-        updateCompetitionButtons();
+        function changeYear() {
+            currentYear = parseInt(document.getElementById('yearSelect').value);
+            document.getElementById('yearDisplay').textContent = currentYear;
+            loadData();
+        }
         
-        // Auto-rotate verses every 7 seconds
-        setInterval(rotateVerse, 7000);
+        async function loadData() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('content').style.display = 'none';
+            
+            try {
+                const [entriesDoc, judgesDoc] = await Promise.all([
+                    window.getDoc(window.doc(window.db, 'entries', currentYear.toString())),
+                    window.getDoc(window.doc(window.db, 'judges', currentYear.toString()))
+                ]);
+                
+                allEntries = entriesDoc.exists() ? (entriesDoc.data().entries || []) : [];
+                allJudges = judgesDoc.exists() ? judgesDoc.data() : { judges: [], scores: [] };
+                allRatings = allJudges.scores || [];
+                
+                detectDuplicates();
+                detectWrongCategories();
+                displayRawData();
+                displayCategoryRankings();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to load data:', error);
+                alert('Failed to load data: ' + error.message);
+            }
+        }
         
-        window.selectYear = selectYear;
-        window.rotateVerse = rotateVerse;
-        window.toggleYearSelector = toggleYearSelector;
-        window.checkPassword = checkPassword;
-        window.closePasswordModal = closePasswordModal;
+        function detectWrongCategories() {
+            wrongCategories = [];
+            
+            allEntries.forEach((entry, index) => {
+                const correctCategory = CORRECT_CATEGORIES[entry.stickerNumber];
+                if (correctCategory && entry.category !== correctCategory) {
+                    wrongCategories.push({
+                        index: index,
+                        name: entry.name,
+                        sticker: entry.stickerNumber,
+                        currentCategory: entry.category,
+                        correctCategory: correctCategory
+                    });
+                }
+            });
+            
+            const alert = document.getElementById('wrongCategoryAlert');
+            const list = document.getElementById('wrongCategoryList');
+            
+            if (wrongCategories.length > 0) {
+                list.innerHTML = wrongCategories.map(wrong => 
+                    `<li>Sticker #${wrong.sticker}: Should be <strong>${wrong.correctCategory}</strong>, not ${wrong.currentCategory}</li>`
+                ).join('');
+                alert.style.display = 'block';
+            } else {
+                alert.style.display = 'none';
+            }
+        }
+        
+        function detectDuplicates() {
+            duplicates = [];
+            const seen = {};
+            
+            allRatings.forEach((rating, index) => {
+                const key = `${rating.judge}-${rating.stickerNumber}`;
+                if (seen[key]) {
+                    duplicates.push({
+                        judge: rating.judge,
+                        sticker: rating.stickerNumber,
+                        indices: [seen[key], index]
+                    });
+                } else {
+                    seen[key] = index;
+                }
+            });
+            
+            const alert = document.getElementById('duplicatesAlert');
+            const list = document.getElementById('duplicatesList');
+            
+            if (duplicates.length > 0) {
+                list.innerHTML = duplicates.map(dup => 
+                    `<li>${dup.judge} rated Sticker #${dup.sticker} multiple times</li>`
+                ).join('');
+                alert.style.display = 'block';
+            } else {
+                alert.style.display = 'none';
+            }
+        }
+        
+        function isDuplicate(rating) {
+            const key = `${rating.judge}-${rating.stickerNumber}`;
+            return allRatings.filter(r => `${r.judge}-${r.stickerNumber}` === key).length > 1;
+        }
+        
+        function isWrongCategory(entry) {
+            const correctCategory = CORRECT_CATEGORIES[entry.stickerNumber];
+            return correctCategory && entry.category !== correctCategory;
+        }
+        
+        function displayRawData() {
+            const tbody = document.getElementById('ratingsBody');
+            tbody.innerHTML = '';
+            
+            const filter = document.getElementById('categoryFilter').value;
+            
+            let filteredRatings = allRatings;
+            if (filter !== 'all') {
+                const filteredStickers = allEntries
+                    .filter(e => e.category === filter)
+                    .map(e => e.stickerNumber);
+                filteredRatings = allRatings.filter(r => filteredStickers.includes(r.stickerNumber));
+            }
+            
+            filteredRatings.forEach((rating, index) => {
+                const entry = allEntries.find(e => e.stickerNumber === rating.stickerNumber);
+                if (!entry) return;
+                
+                const total = rating.taste + rating.texture + rating.intentionality + 
+                            rating.presentation + rating.categoryFit;
+                
+                const actualIndex = allRatings.indexOf(rating);
+                const hasDuplicate = isDuplicate(rating);
+                const hasWrongCategory = isWrongCategory(entry);
+                const correctCategory = CORRECT_CATEGORIES[entry.stickerNumber];
+                
+                const row = document.createElement('tr');
+                if (hasWrongCategory) {
+                    row.className = 'wrong-category';
+                } else if (hasDuplicate) {
+                    row.className = 'duplicate-warning';
+                }
+                
+                row.innerHTML = `
+                    <td>${new Date(rating.timestamp).toLocaleString()}</td>
+                    <td>${rating.judge}${hasDuplicate ? '<span class="duplicate-badge">DUP</span>' : ''}${hasWrongCategory ? '<span class="wrong-badge">WRONG</span>' : ''}</td>
+                    <td>${rating.stickerNumber}</td>
+                    <td>
+                        ${entry.category}
+                        ${hasWrongCategory ? `<br><small style="color: #ef4444;">Should be: ${correctCategory}</small>` : ''}
+                    </td>
+                    <td>${rating.taste}</td>
+                    <td>${rating.texture}</td>
+                    <td>${rating.intentionality}</td>
+                    <td>${rating.presentation}</td>
+                    <td>${rating.categoryFit}</td>
+                    <td><strong>${total}</strong></td>
+                    <td>${rating.notes || '-'}</td>
+                    <td>
+                        <button class="delete-btn" onclick="showDeleteModal(${actualIndex})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function displayCategoryRankings() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+            
+            const byCategory = {
+                'Appetizer': {},
+                'Entree': {},
+                'Dessert': {}
+            };
+            
+            allRatings.forEach(rating => {
+                const entry = allEntries.find(e => e.stickerNumber === rating.stickerNumber);
+                if (!entry) return;
+                
+                const cat = entry.category;
+                const sticker = entry.stickerNumber;
+                
+                if (!byCategory[cat]) byCategory[cat] = {};
+                if (!byCategory[cat][sticker]) byCategory[cat][sticker] = [];
+                byCategory[cat][sticker].push(rating);
+            });
+            
+            ['Appetizer', 'Entree', 'Dessert'].forEach(category => {
+                if (!byCategory[category] || Object.keys(byCategory[category]).length === 0) return;
+                
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                
+                const title = document.createElement('h3');
+                title.textContent = category;
+                section.appendChild(title);
+                
+                const grid = document.createElement('div');
+                grid.className = 'avg-grid';
+                
+                const dishes = [];
+                Object.keys(byCategory[category]).forEach(sticker => {
+                    const ratings = byCategory[category][sticker];
+                    const count = ratings.length;
+                    
+                    const avgTotal = ratings.reduce((sum, r) => 
+                        sum + r.taste + r.texture + r.intentionality + r.presentation + r.categoryFit, 0) / count;
+                    
+                    const entry = allEntries.find(e => e.stickerNumber === sticker);
+                    
+                    dishes.push({
+                        sticker,
+                        avgTotal,
+                        count,
+                        dish: entry?.dish || 'Unknown',
+                        name: entry?.name || 'Unknown',
+                        avgTaste: (ratings.reduce((sum, r) => sum + r.taste, 0) / count).toFixed(2),
+                        avgTexture: (ratings.reduce((sum, r) => sum + r.texture, 0) / count).toFixed(2),
+                        avgIntentionality: (ratings.reduce((sum, r) => sum + r.intentionality, 0) / count).toFixed(2),
+                        avgPresentation: (ratings.reduce((sum, r) => sum + r.presentation, 0) / count).toFixed(2),
+                        avgCategoryFit: (ratings.reduce((sum, r) => sum + r.categoryFit, 0) / count).toFixed(2)
+                    });
+                });
+                
+                dishes.sort((a, b) => {
+                    if (b.avgTotal !== a.avgTotal) return b.avgTotal - a.avgTotal;
+                    return parseFloat(b.avgTaste) - parseFloat(a.avgTaste);
+                });
+                
+                dishes.forEach((dish, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'avg-card';
+                    card.innerHTML = `
+                        <h4><span class="rank">#${index + 1}</span>Sticker #${dish.sticker}</h4>
+                        <div class="value">${dish.avgTotal.toFixed(2)} / 25</div>
+                        <div style="font-size: 14px; font-weight: 600; color: #667eea; margin: 8px 0;">${dish.dish}</div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">${dish.name}</div>
+                        <div style="font-size: 12px; color: #666;">
+                            Taste: ${dish.avgTaste} | Texture: ${dish.avgTexture}<br>
+                            Intent: ${dish.avgIntentionality} | Present: ${dish.avgPresentation}<br>
+                            Category: ${dish.avgCategoryFit}<br>
+                            <strong>${dish.count} judge${dish.count > 1 ? 's' : ''}</strong>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
+        
+        function filterByCategory() {
+            displayRawData();
+        }
+        
+        function showDeleteModal(index) {
+            deleteIndex = index;
+            const rating = allRatings[index];
+            const entry = allEntries.find(e => e.stickerNumber === rating.stickerNumber);
+            const total = rating.taste + rating.texture + rating.intentionality + 
+                        rating.presentation + rating.categoryFit;
+            
+            document.getElementById('deleteDetails').textContent = 
+                `Delete rating from ${rating.judge} for Sticker #${rating.stickerNumber} (${entry?.dish || 'Unknown'}) - Total: ${total}/25?`;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteIndex = -1;
+        }
+        
+        async function confirmDelete() {
+            if (deleteIndex === -1) return;
+            
+            try {
+                allRatings.splice(deleteIndex, 1);
+                allJudges.scores = allRatings;
+                
+                await window.setDoc(window.doc(window.db, 'judges', currentYear.toString()), allJudges);
+                
+                closeDeleteModal();
+                setTimeout(() => loadData(), 1000);
+                
+            } catch (error) {
+                alert('Failed to delete: ' + error.message);
+                closeDeleteModal();
+            }
+        }
+        
+        function exportCSV() {
+            let csv = 'Timestamp,Judge,Sticker Number,Category,Dish,Name,Taste,Texture,Intentionality,Presentation,Category Fit,Total,Notes\n';
+            
+            allRatings.forEach(rating => {
+                const entry = allEntries.find(e => e.stickerNumber === rating.stickerNumber);
+                const total = rating.taste + rating.texture + rating.intentionality + 
+                            rating.presentation + rating.categoryFit;
+                const notes = (rating.notes || '').replace(/"/g, '""');
+                
+                csv += `"${rating.timestamp}","${rating.judge}","${rating.stickerNumber}","${entry?.category || ''}","${entry?.dish || ''}","${entry?.name || ''}",${rating.taste},${rating.texture},${rating.intentionality},${rating.presentation},${rating.categoryFit},${total},"${notes}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `vric-ratings-${currentYear}-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+        
+        async function loadCookbook() {
+            document.getElementById('cookbookLoading').style.display = 'block';
+            document.getElementById('cookbookContent').style.display = 'none';
+            
+            try {
+                const cookbookDoc = await window.getDoc(window.doc(window.db, 'cookbook', 'data'));
+                
+                if (cookbookDoc.exists()) {
+                    cookbook = cookbookDoc.data();
+                } else {
+                    cookbook = { approved: [], pending: [] };
+                }
+                
+                displayPendingRecipes();
+                
+                const pendingCount = cookbook.pending?.length || 0;
+                const badge = document.getElementById('pendingCount');
+                if (pendingCount > 0) {
+                    badge.textContent = pendingCount;
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+                
+                document.getElementById('cookbookLoading').style.display = 'none';
+                document.getElementById('cookbookContent').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to load cookbook:', error);
+            }
+        }
+        
+        function displayPendingRecipes() {
+            const container = document.getElementById('pendingRecipes');
+            container.innerHTML = '';
+            
+            if (!cookbook.pending || cookbook.pending.length === 0) {
+                container.innerHTML = '<p style="color: #666; padding: 20px;">No pending recipes</p>';
+                return;
+            }
+            
+            cookbook.pending.forEach((recipe, index) => {
+                const card = document.createElement('div');
+                card.style.cssText = 'background: #fef3c7; padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #f59e0b;';
+                card.innerHTML = `
+                    <h3 style="color: #92400e; margin-bottom: 10px;">${recipe.dishName}</h3>
+                    <p style="color: #78350f; margin-bottom: 5px;"><strong>By:</strong> ${recipe.name}</p>
+                    <p id="contact-${index}" style="color: #78350f; margin-bottom: 5px; display: none;"><strong>Phone:</strong> ${recipe.phone}</p>
+                    <p style="color: #78350f; margin-bottom: 5px;"><strong>Category:</strong> ${recipe.category}</p>
+                    <p style="color: #78350f; margin-bottom: 5px;"><strong>Country:</strong> ${recipe.country}</p>
+                    ${recipe.photo ? `<img src="${recipe.photo}" class="recipe-preview" style="margin: 10px 0;">` : ''}
+                    <div style="margin-top: 15px;">
+                        <button class="approve-btn" onclick="approveRecipe(${index})">Approve</button>
+                        <button class="reject-btn" onclick="rejectRecipe(${index})" style="margin-left: 10px;">Reject</button>
+                        <button class="contact-btn" onclick="showContact(${index})" style="margin-left: 10px; background: #3B82F6; padding: 6px 12px; font-size: 12px; color: white; border: none; border-radius: 8px; cursor: pointer;">Contact</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function displayApprovedRecipes() {
+            const container = document.getElementById('approvedRecipes');
+            container.innerHTML = '';
+            
+            if (!cookbook.approved || cookbook.approved.length === 0) {
+                container.innerHTML = '<p style="color: #666; padding: 20px;">No approved recipes yet</p>';
+                return;
+            }
+            
+            cookbook.approved.forEach(recipe => {
+                const card = document.createElement('div');
+                card.style.cssText = 'background: #f0f4ff; padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #667eea;';
+                card.innerHTML = `
+                    <h3 style="color: #333; margin-bottom: 10px;">${recipe.dishName}</h3>
+                    <p style="color: #666; margin-bottom: 5px;"><strong>By:</strong> ${recipe.firstName} (${recipe.year})</p>
+                    <p style="color: #666; margin-bottom: 5px;"><strong>Category:</strong> ${recipe.category}</p>
+                    ${recipe.photo ? `<img src="${recipe.photo}" class="recipe-preview" style="margin: 10px 0;">` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        async function approveRecipe(index) {
+            try {
+                const recipe = cookbook.pending[index];
+                recipe.approved = true;
+                
+                if (!cookbook.approved) cookbook.approved = [];
+                cookbook.approved.push(recipe);
+                cookbook.pending.splice(index, 1);
+                
+                await window.setDoc(window.doc(window.db, 'cookbook', 'data'), cookbook);
+                
+                setTimeout(() => loadCookbook(), 1000);
+                
+            } catch (error) {
+                alert('Failed to approve recipe: ' + error.message);
+            }
+        }
+        
+        async function rejectRecipe(index) {
+            if (!confirm('Are you sure you want to reject this recipe? This cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                cookbook.pending.splice(index, 1);
+                
+                await window.setDoc(window.doc(window.db, 'cookbook', 'data'), cookbook);
+                
+                setTimeout(() => loadCookbook(), 1000);
+                
+            } catch (error) {
+                alert('Failed to reject recipe: ' + error.message);
+            }
+        }
+        
+        function showContact(index) {
+            const password = prompt('Enter password to view contact information:');
+            if (password === 'adminVR!C') {
+                const contactElement = document.getElementById(`contact-${index}`);
+                if (contactElement) {
+                    contactElement.style.display = 'block';
+                }
+            } else if (password !== null) {
+                alert('Incorrect password');
+            }
+        }
+        
+        async function loadManageCookbook() {
+            document.getElementById('manageLoading').style.display = 'block';
+            document.getElementById('manageContent').style.display = 'none';
+            
+            try {
+                const cookbookDoc = await window.getDoc(window.doc(window.db, 'cookbook', 'data'));
+                
+                if (cookbookDoc.exists()) {
+                    cookbook = cookbookDoc.data();
+                } else {
+                    cookbook = { approved: [], pending: [] };
+                }
+                
+                displayManageRecipes();
+                
+                document.getElementById('manageLoading').style.display = 'none';
+                document.getElementById('manageContent').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to load cookbook:', error);
+            }
+        }
+        
+        function displayManageRecipes() {
+            const container = document.getElementById('manageRecipes');
+            container.innerHTML = '';
+            
+            if (!cookbook.approved || cookbook.approved.length === 0) {
+                container.innerHTML = '<p style="color: #666; padding: 20px;">No approved recipes yet</p>';
+                return;
+            }
+            
+            cookbook.approved.forEach((recipe, index) => {
+                const card = document.createElement('div');
+                card.className = 'recipe-edit-card';
+                
+                // Parse existing duration
+                let prepNum = 0, prepUnit = 'minutes';
+                if (recipe.prepTime) {
+                    const prepMatch = recipe.prepTime.match(/(\d+)\s*(hour|minute)/i);
+                    if (prepMatch) {
+                        prepNum = prepMatch[1];
+                        prepUnit = prepMatch[2].toLowerCase() + 's';
+                    }
+                }
+                
+                let cookNum = 0, cookUnit = 'minutes';
+                if (recipe.cookTime) {
+                    const cookMatch = recipe.cookTime.match(/(\d+)\s*(hour|minute)/i);
+                    if (cookMatch) {
+                        cookNum = cookMatch[1];
+                        cookUnit = cookMatch[2].toLowerCase() + 's';
+                    }
+                }
+                
+                card.innerHTML = `
+                    <h4>${recipe.firstName}'s ${recipe.dishName}</h4>
+                    
+                    <div class="edit-form-group">
+                        <label>Dish Name</label>
+                        <input type="text" id="dishName-${index}" value="${recipe.dishName}">
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Country</label>
+                        <input type="text" id="country-${index}" value="${recipe.country}">
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Category</label>
+                        <select id="category-${index}">
+                            <option value="Appetizer" ${recipe.category === 'Appetizer' ? 'selected' : ''}>Appetizer</option>
+                            <option value="Entree" ${recipe.category === 'Entree' ? 'selected' : ''}>Entree</option>
+                            <option value="Dessert" ${recipe.category === 'Dessert' ? 'selected' : ''}>Dessert</option>
+                            <option value="Drink" ${recipe.category === 'Drink' ? 'selected' : ''}>Drink</option>
+                        </select>
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Prep Time</label>
+                        <div class="duration-edit-group">
+                            <input type="number" id="prepDuration-${index}" value="${prepNum}" min="0">
+                            <select id="prepUnit-${index}">
+                                <option value="minutes" ${prepUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
+                                <option value="hours" ${prepUnit === 'hours' ? 'selected' : ''}>Hours</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Cook Time</label>
+                        <div class="duration-edit-group">
+                            <input type="number" id="cookDuration-${index}" value="${cookNum}" min="0">
+                            <select id="cookUnit-${index}">
+                                <option value="minutes" ${cookUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
+                                <option value="hours" ${cookUnit === 'hours' ? 'selected' : ''}>Hours</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Ingredients (one per line)</label>
+                        <textarea id="ingredients-${index}">${recipe.ingredients}</textarea>
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Instructions</label>
+                        <textarea id="instructions-${index}">${recipe.instructions}</textarea>
+                    </div>
+                    
+                    <div class="edit-form-group">
+                        <label>Notes</label>
+                        <textarea id="notes-${index}">${recipe.notes || ''}</textarea>
+                    </div>
+                    
+                    <div class="photo-upload-section">
+                        <label>Photo</label>
+                        ${recipe.photo ? `<img src="${recipe.photo}" class="current-photo">` : '<p style="color: #999;">No photo uploaded</p>'}
+                        <input type="file" id="photo-${index}" accept="image/*">
+                        <p style="font-size: 12px; color: #666; margin-top: 5px;">Upload a new photo to replace the current one</p>
+                    </div>
+                    
+                    <div class="edit-buttons">
+                        <button class="save-recipe-btn" onclick="saveRecipe(${index})">Save Changes</button>
+                        <button class="delete-recipe-btn" onclick="deleteRecipe(${index})">Delete Recipe</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function formatDuration(duration, unit) {
+            const num = parseInt(duration);
+            if (num === 0) return '0 minutes';
+            if (num === 1) return unit === 'hours' ? '1 hour' : '1 minute';
+            return `${num} ${unit}`;
+        }
+        
+        async function saveRecipe(index) {
+            try {
+                const dishName = document.getElementById(`dishName-${index}`).value;
+                const country = document.getElementById(`country-${index}`).value;
+                const category = document.getElementById(`category-${index}`).value;
+                
+                const prepDuration = document.getElementById(`prepDuration-${index}`).value;
+                const prepUnit = document.getElementById(`prepUnit-${index}`).value;
+                const prepTime = formatDuration(prepDuration, prepUnit);
+                
+                const cookDuration = document.getElementById(`cookDuration-${index}`).value;
+                const cookUnit = document.getElementById(`cookUnit-${index}`).value;
+                const cookTime = formatDuration(cookDuration, cookUnit);
+                
+                const ingredients = document.getElementById(`ingredients-${index}`).value;
+                const instructions = document.getElementById(`instructions-${index}`).value;
+                const notes = document.getElementById(`notes-${index}`).value;
+                const photoFile = document.getElementById(`photo-${index}`).files[0];
+                
+                let photoURL = cookbook.approved[index].photo;
+                
+                if (photoFile) {
+                    const formData = new FormData();
+                    formData.append('image', photoFile);
+                    
+                    const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        photoURL = data.data.url;
+                    } else {
+                        throw new Error('Failed to upload image');
+                    }
+                }
+                
+                cookbook.approved[index] = {
+                    ...cookbook.approved[index],
+                    dishName,
+                    country,
+                    category,
+                    prepTime,
+                    cookTime,
+                    ingredients,
+                    instructions,
+                    notes,
+                    photo: photoURL
+                };
+                
+                await window.setDoc(window.doc(window.db, 'cookbook', 'data'), cookbook);
+                
+                alert('Recipe updated successfully!');
+                setTimeout(() => loadManageCookbook(), 1000);
+                
+            } catch (error) {
+                alert('Failed to save recipe: ' + error.message);
+            }
+        }
+        
+        async function deleteRecipe(index) {
+            if (!confirm('Are you sure you want to delete this recipe? This cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                cookbook.approved.splice(index, 1);
+                
+                await window.setDoc(window.doc(window.db, 'cookbook', 'data'), cookbook);
+                
+                alert('Recipe deleted successfully!');
+                setTimeout(() => loadManageCookbook(), 1000);
+                
+            } catch (error) {
+                alert('Failed to delete recipe: ' + error.message);
+            }
+        }
+        
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            if (tabName === 'cookbook') {
+                loadCookbook();
+            } else if (tabName === 'manage-cookbook') {
+                loadManageCookbook();
+            }
+        }
+        
+        window.adminLogin = adminLogin;
+        window.showDeleteModal = showDeleteModal;
+        window.closeDeleteModal = closeDeleteModal;
+        window.confirmDelete = confirmDelete;
+        window.loadData = loadData;
+        window.changeYear = changeYear;
+        window.filterByCategory = filterByCategory;
+        window.exportCSV = exportCSV;
+        window.approveRecipe = approveRecipe;
+        window.rejectRecipe = rejectRecipe;
+        window.saveRecipe = saveRecipe;
+        window.deleteRecipe = deleteRecipe;
+        window.showTab = showTab;
     </script>
 </body>
 </html>
