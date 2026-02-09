@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taste of VRIC - Competition</title>
+    <title>Taste of VRIC</title>
     <style>
         * {
             margin: 0;
@@ -13,152 +13,275 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: #f8f9fa;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        
+        .verse-container {
+            position: fixed;
+            top: 8px;
+            left: 10px;
+            right: 10px;
+            text-align: center;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 4px;
+            transition: all 0.3s;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .verse-container:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .verse-text {
+            font-size: clamp(10px, 2.5vw, 12px);
+            color: #5a6c7d;
+            line-height: 1.5;
+        }
+        
+        .verse-text.arabic {
+            font-size: clamp(12px, 3vw, 15px);
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', serif;
+            direction: rtl;
+        }
+        
+        .verse-text.urdu {
+            font-size: clamp(11px, 2.8vw, 13px);
+            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
+            direction: rtl;
+        }
+        
+        .verse-text.bangla {
+            font-size: clamp(10px, 2.5vw, 12px);
+            font-family: 'SolaimanLipi', 'Kalpurush', 'Vrinda', serif;
+        }
+        
+        .verse-ref {
+            font-size: clamp(8px, 2vw, 9px);
+            color: #95a5a6;
+            margin-top: 4px;
+            font-style: italic;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
+            max-width: 600px;
+            width: 100%;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: clamp(30px, 8vw, 60px) clamp(20px, 5vw, 50px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            margin-top: 60px;
         }
         
-        .logo {
-            width: 120px;
-            height: 120px;
+        .logo-img {
+            width: clamp(80px, 20vw, 120px);
+            height: clamp(80px, 20vw, 120px);
             margin: 0 auto 20px;
         }
         
-        .header h1 {
-            font-size: 48px;
+        h1 {
+            color: #2c3e50;
+            font-size: clamp(28px, 7vw, 42px);
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: clamp(14px, 3.5vw, 18px);
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        .year-display {
+            color: #3B82F6;
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: 600;
+            margin-bottom: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .year-display:hover {
+            opacity: 0.8;
+        }
+        
+        .year-selector {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .year-selector.active {
+            display: flex;
+        }
+        
+        .year-btn {
+            padding: 10px 20px;
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: clamp(14px, 3.5vw, 16px);
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .year-btn:hover {
+            border-color: #3B82F6;
+            color: #3B82F6;
+        }
+        
+        .year-btn.active {
+            background: #3B82F6;
+            color: white;
+            border-color: #3B82F6;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: block;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: clamp(15px, 4vw, 18px);
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: #3B82F6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #3B82F6;
+            border: 2px solid #3B82F6;
+        }
+        
+        .btn-secondary:hover {
+            background: #EFF6FF;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-outline:hover {
+            border-color: #3B82F6;
+            color: #3B82F6;
+            background: #EFF6FF;
+        }
+        
+        .year-info {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            border-left: 4px solid #3B82F6;
+        }
+        
+        .year-info h3 {
+            font-size: clamp(16px, 4vw, 20px);
             color: #2c3e50;
             margin-bottom: 10px;
-            font-weight: 300;
         }
         
-        .header p {
-            font-size: 18px;
-            color: #6c757d;
-        }
-        
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-        
-        .card h2 {
-            font-size: 28px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-weight: 400;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .card h2::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #4169E1;
-        }
-        
-        .card p {
-            color: #6c757d;
-            font-size: 16px;
+        .year-info p {
+            font-size: clamp(13px, 3.2vw, 15px);
+            color: #6b7280;
             line-height: 1.6;
         }
         
-        .card.admin {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .card.admin h2 {
-            color: white;
-        }
-        
-        .card.admin h2::after {
-            background: white;
-        }
-        
-        .card.admin p {
-            color: rgba(255,255,255,0.9);
-        }
-        
-        .year-2027 {
-            display: none;
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 32px;
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 70px;
             }
             
-            .cards {
-                grid-template-columns: 1fr;
+            .year-selector {
+                gap: 8px;
+            }
+            
+            .year-btn {
+                padding: 8px 16px;
+            }
+            
+            .button-group {
+                gap: 12px;
+            }
+            
+            .btn {
+                padding: 12px 24px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="verse-container" onclick="rotateVerse()">
+        <div class="verse-text arabic" id="verseText"></div>
+        <div class="verse-ref" id="verseRef"></div>
+    </div>
+    
     <div class="container">
-        <div class="header">
-            <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" class="logo">
-            <h1>Taste of VRIC</h1>
-            <p>Annual cooking competition celebrating our community's diverse culinary traditions</p>
+        <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" class="logo-img">
+        
+        <h1>Taste of VRIC</h1>
+        <p class="subtitle">Annual Cooking Competition</p>
+        
+        <div class="year-display" onclick="toggleYearSelector()" id="yearDisplay">2026</div>
+        
+        <div class="year-selector" id="yearSelector">
+            <button class="year-btn" onclick="selectYear(2024)">2024</button>
+            <button class="year-btn" onclick="selectYear(2025)">2025</button>
+            <button class="year-btn active" onclick="selectYear(2026)">2026</button>
+            <button class="year-btn" onclick="selectYear(2027)">2027</button>
         </div>
         
-        <div class="cards">
-            <a href="cookbook.html" class="card">
-                <h2>View Cookbook</h2>
-                <p>Browse through our collection of winning recipes from past competitions</p>
-            </a>
+        <div class="button-group">
+            <a href="cookbook.html" class="btn btn-primary">View Cookbook</a>
             
-            <a href="entry.html" class="card year-2027" id="submitEntry">
-                <h2>Submit an Entry</h2>
-                <p>Enter your signature dish into this year's competition</p>
-            </a>
-            
-            <a href="judges.html" class="card year-2027" id="judgesCorner">
-                <h2>Judges Corner</h2>
-                <p>Access judging panel and scoring tools</p>
-            </a>
-            
-            <a href="admin.html" class="card admin">
-                <h2>Admin Panel</h2>
-                <p>Manage competition data, entries, and results</p>
-            </a>
+            <div id="competitionButtons">
+                <!-- These will be shown/hidden based on year -->
+            </div>
+        </div>
+        
+        <div class="year-info">
+            <h3 id="yearTitle">2026 Competition</h3>
+            <p id="yearDescription">Browse our collection of cherished recipes from the community.</p>
         </div>
     </div>
 
@@ -166,38 +289,120 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        const firebaseConfig = {
+        const app = initializeApp({
             apiKey: "AIzaSyBLuoW3l8TM9s-C47uNF0gxDBmzYfGq_Z0",
             authDomain: "tasteofvric-97d8b.firebaseapp.com",
             projectId: "tasteofvric-97d8b",
             storageBucket: "tasteofvric-97d8b.firebasestorage.app",
             messagingSenderId: "538483030204",
             appId: "1:538483030204:web:5a0414d9bf35bcf2e238b9"
-        };
+        });
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Check current year and show/hide buttons
-        async function checkYear() {
-            try {
-                const configDoc = await getDoc(doc(db, 'config', 'settings'));
-                
-                if (configDoc.exists()) {
-                    const currentYear = configDoc.data().currentYear || 2026;
-                    
-                    // Show Submit Entry and Judges Corner only for 2027+
-                    if (currentYear >= 2027) {
-                        document.getElementById('submitEntry').style.display = 'block';
-                        document.getElementById('judgesCorner').style.display = 'block';
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking year:', error);
+        window.db = getFirestore(app);
+        window.doc = doc;
+        window.getDoc = getDoc;
+    </script>
+    
+    <script>
+        let currentVerseIndex = 0;
+        let selectedYear = 2026;
+        
+        const verses = [
+            {
+                text: "يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِن طَيِّبَاتِ مَا رَزَقْنَاكُمْ وَاشْكُرُوا لِلَّهِ إِن كُنتُمْ إِيَّاهُ تَعْبُدُونَ",
+                ref: "Quran 2:172",
+                lang: "arabic"
+            },
+            {
+                text: "O you who believe! Eat of the good things that We have provided for you, and be grateful to Allah, if it is Him you worship.",
+                ref: "Quran 2:172",
+                lang: "english"
+            },
+            {
+                text: "اے ایمان والو! جو پاکیزہ چیزیں ہم نے تمہیں دی ہیں ان میں سے کھاؤ اور اللہ کا شکر ادا کرو اگر تم اسی کی عبادت کرتے ہو",
+                ref: "Quran 2:172",
+                lang: "urdu"
+            },
+            {
+                text: "হে মুমিনগণ! আমি তোমাদেরকে যেসব উত্তম বস্তু দান করেছি তা থেকে তোমরা আহার কর এবং আল্লাহর প্রতি কৃতজ্ঞতা প্রকাশ কর",
+                ref: "Quran 2:172",
+                lang: "bangla"
+            },
+            {
+                text: "¡Oh, creyentes! Comed de las cosas buenas que os hemos proveído y agradeced a Allah, si es sólo a Él a quien adoráis.",
+                ref: "Corán 2:172",
+                lang: "spanish"
+            }
+        ];
+        
+        function rotateVerse() {
+            currentVerseIndex = (currentVerseIndex + 1) % verses.length;
+            displayVerse();
+        }
+        
+        function displayVerse() {
+            const verse = verses[currentVerseIndex];
+            document.getElementById('verseText').textContent = verse.text;
+            document.getElementById('verseText').className = `verse-text ${verse.lang}`;
+            document.getElementById('verseRef').textContent = verse.ref;
+        }
+        
+        function selectYear(year) {
+            selectedYear = year;
+            
+            // Update year display
+            document.getElementById('yearDisplay').textContent = year;
+            
+            // Update active button
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide selector after selection
+            document.getElementById('yearSelector').classList.remove('active');
+            
+            // Update year info
+            document.getElementById('yearTitle').textContent = `${year} Competition`;
+            
+            if (year >= 2027) {
+                document.getElementById('yearDescription').textContent = `The ${year} competition is now open! Submit your entry and view our growing collection of recipes.`;
+            } else {
+                document.getElementById('yearDescription').textContent = 'Browse our collection of cherished recipes from the community.';
+            }
+            
+            // Show/hide competition buttons based on year
+            updateCompetitionButtons();
+        }
+        
+        function toggleYearSelector() {
+            const selector = document.getElementById('yearSelector');
+            selector.classList.toggle('active');
+        }
+        
+        function updateCompetitionButtons() {
+            const buttonsContainer = document.getElementById('competitionButtons');
+            
+            if (selectedYear >= 2027) {
+                buttonsContainer.innerHTML = `
+                    <a href="cookbook-submit.html" class="btn btn-secondary">Submit an Entry</a>
+                    <a href="judges.html" class="btn btn-outline">Judges Corner</a>
+                `;
+            } else {
+                buttonsContainer.innerHTML = '';
             }
         }
         
-        checkYear();
+        // Initialize
+        displayVerse();
+        updateCompetitionButtons();
+        
+        // Auto-rotate verses every 5 seconds
+        setInterval(rotateVerse, 5000);
+        
+        window.selectYear = selectYear;
+        window.rotateVerse = rotateVerse;
+        window.toggleYearSelector = toggleYearSelector;
     </script>
 </body>
 </html>
