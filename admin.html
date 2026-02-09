@@ -492,14 +492,19 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             
-            loadYearOptions();
-            loadData();
-            loadCookbook();
-            
-            autoRefreshInterval = setInterval(() => {
-                loadData();
-                loadCookbook();
-            }, 10000);
+            // Call these after a short delay to ensure DOM and other functions are loaded
+            setTimeout(() => {
+                if (typeof loadYearOptions === 'function') loadYearOptions();
+                if (typeof loadData === 'function') loadData();
+                if (typeof loadCookbook === 'function') loadCookbook();
+                
+                if (typeof autoRefreshInterval !== 'undefined') {
+                    autoRefreshInterval = setInterval(() => {
+                        loadData();
+                        loadCookbook();
+                    }, 10000);
+                }
+            }, 100);
         }
     </script>
 </head>
