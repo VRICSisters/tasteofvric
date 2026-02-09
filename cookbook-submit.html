@@ -12,19 +12,30 @@
         }
         
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
             min-height: 100vh;
-            padding: 20px;
+            padding: clamp(10px, 3vw, 20px);
         }
         
         .container {
             max-width: 750px;
             margin: 0 auto;
-            background: #fffbeb;
-            border-radius: 8px;
-            padding: 50px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            background: white;
+            border-radius: 12px;
+            padding: clamp(30px, 6vw, 50px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .logo-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo-img {
+            width: clamp(70px, 15vw, 90px);
+            height: clamp(70px, 15vw, 90px);
+            margin-bottom: 15px;
         }
         
         .screen {
@@ -36,44 +47,45 @@
         }
         
         h1 {
-            color: #92400e;
-            margin-bottom: 15px;
+            color: #2c3e50;
+            margin-bottom: 10px;
             text-align: center;
-            font-size: 36px;
-            font-weight: 400;
+            font-size: clamp(26px, 6vw, 36px);
+            font-weight: 600;
         }
         
         .subtitle {
             text-align: center;
-            color: #78350f;
-            margin-bottom: 40px;
-            font-size: 16px;
-            font-style: italic;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            line-height: 1.5;
         }
         
         .back-btn {
             display: inline-block;
-            color: #059669;
+            color: #3B82F6;
             text-decoration: none;
             margin-bottom: 20px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: clamp(14px, 3.5vw, 15px);
+            transition: all 0.2s;
         }
         
         .back-btn:hover {
-            text-decoration: underline;
+            color: #2563EB;
         }
         
         .form-group {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         label {
             display: block;
-            margin-bottom: 10px;
-            color: #78350f;
+            margin-bottom: 8px;
+            color: #2c3e50;
             font-weight: 600;
-            font-size: 16px;
+            font-size: clamp(14px, 3.5vw, 16px);
         }
         
         label .required {
@@ -82,18 +94,19 @@
         
         input[type="text"], input[type="tel"], input[type="number"], input[type="file"], select, textarea {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #fcd34d;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border 0.3s;
-            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: all 0.3s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: white;
         }
         
         input[type="text"]:focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #f59e0b;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
         textarea {
@@ -109,14 +122,14 @@
         }
         
         .helper-text {
-            font-size: 13px;
-            color: #92400e;
+            font-size: clamp(12px, 3vw, 13px);
+            color: #6b7280;
             margin-top: 6px;
-            font-style: italic;
+            line-height: 1.4;
         }
         
         .privacy-note {
-            color: #059669;
+            color: #3B82F6;
             font-weight: 600;
         }
         
@@ -136,34 +149,34 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
+            accent-color: #3B82F6;
         }
         
         .radio-option label {
             margin: 0;
             cursor: pointer;
             font-weight: normal;
-            font-size: 15px;
+            font-size: clamp(14px, 3.5vw, 15px);
         }
         
         .submit-btn {
             width: 100%;
-            padding: 18px;
-            background: #10b981;
+            padding: 16px;
+            background: #3B82F6;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: clamp(16px, 4vw, 18px);
             font-weight: 600;
-            font-family: 'Georgia', 'Times New Roman', serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             cursor: pointer;
             transition: all 0.3s;
-            letter-spacing: 0.5px;
         }
         
         .submit-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            background: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
         }
         
         .submit-btn:disabled {
@@ -176,76 +189,76 @@
             background: #fee2e2;
             border: 2px solid #ef4444;
             color: #991b1b;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
-            font-size: 15px;
+            font-size: clamp(14px, 3.5vw, 15px);
         }
         
         .loading {
             text-align: center;
             padding: 20px;
             display: none;
-            font-size: 16px;
-            color: #78350f;
+            font-size: clamp(15px, 3.8vw, 16px);
+            color: #6b7280;
         }
         
         .photo-preview {
             margin-top: 12px;
             max-width: 100%;
             max-height: 250px;
-            border-radius: 6px;
+            border-radius: 8px;
             display: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .confirmation {
             text-align: center;
-            padding: 60px 40px;
+            padding: clamp(40px, 10vw, 60px) clamp(20px, 6vw, 40px);
         }
         
         .confirmation-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
+            font-size: clamp(60px, 15vw, 80px);
+            margin-bottom: 25px;
         }
         
         .confirmation h2 {
-            color: #92400e;
-            font-size: 32px;
-            font-weight: 400;
-            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: clamp(26px, 6vw, 32px);
+            font-weight: 600;
+            margin-bottom: 15px;
         }
         
         .confirmation-arabic {
-            font-size: 28px;
+            font-size: clamp(22px, 5.5vw, 28px);
             font-weight: 600;
-            color: #047857;
+            color: #3B82F6;
             margin-bottom: 20px;
             direction: rtl;
         }
         
         .confirmation-message {
-            font-size: 18px;
-            color: #78350f;
-            line-height: 1.8;
-            margin-bottom: 40px;
+            font-size: clamp(15px, 4vw, 18px);
+            color: #6b7280;
+            line-height: 1.7;
+            margin-bottom: 35px;
         }
         
         .confirmation-buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
         }
         
         .conf-btn {
-            padding: 16px 32px;
-            border: 2px solid #92400e;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 14px 28px;
+            border: 2px solid #3B82F6;
+            border-radius: 8px;
+            font-size: clamp(14px, 3.5vw, 16px);
             font-weight: 600;
-            font-family: 'Georgia', 'Times New Roman', serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
@@ -253,28 +266,27 @@
         }
         
         .conf-btn.primary {
-            background: #10b981;
+            background: #3B82F6;
             color: white;
-            border-color: #10b981;
+            border-color: #3B82F6;
         }
         
         .conf-btn.primary:hover {
-            background: #059669;
-            border-color: #059669;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            background: #2563EB;
+            border-color: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         
         .conf-btn.secondary {
             background: white;
-            color: #92400e;
-            border-color: #92400e;
+            color: #3B82F6;
+            border-color: #3B82F6;
         }
         
         .conf-btn.secondary:hover {
-            background: #92400e;
-            color: white;
-            transform: translateY(-1px);
+            background: #EFF6FF;
+            transform: translateY(-2px);
         }
         
         @media (max-width: 600px) {
@@ -334,7 +346,11 @@
         <div id="formScreen" class="screen active">
             <a href="index.html" class="back-btn">← Back to Home</a>
             
-            <h1>📖 VRIC Cookbook</h1>
+            <div class="logo-header">
+                <img src="https://vric.org/wp-content/uploads/2019/04/vric_logo_solo.png" alt="VRIC Logo" class="logo-img">
+            </div>
+            
+            <h1>VRIC Cookbook</h1>
             <p class="subtitle">Share your favorite recipe with the community</p>
             
             <div id="error" class="error"></div>
