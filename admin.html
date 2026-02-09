@@ -479,6 +479,29 @@
             margin-top: 15px;
         }
     </style>
+    <script>
+        // Define adminLogin early so it's available for inline handlers
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password !== 'adminVR!C') {
+                alert('Incorrect password');
+                return;
+            }
+            
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            loadYearOptions();
+            loadData();
+            loadCookbook();
+            
+            autoRefreshInterval = setInterval(() => {
+                loadData();
+                loadCookbook();
+            }, 10000);
+        }
+    </script>
 </head>
 <body>
     <!-- Login Screen -->
@@ -648,34 +671,6 @@
         let duplicates = [];
         let wrongCategories = [];
         let autoRefreshInterval = null;
-        
-        // Enter key support for login
-        document.getElementById('adminPassword')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                adminLogin();
-            }
-        });
-        
-        function adminLogin() {
-            const password = document.getElementById('adminPassword').value;
-            
-            if (password !== 'adminVR!C') {
-                alert('Incorrect password');
-                return;
-            }
-            
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            
-            loadYearOptions();
-            loadData();
-            loadCookbook();
-            
-            autoRefreshInterval = setInterval(() => {
-                loadData();
-                loadCookbook();
-            }, 10000);
-        }
         
         async function loadYearOptions() {
             try {
